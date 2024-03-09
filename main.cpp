@@ -1,0 +1,24 @@
+#include "Test.h"
+
+using std::string;
+using std::make_tuple;
+using std::function;
+
+#include "tests.hpp"
+
+int main(void)
+{
+	TestSuite suite(
+		make_tuple(
+			string("simpleTest"),
+			function<void()>(simpleTest)
+		), make_tuple(
+			string("otherSimpleTest"),
+			function<void()>(otherSimpleTest)
+		)
+	);
+
+	suite.run();
+
+	return 0;
+}
