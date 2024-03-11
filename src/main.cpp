@@ -1,5 +1,6 @@
 #include "Test.h"
 
+using TestCPP::TestSuite;
 using std::string;
 using std::make_tuple;
 using std::function;
@@ -12,7 +13,8 @@ int main(void)
 		make_tuple(
 			string("simpleTest"),
 			function<void()>(simpleTest)
-		), make_tuple(
+		),
+        make_tuple(
 			string("otherSimpleTest"),
 			function<void()>(otherSimpleTest)
 		)
