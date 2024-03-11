@@ -1,4 +1,4 @@
 .clang
 .codelite
-Debug
-Release
+build-debug
+build-release
