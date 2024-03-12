@@ -19,7 +19,7 @@ Getting Started
 
 Include the test framework through TestCPP/Test.h, whether you
  make it a part of your project or install the files into
- the standard install locations (like /usr/local/TestCPP
+ the standard install locations (like /usr/local/include/TestCPP
  in linux).
 Link in the test library through a linker flag if you
  installed it, most commonly -lTestCPP.
