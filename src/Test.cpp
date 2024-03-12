@@ -106,31 +106,31 @@ namespace TestCPP {
         )
     {
         switch(errType) {
-        case std::regex_constants::_S_error_collate:
+        case std::regex_constants::error_collate:
             return string("The expression contained an invalid collating element name.");
-        case std::regex_constants::_S_error_ctype:
+        case std::regex_constants::error_ctype:
             return string("The expression contained an invalid character class name.");
-        case std::regex_constants::_S_error_escape:
+        case std::regex_constants::error_escape:
             return string("The expression contained an invalid escaped character, or a trailing escape.");
-        case std::regex_constants::_S_error_backref:
+        case std::regex_constants::error_backref:
             return string("The expression contained an invalid back reference.");
-        case std::regex_constants::_S_error_brack:
+        case std::regex_constants::error_brack:
             return string("The expression contained mismatched brackets ([ and ]).");
-        case std::regex_constants::_S_error_paren:
+        case std::regex_constants::error_paren:
             return string("The expression contained mismatched parentheses (( and )).");
-        case std::regex_constants::_S_error_brace:
+        case std::regex_constants::error_brace:
             return string("The expression contained mismatched braces ({ and }).");
-        case std::regex_constants::_S_error_badbrace:
+        case std::regex_constants::error_badbrace:
             return string("The expression contained an invalid range between braces ({ and }).");
-        case std::regex_constants::_S_error_range:
+        case std::regex_constants::error_range:
             return string("The expression contained an invalid character range.");
-        case std::regex_constants::_S_error_space:
+        case std::regex_constants::error_space:
             return string("There was insufficient memory to convert the expression info a finite state machine.");
-        case std::regex_constants::_S_error_badrepeat:
+        case std::regex_constants::error_badrepeat:
             return string("The expression contained a repeat specifier (one of *?+{) that was not preceded by a valid regular expression.");
-        case std::regex_constants::_S_error_complexity:
+        case std::regex_constants::error_complexity:
             return string("The complexity of an attempted match against a regular expression exceeded a pre-set level.");
-        case std::regex_constants::_S_error_stack:
+        case std::regex_constants::error_stack:
             return string("There was insufficient memory to determine whether the regular expression could match the specified character sequence.");
         default: return string("Unknown regex error");
         }
