@@ -91,7 +91,7 @@ For the release build:
 
 Installing
 
-After building, run the variant of the commands that aligns with your:
+After building, run the variant of the commands that aligns with your
  build configuration (starting from the project directory).
 For the debug build:
     cd build-debug
