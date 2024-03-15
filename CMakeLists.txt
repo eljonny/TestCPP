@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.16)
 
-## Use the variable PROJECT_NAME for changing the target name
 set (PROJECT_NAME "TestCPP")
+set (PROJECT_GROUP_NAME "cpptesting")
 
 ## Set our project name
 project (${PROJECT_NAME} VERSION 0.1)
@@ -12,6 +12,11 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library (
     ${PROJECT_NAME}
     src/Test.cpp
+)
+add_library (
+    ${PROJECT_GROUP_NAME}::${PROJECT_NAME}
+    ALIAS
+        ${PROJECT_NAME}
 )
 add_executable (
     ${PROJECT_NAME}_run
@@ -33,18 +38,31 @@ else ()
 endif ()
 
 target_include_directories (
-    ${PROJECT_NAME} PUBLIC
+    ${PROJECT_NAME} PRIVATE
     include
 )
 
 target_include_directories (
-    ${PROJECT_NAME}_run PUBLIC
+    ${PROJECT_NAME}_run PRIVATE
     include
 )
 
 target_link_libraries (
     ${PROJECT_NAME}_run
-    TestCPP
+    ${PROJECT_NAME}
+)
+
+include (CMakePackageConfigHelpers)
+configure_package_config_file (
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
 )
 
 set_target_properties (
@@ -56,6 +74,22 @@ set_target_properties (
 include (GNUInstallDirs)
 install (
     TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Targets
     PUBLIC_HEADER
       DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
+export (
+    EXPORT ${PROJECT_NAME}Targets
+    FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
+)
+install (
+    EXPORT ${PROJECT_NAME}Targets
+    NAMESPACE ${PROJECT_GROUP_NAME}::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+install(
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
