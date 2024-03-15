@@ -17,6 +17,28 @@ Features of the test framework are very minimal and include:
 
 Getting Started
 
+As of 0.1-beta.1 this library can be included in a CMake build
+ using the find_package CMake function after installing, like
+ so:
+
+ find_package(TestCPP CONFIG REQUIRED)
+
+Then add it to your test executable target through
+ target_link_libraries like so:
+
+ target_link_libraries(
+    yourTestExecutableTarget
+    PRIVATE
+       cpptesting::TestCPP
+ )
+
+As of 0.1-beta.1, you can also include it in your vcpkg project
+ by running the following in the root of your project (pending
+ vcpkg PR approval that I have in right now
+ https://github.com/microsoft/vcpkg/pull/37471):
+
+ vcpkg add port testcpp
+
 Include the test framework through TestCPP/Test.h, whether you
  make it a part of your project or install the files into
  the standard install locations (like /usr/local/include/TestCPP
