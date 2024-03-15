@@ -21,6 +21,7 @@
   </VirtualDirectory>
   <VirtualDirectory Name="resources">
     <File Name="CMakeLists.txt"/>
+    <File Name="cmake/TestCPPConfig.cmake.in"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -121,4 +122,9 @@ make</Target>
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="vcpkg">
+    <File Name="custom-overlay/testcpp/usage"/>
+    <File Name="custom-overlay/testcpp/vcpkg.json"/>
+    <File Name="custom-overlay/testcpp/portfile.cmake"/>
+  </VirtualDirectory>
 </CodeLite_Project>
