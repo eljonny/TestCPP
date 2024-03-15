@@ -4,7 +4,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO eljonny/TestCPP
     REF "v${VERSION}"
-    SHA512 868e0663c2a15a7a9ce4960858560cb9012e297169879a6ff2ae27c9a47e5b8b3faacab347eb60bc17b96175c8ee6b11783ea48f0aea92b77a3c65d4f9faff7e
+    SHA512 92a683e4fa71b6c5726ca0fa8431d000f4a35c116de992b361bc46e36d400e84ec6a2da0de38dba2d1a520695b1b72c458eddc006669be162997efca765226e9
     HEAD_REF main
 )
 
@@ -17,6 +17,7 @@ vcpkg_cmake_install()
 
 vcpkg_cmake_config_fixup(
     DO_NOT_DELETE_PARENT_CONFIG_PATH
+    CONFIG_PATH "lib/cmake"
 )
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
