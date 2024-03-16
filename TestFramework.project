@@ -69,7 +69,10 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="yes">
-        <Target Name="ctest">ctest --progress --verbose</Target>
+        <Target Name="ctest">ctest --progress --verbose
+mkdir -p coverage &amp;&amp; cd coverage
+find .. -name '*.gcda' | xargs gcov -abcfmu
+find . -type f -not -name 'Test*.gcov' | xargs rm</Target>
         <Target Name="cpack">cpack --config CPackConfig.cmake
 cpack --config CPackSourceConfig.cmake
 cpack -G DEB

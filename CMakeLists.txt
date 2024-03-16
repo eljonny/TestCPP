@@ -42,13 +42,41 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
             PUBLIC
             /W4 /O2
         )
+        target_compile_options (
+            ${PROJECT_NAME}_run
+            PUBLIC
+            /W4 /O2
+        )
+        
+        if (BUILD_TESTING)
+            target_compile_options (
+                ${PROJECT_NAME}_test
+                PUBLIC
+                /W4 /O2
+            )
+        endif ()
+        
     else ()
         target_compile_options (
             ${PROJECT_NAME}
             PUBLIC
             -O3 -Wall -Wextra -Wpedantic
         )
+        target_compile_options (
+            ${PROJECT_NAME}_run
+            PUBLIC
+            -O3 -Wall -Wextra -Wpedantic
+        )
+        
+        if (BUILD_TESTING)
+            target_compile_options (
+                ${PROJECT_NAME}_test
+                PUBLIC
+                -O3 -Wall -Wextra -Wpedantic
+            )
+        endif ()
     endif ()
+    
 else ()
     if (MSVC)
         target_compile_options (
@@ -56,12 +84,46 @@ else ()
             PUBLIC
             /W4 /Od
         )
+        target_compile_options (
+            ${PROJECT_NAME}_run
+            PUBLIC
+            /W4 /Od
+        )
+        
+        if (BUILD_TESTING)
+            target_compile_options (
+                ${PROJECT_NAME}_test
+                PUBLIC
+                /W4 /Od
+            )
+        endif ()
+        
     else ()
         target_compile_options (
-            ${PROJECT_NAME}
-            PUBLIC
-            -g -Og -Wall -Wextra -Wpedantic
+            ${PROJECT_NAME}_run
+            PUBLIC -g -Og -Wall -Wextra -Wpedantic
         )
+        
+        if (BUILD_TESTING)
+            target_compile_options (
+                ${PROJECT_NAME}
+                PUBLIC
+                    -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
+                    -ftest-coverage
+            )
+            target_compile_options (
+                ${PROJECT_NAME}_test
+                PUBLIC
+                    -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
+                    -ftest-coverage
+            )
+        
+        else ()
+            target_compile_options (
+                ${PROJECT_NAME}
+                PUBLIC -g -Og -Wall -Wextra -Wpedantic
+            )
+        endif ()
     endif ()
 endif ()
 
@@ -89,8 +151,13 @@ target_link_libraries (
 
 if (BUILD_TESTING)
     target_link_libraries (
+        ${PROJECT_NAME}
+        gcov
+    )
+    target_link_libraries (
         ${PROJECT_NAME}_test
         ${PROJECT_NAME}
+        gcov
     )
     
     add_test (
