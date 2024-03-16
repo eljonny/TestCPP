@@ -22,6 +22,20 @@
   <VirtualDirectory Name="resources">
     <File Name="CMakeLists.txt"/>
     <File Name="cmake/TestCPPConfig.cmake.in"/>
+    <File Name="cmake/Packing.cmake"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="vcpkg">
+    <File Name="custom-overlay/testcpp/usage"/>
+    <File Name="custom-overlay/testcpp/vcpkg.json"/>
+    <File Name="custom-overlay/testcpp/portfile.cmake"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="test">
+    <VirtualDirectory Name="src">
+      <File Name="test/src/TestCPPTestMain.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="include">
+      <File Name="test/include/TestCPPTests.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -55,7 +69,12 @@
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="yes">
-        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev
+        <Target Name="ctest">ctest --progress --verbose</Target>
+        <Target Name="cpack">cpack --config CPackConfig.cmake
+cpack --config CPackSourceConfig.cmake
+cpack -G DEB
+cpack -G RPM</Target>
+        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1
 make</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
         <CleanCommand>make clean</CleanCommand>
@@ -99,6 +118,9 @@ make</Target>
       <PreBuild/>
       <PostBuild/>
       <CustomBuild Enabled="yes">
+        <Target Name="ctest">ctest --progress --verbose</Target>
+        <Target Name="cpack">cpack --config CPackConfig.cmake
+cpack --config CPackSourceConfig.cmake</Target>
         <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev
 make</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
@@ -108,7 +130,7 @@ make</Target>
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName/>
-        <WorkingDirectory>build-debug</WorkingDirectory>
+        <WorkingDirectory>build-release</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
@@ -122,9 +144,4 @@ make</Target>
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="vcpkg">
-    <File Name="custom-overlay/testcpp/usage"/>
-    <File Name="custom-overlay/testcpp/vcpkg.json"/>
-    <File Name="custom-overlay/testcpp/portfile.cmake"/>
-  </VirtualDirectory>
 </CodeLite_Project>

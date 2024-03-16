@@ -3,11 +3,16 @@ cmake_minimum_required (VERSION 3.16)
 set (PROJECT_NAME "TestCPP")
 set (PROJECT_GROUP_NAME "cpptesting")
 
-## Set our project name
-project (${PROJECT_NAME} VERSION 0.1)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+project (${PROJECT_NAME} VERSION 0.1.0)
 
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if (${CMAKE_TEST_ENABLED})
+    include (CTest)
+endif ()
 
 add_library (
     ${PROJECT_NAME}
@@ -23,17 +28,40 @@ add_executable (
     src/main.cpp
 )
 
+if (BUILD_TESTING)
+    add_executable (
+        ${PROJECT_NAME}_test
+        test/src/TestCPPTestMain.cpp
+    )
+endif ()
+
 if (${CMAKE_BUILD_TYPE} EQUAL "Release")
     if (MSVC)
-        target_compile_options (${PROJECT_NAME} PUBLIC /W4 /O2)
+        target_compile_options (
+            ${PROJECT_NAME}
+            PUBLIC
+            /W4 /O2
+        )
     else ()
-        target_compile_options (${PROJECT_NAME} PUBLIC -O3 -Wall -Wextra -Wpedantic)
+        target_compile_options (
+            ${PROJECT_NAME}
+            PUBLIC
+            -O3 -Wall -Wextra -Wpedantic
+        )
     endif ()
 else ()
     if (MSVC)
-        target_compile_options (${PROJECT_NAME} PUBLIC /W4 /Od)
+        target_compile_options (
+            ${PROJECT_NAME}
+            PUBLIC
+            /W4 /Od
+        )
     else ()
-        target_compile_options (${PROJECT_NAME} PUBLIC -g -Og -Wall -Wextra -Wpedantic)
+        target_compile_options (
+            ${PROJECT_NAME}
+            PUBLIC
+            -g -Og -Wall -Wextra -Wpedantic
+        )
     endif ()
 endif ()
 
@@ -41,16 +69,35 @@ target_include_directories (
     ${PROJECT_NAME} PRIVATE
     include
 )
-
 target_include_directories (
     ${PROJECT_NAME}_run PRIVATE
     include
 )
 
+if (BUILD_TESTING)
+    target_include_directories (
+        ${PROJECT_NAME}_test PRIVATE
+        test/include
+        include
+    )
+endif ()
+
 target_link_libraries (
     ${PROJECT_NAME}_run
     ${PROJECT_NAME}
 )
+
+if (BUILD_TESTING)
+    target_link_libraries (
+        ${PROJECT_NAME}_test
+        ${PROJECT_NAME}
+    )
+    
+    add_test (
+        NAME ${PROJECT_NAME}Tests
+        COMMAND ${PROJECT_NAME}_test
+    )
+endif ()
 
 include (CMakePackageConfigHelpers)
 configure_package_config_file (
@@ -93,3 +140,5 @@ install(
         ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
+
+include (Packing)
