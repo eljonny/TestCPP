@@ -104,7 +104,7 @@ else ()
             PUBLIC -g -Og -Wall -Wextra -Wpedantic
         )
         
-        if (BUILD_TESTING)
+        if (BUILD_TESTING AND ${CMAKE_COVERAGE_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}
                 PUBLIC
@@ -150,15 +150,24 @@ target_link_libraries (
 )
 
 if (BUILD_TESTING)
-    target_link_libraries (
-        ${PROJECT_NAME}
-        gcov
-    )
-    target_link_libraries (
-        ${PROJECT_NAME}_test
-        ${PROJECT_NAME}
-        gcov
-    )
+    if (${CMAKE_COVERAGE_ENABLED})
+        target_link_libraries (
+            ${PROJECT_NAME}
+            gcov
+        )
+        target_link_libraries (
+            ${PROJECT_NAME}_test
+            ${PROJECT_NAME}
+            gcov
+        )
+    
+    else ()
+        target_link_libraries (
+            ${PROJECT_NAME}_test
+            ${PROJECT_NAME}
+        )
+    
+    endif ()
     
     add_test (
         NAME ${PROJECT_NAME}Tests
