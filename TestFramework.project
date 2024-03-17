@@ -41,8 +41,9 @@
     <File Name=".github/FUNDING.yml"/>
     <File Name=".github/workflows/codeql.yml"/>
     <File Name=".github/workflows/cmake-multi-platform.yml"/>
-    <File Name=".github/workflows/cmake-build-test-cov.yml"/>
     <File Name=".github/workflows/cmake-linux-pack.yml"/>
+    <File Name=".github/workflows/cmake-build-test.yml"/>
+    <File Name=".github/workflows/cmake-build-cov.yml"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
