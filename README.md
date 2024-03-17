@@ -151,6 +151,8 @@ The Release configuration does not support code coverage because of the
 
 # Testing and Code Coverage
 
+The library is tested using itself.
+
 If you would like to test the framework after building it, ensure the
  test flag was passed to CMake when you built it then run the following
  command from the build-debug or build-release directory:
