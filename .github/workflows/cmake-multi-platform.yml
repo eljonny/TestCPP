@@ -78,4 +78,4 @@ jobs:
 
     - name: Pack
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: cpack --config CPackConfig.cmake
+      run: cpack --config CPackConfig.cmake -C ${{ matrix.build_type }}
