@@ -11,11 +11,16 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (${CMAKE_TEST_ENABLED})
+    message ("-- Testing enabled!")
     include (CTest)
 endif ()
 
-if (NOT DEFINED ${CMAKE_COVERAGE_ENABLED})
+if (NOT DEFINED CMAKE_COVERAGE_ENABLED)
+    message ("-- Not defined CMAKE_COVERAGE_ENABLED")
     set (CMAKE_COVERAGE_ENABLED 0)
+
+else ()
+    message ("-- Defined CMAKE_COVERAGE_ENABLED ${CMAKE_COVERAGE_ENABLED}")
 endif ()
 
 add_library (
@@ -40,6 +45,8 @@ if (BUILD_TESTING)
 endif ()
 
 if (${CMAKE_BUILD_TYPE} EQUAL "Release")
+    message ("-- Release build compilation options enabled")
+
     if (MSVC)
         target_compile_options (
             ${PROJECT_NAME}
@@ -82,6 +89,8 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
     endif ()
     
 else ()
+    message ("-- Debug build compilation options enabled")
+    
     if (MSVC)
         target_compile_options (
             ${PROJECT_NAME}
@@ -109,6 +118,8 @@ else ()
         )
         
         if (BUILD_TESTING AND ${CMAKE_COVERAGE_ENABLED})
+            message ("-- Coverage compilation options enabled")
+
             target_compile_options (
                 ${PROJECT_NAME}
                 PUBLIC
@@ -155,6 +166,8 @@ target_link_libraries (
 
 if (BUILD_TESTING)
     if (${CMAKE_COVERAGE_ENABLED})
+        message ("-- Linking in gcov")
+
         target_link_libraries (
             ${PROJECT_NAME}
             gcov
