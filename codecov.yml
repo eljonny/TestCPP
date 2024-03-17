@@ -1,0 +1,3 @@
+ignore:
+  - "include/tests.hpp"
+  - "src/main.cpp"

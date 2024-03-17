@@ -19,7 +19,7 @@
     <File Name="WAIVER"/>
     <File Name="README.md"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="resources">
+  <VirtualDirectory Name="cmake">
     <File Name="CMakeLists.txt"/>
     <File Name="cmake/TestCPPConfig.cmake.in"/>
     <File Name="cmake/Packing.cmake"/>
@@ -156,4 +156,7 @@ make</Target>
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="codecov">
+    <File Name="codecov.yml"/>
+  </VirtualDirectory>
 </CodeLite_Project>
