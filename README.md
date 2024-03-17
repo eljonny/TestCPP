@@ -17,12 +17,12 @@ Features of the test framework are very minimal and include:
  - Test suite definition
  - Test elapsed time logging
  - Basic assertions
-   > assertEquals
-   > assertNotEquals
-   > assertNull
-   > assertNotNull
-   > assertTrue
-   > assertFalse
+   - assertEquals
+   - assertNotEquals
+   - assertNull
+   - assertNotNull
+   - assertTrue
+   - assertFalse
  - fail function, for marking incomplete or skeleton tests
 
 # Getting Started
