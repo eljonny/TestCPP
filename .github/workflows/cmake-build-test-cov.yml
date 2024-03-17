@@ -61,8 +61,13 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest --build-config ${{ matrix.build_type }} --progress --verbose
+
+    - name: Coverage
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      # Execute gcov to generate a coverage report
       run: |
-        ctest --build-config ${{ matrix.build_type }} --progress --verbose
-        mkdir -p coverage && cd coverage
+        mkdir -p coverage
+        cd coverage
         find .. -name '*.gcda' | xargs gcov -abcfmu
         find . -type f -not -name 'Test*.gcov' | xargs rm
