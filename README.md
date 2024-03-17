@@ -109,6 +109,7 @@ To build within the CodeLite IDE:
  - Right click on the TestFramework project
  - Move to the Custom Targets... context menu option
  - Click cmake
+
 In the Custom Targets... context menu option there are also ctest
  and cpack targets, which will, respectively:
  - Run the test suite for the library and (if the Debug
@@ -144,6 +145,7 @@ For the release build:
 The Release configuration supports testing. To enable generation of the
  test target in the build, add the following flag to the cmake command:
  - `-DCMAKE_TEST_ENABLED=1`
+
 The Release configuration does not support code coverage because of the
  compiler optimizations used.
 
@@ -175,6 +177,7 @@ These commands do the following:
  - Pass the list of files to gcov to process the raw data and
    output human-readable code coverage reports
  - Remove all the coverage data for non-project code
+
 The GitHub repo is linked to Codecov which visualizes this data.
 
 # Installing
@@ -198,15 +201,18 @@ For the release build:
 The project is configured to use CPack, if you would like to
  create your own binary and/or source distribution of the
  project.
+
 To create basic binary packages that can be used on the
  target OS and architecture (I believe this is based on what
  type of system you run the build process), run the following
  command from the CMake build directory (either build-debug
  or build-release):
  - `cpack --config CPackConfig.cmake`
+
 To create source packages, run the following command from the
  CMake build directory (either build-debug or build-release):
  - `cpack --config CPackSourceConfig.cmake`
+
 If you are building on Linux, the build supports generating
  deb and rpm packages. To build those, run the following
  respective commands from the CMake build directory (either
