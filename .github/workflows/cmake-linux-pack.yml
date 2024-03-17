@@ -68,5 +68,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: linux-packages
-        path: ${{ steps.strings.outputs.build-output-dir }}/../_packages/**
+        path: ${{ github.workspace }}/_packages/**
         overwrite: true
