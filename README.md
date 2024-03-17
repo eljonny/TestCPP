@@ -2,6 +2,7 @@
 ![Test](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-test.yml/badge.svg?event=push)
 ![RPM/DEB Packaging](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack.yml/badge.svg?event=push)
 ![Coverage](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov.yml/badge.svg?event=push)
+![Security](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml/badge.svg?event=push)
 [![codecov](https://codecov.io/gh/eljonny/TestCPP/graph/badge.svg?token=WFG41QY4BB)](https://codecov.io/gh/eljonny/TestCPP)
 
 # Introduction
