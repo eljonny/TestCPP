@@ -17,7 +17,7 @@
     <File Name="UNLICENSE"/>
     <File Name="LICENSE"/>
     <File Name="WAIVER"/>
-    <File Name="README"/>
+    <File Name="README.md"/>
   </VirtualDirectory>
   <VirtualDirectory Name="resources">
     <File Name="CMakeLists.txt"/>
