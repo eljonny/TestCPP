@@ -14,6 +14,10 @@ if (${CMAKE_TEST_ENABLED})
     include (CTest)
 endif ()
 
+if (NOT DEFINED ${CMAKE_COVERAGE_ENABLED})
+    set (CMAKE_COVERAGE_ENABLED 0)
+endif ()
+
 add_library (
     ${PROJECT_NAME}
     src/Test.cpp
