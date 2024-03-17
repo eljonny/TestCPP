@@ -72,3 +72,9 @@ jobs:
         cd coverage
         find .. -name '*.gcda' | xargs gcov -abcfmu
         find . -type f -not -name 'Test*.gcov' | xargs rm
+        
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: eljonny/TestCPP
