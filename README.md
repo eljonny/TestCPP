@@ -10,6 +10,12 @@
 This is an implementation of a very simple test framework.
 It has no dependencies (other than the C++ standard library)
  and relies on C++11 features.
+
+The library is most useful for educational projects or small
+ personal/internal projects, as many features required for
+ testing more complex projects are not present.
+For testing more complex projects I would recommend using
+ [GoogleTest](https://github.com/google/googletest).
  
 The code is about 380 lines and resulting Debug binary
  packages are about 330kb on Linux, while the Release
