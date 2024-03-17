@@ -67,6 +67,7 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute gcov to generate a coverage report
       run: |
+        find . -name '*.gcda'
         mkdir -p coverage
         cd coverage
         find .. -name '*.gcda' | xargs gcov -abcfmu
