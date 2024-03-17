@@ -1,8 +1,8 @@
-![Build](https://github.com/eljonny/TestCPP/actions/workflows/cmake-multi-platform.yml/badge.svg?event=push)
-![Test](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-test.yml/badge.svg?event=push)
-![RPM/DEB Packaging](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack.yml/badge.svg?event=push)
-![Coverage](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov.yml/badge.svg?event=push)
-![Security](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml/badge.svg?event=push)
+[![Build](https://github.com/eljonny/TestCPP/actions/workflows/cmake-multi-platform.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-multi-platform.yml)
+[![Test](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-test.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-test.yml)
+[![RPM/DEB Packaging](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack.yml)
+[![Coverage](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov.yml)
+[![Security](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml)
 [![codecov](https://codecov.io/gh/eljonny/TestCPP/graph/badge.svg?token=WFG41QY4BB)](https://codecov.io/gh/eljonny/TestCPP)
 
 # Introduction
