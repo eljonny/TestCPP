@@ -65,10 +65,3 @@ jobs:
         mkdir -p coverage && cd coverage
         find .. -name '*.gcda' | xargs gcov -abcfmu
         find . -type f -not -name 'Test*.gcov' | xargs rm
-
-    - name: Pack
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: |
-        cpack --config CPackConfig.cmake
-        cpack -G DEB
-        cpack -G RPM
