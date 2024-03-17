@@ -37,6 +37,11 @@
       <File Name="test/include/TestCPPTests.hpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
+  <VirtualDirectory Name="github">
+    <File Name=".github/FUNDING.yml"/>
+    <File Name=".github/workflows/codeql.yml"/>
+    <File Name=".github/workflows/cmake-multi-platform.yml"/>
+  </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
