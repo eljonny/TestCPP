@@ -11,6 +11,21 @@ This is an implementation of a very simple test framework.
 It has no dependencies (other than the C++ standard library)
  and relies on C++11 features.
 
+The library is most useful for educational projects or small
+ personal/internal projects, as many features required for
+ testing more complex projects are not present.
+For testing more complex projects I would recommend using
+ [GoogleTest](https://github.com/google/googletest).
+ 
+The code is about 380 lines and resulting Debug binary
+ packages are about 330kb on Linux, while the Release
+ packages are about 280kb; this includes the header, the
+ static library, and the CMake targets for including it in
+ your CMake build.
+The Release builds are optimized for speed over size, so the
+ build could probably be tweaked to get a smaller binary if
+ desired.
+
 # Features
 
 Features of the test framework are very minimal and include:
@@ -27,6 +42,8 @@ Features of the test framework are very minimal and include:
  - fail function, for marking incomplete or skeleton tests
 
 # Getting Started
+
+## Acquiring the Library
 
 As of 0.1.0-beta.1 this library can be included in a CMake build
  using the `find_package` CMake function after installing, like
@@ -52,6 +69,14 @@ As of 0.1.0-beta.1, you can also include it in your `vcpkg` project
 ```
  vcpkg add port testcpp
 ```
+
+You can get binary packages from the Releases page on the GitHub
+ repo, or get them directly from the latest successful build on
+ the Actions page from the multi-platform or linux-package
+ workflows on the repo.
+Currently binaries are generated for Linux and Windows.
+
+## Writing Tests
 
 Include the test framework through TestCPP/Test.h, whether you
  make it a part of your project or install the files into
