@@ -67,15 +67,16 @@ namespace TestCPP {
             cerr << "Reason: " << errorMessage << endl;
             return false;
         }
-        catch(runtime_error re) {
+        catch(runtime_error& re) {
             this->pass = false;
             cerr << "Test " << this->testName << " failed!" << endl;
             cerr << "Reason: " << re.what() << endl;
             return false;
         }
-        catch(exception e) {
+        catch(exception& e) {
             this->pass = false;
             cerr << "Test " << this->testName << " failed!" << endl;
+            cerr << "Reason: " << e.what() << endl;
             return false;
         }
     }
