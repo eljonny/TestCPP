@@ -23,6 +23,13 @@
     <File Name="CMakeLists.txt"/>
     <File Name="cmake/TestCPPConfig.cmake.in"/>
     <File Name="cmake/Packing.cmake"/>
+    <File Name="cmake/Installing.cmake"/>
+    <File Name="cmake/Targets.cmake"/>
+    <File Name="cmake/Includes.cmake"/>
+    <File Name="cmake/Linking.cmake"/>
+    <File Name="cmake/Testing.cmake"/>
+    <File Name="cmake/VarChecks.cmake"/>
+    <File Name="cmake/BuildTypeHandling.cmake"/>
   </VirtualDirectory>
   <VirtualDirectory Name="vcpkg">
     <File Name="custom-overlay/testcpp/usage"/>
@@ -44,6 +51,19 @@
     <File Name=".github/workflows/cmake-linux-pack.yml"/>
     <File Name=".github/workflows/cmake-build-test.yml"/>
     <File Name=".github/workflows/cmake-build-cov.yml"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="codecov">
+    <File Name="codecov.yml"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="conan">
+    <VirtualDirectory Name="test_package">
+      <File Name="test_package/conanfile.py"/>
+      <File Name="test_package/CMakeLists.txt"/>
+      <VirtualDirectory Name="src">
+        <File Name="test_package/src/example.cpp"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+    <File Name="conanfile.py"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -85,7 +105,7 @@ find . -type f -not -name 'Test*.gcov' | xargs rm</Target>
 cpack --config CPackSourceConfig.cmake
 cpack -G DEB
 cpack -G RPM</Target>
-        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=1
+        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=1 -DCMAKE_DEMO_ENABLED=1
 make</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
         <CleanCommand>make clean</CleanCommand>
@@ -134,7 +154,7 @@ make</Target>
 cpack --config CPackSourceConfig.cmake
 cpack -G DEB
 cpack -G RPM</Target>
-        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=0
+        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=0 -DCMAKE_DEMO_ENABLED=1
 make</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
         <CleanCommand>make clean</CleanCommand>
@@ -157,7 +177,4 @@ make</Target>
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="codecov">
-    <File Name="codecov.yml"/>
-  </VirtualDirectory>
 </CodeLite_Project>
