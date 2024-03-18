@@ -253,7 +253,7 @@ The Release configuration does not support code coverage because of the
 
 Both Release and Debug configurations support building the demo app,
  which you can enable by adding the following flag to `cmake`:
- - `-DCMAKE_DEMO_ENABLED`
+ - `-DCMAKE_DEMO_ENABLED=1`
 
 # Testing and Code Coverage
 
