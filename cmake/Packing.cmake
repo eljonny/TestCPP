@@ -12,6 +12,10 @@ set (CPACK_PACKAGE_VENDOR "eljonny")
 
 set (CPACK_VERBATIM_VARIABLES YES)
 
+# This ensures that the zip package is created with the same structure
+#  as the tar.gz and other binary packages.
+set (CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+
 set (CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 set (CPACK_OUTPUT_FILE_PREFIX
         "${CMAKE_SOURCE_DIR}/_packages/${CMAKE_BUILD_TYPE}")
