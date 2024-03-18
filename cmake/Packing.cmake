@@ -1,7 +1,7 @@
 set (
     CPACK_SOURCE_IGNORE_FILES
         "build-debug" "build-release" ".clang"
-        ".codelite" ".git" "_packages"
+        ".codelite" ".git" "_packages" "test_package/build"
 )
 
 set (CPACK_PACKAGE_DESCRIPTION_SUMMARY
