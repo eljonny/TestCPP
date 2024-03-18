@@ -1,0 +1,28 @@
+set_target_properties (
+    ${PROJECT_NAME}
+    PROPERTIES
+        PUBLIC_HEADER
+        include/Test.h
+)
+include (GNUInstallDirs)
+install (
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Targets
+    PUBLIC_HEADER
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
+export (
+    EXPORT ${PROJECT_NAME}Targets
+    FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
+)
+install (
+    EXPORT ${PROJECT_NAME}Targets
+    NAMESPACE ${PROJECT_GROUP_NAME}::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+install(
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)

@@ -42,3 +42,16 @@ set (CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 set (CPACK_DEB_COMPONENT_INSTALL YES)
 
 include (CPack)
+
+include (CMakePackageConfigHelpers)
+configure_package_config_file (
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
