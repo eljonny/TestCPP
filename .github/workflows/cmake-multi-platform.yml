@@ -72,7 +72,9 @@ jobs:
 
     - name: Pack
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: cpack --config CPackConfig.cmake -C ${{ matrix.build_type }}
+      run: |
+        cpack --config CPackConfig.cmake -C ${{ matrix.build_type }}
+        cpack --config CPackConfig.cmake -C ${{ matrix.build_type }} -G ZIP
 
     - name: 'Artifact Storage'
       uses: actions/upload-artifact@v4

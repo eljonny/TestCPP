@@ -104,7 +104,8 @@ find . -type f -not -name 'Test*.gcov' | xargs rm</Target>
         <Target Name="cpack">cpack --config CPackConfig.cmake
 cpack --config CPackSourceConfig.cmake
 cpack -G DEB
-cpack -G RPM</Target>
+cpack -G RPM
+cpack -G ZIP</Target>
         <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=1 -DCMAKE_DEMO_ENABLED=1
 make</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
@@ -153,7 +154,8 @@ make</Target>
         <Target Name="cpack">cpack --config CPackConfig.cmake
 cpack --config CPackSourceConfig.cmake
 cpack -G DEB
-cpack -G RPM</Target>
+cpack -G RPM
+cpack -G ZIP</Target>
         <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=0 -DCMAKE_DEMO_ENABLED=1
 make</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
