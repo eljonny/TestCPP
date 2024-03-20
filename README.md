@@ -328,6 +328,11 @@ If you are building on Linux, the build supports generating
  - `cpack -G DEB`
  - `cpack -G RPM`
 
+Both Windows and Linux builds also support generating a zip
+ package by running the following command from the CMake
+ build directory (either build-debug or build-release):
+ - `cpack -G ZIP`
+
 # Issues
 
 I'm more than willing to work on issues as they come up.
