@@ -1,6 +1,7 @@
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake
 from conan.tools.cmake import cmake_layout, CMakeDeps
+from conan.tools.build import check_min_cppstd
 
 
 class TestCPPRecipe(ConanFile):
@@ -21,6 +22,8 @@ class TestCPPRecipe(ConanFile):
     exports_sources = "CMakeLists.txt", "src/Test.cpp", "include/Test.h"
     exports_sources += "cmake/*", "LICENSE", "README.md", "WAIVER"
 
+    generators = "CMakeDeps"
+
     def config_options(self):
         if self.settings.os == "Windows":
             self.options.rm_safe("fPIC")
@@ -37,6 +40,9 @@ class TestCPPRecipe(ConanFile):
         deps.generate()
         tc = CMakeToolchain(self)
         tc.generate()
+
+    def validate(self):
+        check_min_cppstd(self, "11")
 
     def build(self):
         cmake = CMake(self)
