@@ -10,6 +10,8 @@ using std::function;
 int main(void)
 {
 	TestSuite suite(
+        string("Demo Test Suite"),
+        
 		make_tuple(
 			string("simpleTest"),
 			function<void()>(simpleTest)
