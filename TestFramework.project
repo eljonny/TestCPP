@@ -3,12 +3,12 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <File Name="src/main.cpp"/>
     <File Name="src/Test.cpp"/>
+    <File Name="src/TestUtil.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="include/Test.h"/>
-    <File Name="include/tests.hpp"/>
+    <File Name="include/TestUtil.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="git">
     <File Name=".gitignore"/>
@@ -38,10 +38,22 @@
   </VirtualDirectory>
   <VirtualDirectory Name="test">
     <VirtualDirectory Name="src">
-      <File Name="test/src/TestCPPTestMain.cpp"/>
+      <File Name="test/src/TestCPPTestCaseMain.cpp"/>
+      <File Name="test/src/TestCPPTestSuiteMain.cpp"/>
+      <VirtualDirectory Name="TestCase">
+        <File Name="test/src/TestCase/TestCaseTestChunks.cpp"/>
+      </VirtualDirectory>
     </VirtualDirectory>
     <VirtualDirectory Name="include">
-      <File Name="test/include/TestCPPTests.hpp"/>
+      <VirtualDirectory Name="TestCase">
+        <File Name="test/include/TestCase/TestCaseSuite.hpp"/>
+        <File Name="test/include/TestCase/TestCaseTests.hpp"/>
+        <File Name="test/include/TestCase/TestCaseTestChunks.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="TestSuite">
+        <File Name="test/include/TestSuite/TestSuiteSuite.hpp"/>
+        <File Name="test/include/TestSuite/TestSuiteTests.hpp"/>
+      </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="github">
@@ -179,4 +191,8 @@ make</Target>
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="demo">
+    <VirtualDirectory Name="include"/>
+    <VirtualDirectory Name="src"/>
+  </VirtualDirectory>
 </CodeLite_Project>

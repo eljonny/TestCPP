@@ -14,14 +14,23 @@ if (BUILD_TESTING)
             gcov
         )
         target_link_libraries (
-            ${PROJECT_NAME}_test
+            ${PROJECT_NAME}_TestCase_test
+            ${PROJECT_NAME}
+            gcov
+        )
+        target_link_libraries (
+            ${PROJECT_NAME}_TestSuite_test
             ${PROJECT_NAME}
             gcov
         )
     
     else ()
         target_link_libraries (
-            ${PROJECT_NAME}_test
+            ${PROJECT_NAME}_TestCase_test
+            ${PROJECT_NAME}
+        )
+        target_link_libraries (
+            ${PROJECT_NAME}_TestSuite_test
             ${PROJECT_NAME}
         )
     

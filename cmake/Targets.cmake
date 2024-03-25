@@ -1,5 +1,6 @@
 add_library (
     ${PROJECT_NAME}
+    src/TestUtil.cpp
     src/Test.cpp
 )
 add_library (
@@ -11,13 +12,19 @@ add_library (
 if (${CMAKE_DEMO_ENABLED})
     add_executable (
         ${PROJECT_NAME}_run
-        src/main.cpp
+        demo/src/main.cpp
     )
 endif ()
 
 if (BUILD_TESTING)
     add_executable (
-        ${PROJECT_NAME}_test
-        test/src/TestCPPTestMain.cpp
+        ${PROJECT_NAME}_TestCase_test
+        test/src/TestCase/TestCaseTestChunks.cpp
+        test/src/TestCPPTestCaseMain.cpp
+    )
+    
+    add_executable (
+        ${PROJECT_NAME}_TestSuite_test
+        test/src/TestCPPTestSuiteMain.cpp
     )
 endif ()

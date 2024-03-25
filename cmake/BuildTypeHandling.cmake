@@ -18,7 +18,13 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
         
         if (BUILD_TESTING)
             target_compile_options (
-                ${PROJECT_NAME}_test
+                ${PROJECT_NAME}_TestCase_test
+                PUBLIC
+                /W4 /O2
+            )
+            
+            target_compile_options (
+                ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
                 /W4 /O2
             )
@@ -41,7 +47,13 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
         
         if (BUILD_TESTING)
             target_compile_options (
-                ${PROJECT_NAME}_test
+                ${PROJECT_NAME}_TestCase_test
+                PUBLIC
+                -O3 -Wall -Wextra -Wpedantic
+            )
+            
+            target_compile_options (
+                ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
                 -O3 -Wall -Wextra -Wpedantic
             )
@@ -68,7 +80,13 @@ else ()
         
         if (BUILD_TESTING)
             target_compile_options (
-                ${PROJECT_NAME}_test
+                ${PROJECT_NAME}_TestCase_test
+                PUBLIC
+                /W4 /Od
+            )
+            
+            target_compile_options (
+                ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
                 /W4 /Od
             )
@@ -91,8 +109,16 @@ else ()
                     -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
                     -ftest-coverage
             )
+            
             target_compile_options (
-                ${PROJECT_NAME}_test
+                ${PROJECT_NAME}_TestCase_test
+                PUBLIC
+                    -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
+                    -ftest-coverage
+            )
+            
+            target_compile_options (
+                ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
                     -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
                     -ftest-coverage
