@@ -110,6 +110,7 @@ namespace TestCPP {
     }
     
     void TestCase::runTest() {
+        clog << "Starting run of test " << this->testName << endl;
         this->lastRunTime = duration(this->test).count();
         if(this->notifyTestPassed) {
             clog << fixed;
