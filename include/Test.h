@@ -38,52 +38,106 @@
 #include <chrono>
 #include <regex>
 
+using std::chrono::nanoseconds;
+using std::chrono::system_clock;
+using std::chrono::duration_cast;
+using std::enable_if;
+using std::endl;
+using std::exception;
+using std::forward;
+using std::function;
+using std::regex_constants::error_type;
+using std::string;
+using std::streambuf;
+using std::stringstream;
+using std::vector;
+
 namespace TestCPP {
     class TestCase {
 
-        using TimeT = std::chrono::nanoseconds;
-
     public:
+        enum TestCaseOutCompareOptions {
+            CONTAINS,
+            EXACT
+        };
+        
         TestCase(
-            std::string testName,
-            std::function<void()> test,
-            bool testPassedMessage = true
+            string testName,
+            function<void()> test,
+            bool testPassedMessage = true,
+            bool captureOut = false,
+            bool captureLog = false,
+            bool captureErr = false,
+            TestCaseOutCompareOptions opt = CONTAINS
         );
-        bool go();
+        
+        ~TestCase();
+        
         void setNotifyPassed(bool);
+        void captureStdout();
+        void captureClog();
+        void captureStdErr();
+        void outCompareOption(TestCaseOutCompareOptions opt);
+        void clearStdoutCapture();
+        void clearLogCapture();
+        void clearStderrCapture();
+        bool checkStdout(string against);
+        bool checkLog(string against);
+        bool checkStderr(string against);
+        bool go();
         unsigned long long getLastRuntime();
 
     private:
         bool notifyTestPassed;
         bool pass;
         unsigned long long lastRunTime;
-        std::string testName;
-        std::function<void()> test;
+        
+        string testName;
+        function<void()> test;
+        
+        TestCaseOutCompareOptions option;
+        
+        stringstream * stdoutBuffer = nullptr;
+        stringstream * clogBuffer = nullptr;
+        stringstream * stderrBuffer = nullptr;
+        streambuf * stdoutOriginal = nullptr;
+        streambuf * clogOriginal = nullptr;
+        streambuf * stderrOriginal = nullptr;
 
         template<typename F, typename ...Args>
-        static TimeT duration(F func, Args&&... args)
+        static nanoseconds duration(F func, Args&&... args)
         {
-            auto start = std::chrono::system_clock::now();
-            func(std::forward<Args>(args)...);
-            return std::chrono::duration_cast<TimeT>(std::chrono::system_clock::now()-start);
+            auto start = system_clock::now();
+            func(forward<Args>(args)...);
+            return duration_cast<nanoseconds>(
+                system_clock::now()-start
+            );
         }
+        
+        void logTestFailure(string);
+        void runTest();
+        bool checkOutput(TestCaseOutCompareOptions opt, string source,
+                         string against);
     };
 
     class TestSuite {
 
     public:
-
         template<typename... TestType>
-        TestSuite(typename std::enable_if<sizeof...(TestType) == 0>::type) {
+        TestSuite(string suiteName,
+                  typename enable_if<sizeof...(TestType) == 0>::type) {
+            
             this->testPassedMessage = true;
-            this->tests = std::vector<TestCase>();
+            this->setSuiteName(suiteName);
+            this->tests = vector<TestCase>();
         }
 
         template<typename... TestType>
-        TestSuite(TestType ...tests) {
+        TestSuite(string suiteName, TestType ...tests) {
 
             this->testPassedMessage = true;
-            this->tests = std::vector<TestCase>();
+            this->setSuiteName(suiteName);
+            this->tests = vector<TestCase>();
 
             this->addTests(tests...);
         }
@@ -92,7 +146,7 @@ namespace TestCPP {
         void addTest(T test);
 
         template<typename... OtherTests>
-        typename std::enable_if<sizeof...(OtherTests) == 0>::type
+        typename enable_if<sizeof...(OtherTests) == 0>::type
         inline addTests() { }
 
         template<typename Test, typename... OtherTests>
@@ -106,24 +160,22 @@ namespace TestCPP {
             return T(args...);
         }
 
-        void setSuiteName(std::string testSuiteName);
-
-        static std::string getRegExpErrorString(std::regex_constants::error_type errType);
+        void setSuiteName(string testSuiteName);
 
         template<typename T1, typename T2>
         static void assertEquals(
                 T1 expected, T2 actual,
-                std::string failureMessage =
-                    std::string("Arguments are not equivalent!")
+                string failureMessage =
+                    string("Arguments are not equivalent!")
             )
         {
             if(expected != actual) {
-                std::ostringstream err;
+                stringstream err;
 
-                err << "Equivalence assertion failed!" << std::endl;
-                err << failureMessage << std::endl;
-                err << "Expected: <" << expected << ">" << std::endl;
-                err << "Actual: <" << actual << ">" << std::endl;
+                err << "Equivalence assertion failed!" << endl;
+                err << failureMessage << endl;
+                err << "Expected: <" << expected << ">" << endl;
+                err << "Actual: <" << actual << ">" << endl;
 
                 throw err.str();
             }
@@ -132,17 +184,17 @@ namespace TestCPP {
         template<typename T1, typename T2>
         static void assertNotEquals(
                 T1 expected, T2 actual,
-                std::string failureMessage =
-                    std::string("Arguments are equivalent!")
+                string failureMessage =
+                    string("Arguments are equivalent!")
             )
         {
             if(expected == actual) {
-                std::ostringstream err;
+                stringstream err;
 
-                err << "Non-Equivalence assertion failed!" << std::endl;
-                err << failureMessage << std::endl;
-                err << "Expected: <" << expected << ">" << std::endl;
-                err << "Actual: <" << actual << ">" << std::endl;
+                err << "Non-Equivalence assertion failed!" << endl;
+                err << failureMessage << endl;
+                err << "Expected: <" << expected << ">" << endl;
+                err << "Actual: <" << actual << ">" << endl;
 
                 throw err.str();
             }
@@ -151,17 +203,17 @@ namespace TestCPP {
         template<typename T>
         static void assertNull(
                 T ptr,
-                std::string failureMessage =
-                    std::string("Object is not null!")
+                string failureMessage =
+                    string("Object is not null!")
             )
         {
             bool null = ptr == nullptr;
 
             if(!null) {
-                std::ostringstream err;
+                stringstream err;
 
-                err << "Null assertion failed!" << std::endl;
-                err << failureMessage << std::endl;
+                err << "Null assertion failed!" << endl;
+                err << failureMessage << endl;
 
                 throw err.str();
             }
@@ -170,37 +222,43 @@ namespace TestCPP {
         template<typename T>
         static void assertNotNull(
                 T ptr,
-                std::string failureMessage =
-                    std::string("Object is null!")
+                string failureMessage =
+                    string("Object is null!")
             )
         {
             bool notNull = ptr != nullptr;
 
             if(!notNull) {
-                std::ostringstream err;
+                stringstream err;
 
-                err << "Not Null assertion failed!" << std::endl;
-                err << failureMessage << std::endl;
+                err << "Not Null assertion failed!" << endl;
+                err << failureMessage << endl;
 
                 throw err.str();
             }
         }
+        
+        static void assertThrows(
+            function<void()> shouldThrow,
+            string failureMessage =
+                string("Should have thrown something!")
+        );
 
         static void assertTrue(
             bool condition,
-            std::string failureMessage =
-                std::string("Condition is false!")
+            string failureMessage =
+                string("Condition is false!")
         );
 
         static void assertFalse(
             bool condition,
-            std::string failureMessage =
-                std::string("Condition is true!")
+            string failureMessage =
+                string("Condition is true!")
         );
 
         static void fail(
-            std::string failureMessage =
-                std::string("Test failed!")
+            string failureMessage =
+                string("Test failed!")
         );
 
         void enableTestPassedMessage();
@@ -214,8 +272,9 @@ namespace TestCPP {
         unsigned lastRunSuccessCount;
         unsigned lastRunFailCount;
         unsigned long long totalRuntime;
-        std::string suiteName;
-        std::vector<TestCase> tests;
+        
+        string suiteName;
+        vector<TestCase> tests;
     };
 }
 

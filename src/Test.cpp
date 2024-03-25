@@ -27,62 +27,200 @@
 
 //Original author: Jonathan Hyry CSU-Fullerton SECS 6896-02 Fall 2014/15
 
-#include "Test.h"
+#include <iomanip>
 
-using std::tuple;
-using std::function;
-using std::string;
-using std::runtime_error;
-using std::exception;
-using std::clog;
+#include "Test.h"
+#include "TestUtil.h"
+
 using std::cerr;
+using std::clog;
+using std::cout;
+using std::current_exception;
 using std::endl;
-using std::ostringstream;
+using std::exception;
+using std::exception_ptr;
+using std::fixed;
+using std::function;
+using std::invalid_argument;
+using std::rethrow_exception;
+using std::runtime_error;
+using std::setprecision;
+using std::string;
+using std::tuple;
 
 namespace TestCPP {
-    TestCase::TestCase(string name, function<void()> test, bool msg) {
+    TestCase::TestCase(string name, function<void()> test, bool msg,
+                       bool captureOut, bool captureLog,
+                       bool captureErr,
+                       TestCase::TestCaseOutCompareOptions opt)
+    {
         this->notifyTestPassed = msg;
         this->test = test;
-        this->testName = name;
+        
+        if (name.data())
+        {
+            this->testName = name;
+        }
+        else
+        {
+            stringstream e;
+            e << "An invalid string was passed as the Test Case Name!";
+            throw invalid_argument(e.str());
+        }
+        
+        if (captureOut) {
+            captureStdout();
+        }
+        if (captureLog) {
+            captureClog();
+        }
+        if (captureErr) {
+            captureStdErr();
+        }
+        
+        this->option = opt;
+    }
+    
+    TestCase::~TestCase() {
+        if (this->stdoutBuffer != nullptr) {
+            delete this->stdoutBuffer;
+            cout.rdbuf(this->stdoutOriginal);
+        }
+        if (this->clogBuffer != nullptr) {
+            delete this->clogBuffer;
+            clog.rdbuf(this->clogOriginal);
+        }
+        if (this->stderrBuffer != nullptr) {
+            delete this->stderrBuffer;
+            cerr.rdbuf(this->stderrOriginal);
+        }
     }
 
     unsigned long long TestCase::getLastRuntime() {
         return this->lastRunTime;
     }
+    
+    void TestCase::logTestFailure(string reason) {
+        cerr << fixed;
+        cerr << setprecision(4);
+        cerr << "Test " << this->testName << " failed! ("
+                << static_cast<double>(this->lastRunTime)
+                    /1000000000.0 << "s)" << endl;
+        cerr << "Reason: " << reason << endl;
+    }
+    
+    void TestCase::runTest() {
+        this->lastRunTime = duration(this->test).count();
+        if(this->notifyTestPassed) {
+            clog << fixed;
+            clog << setprecision(4);
+            clog << "Test " << this->testName << " passed! ("
+                    << static_cast<double>(this->lastRunTime)
+                        /1000000000.0 << "s)" << endl;
+        }
+        this->pass = true;
+    }
 
     bool TestCase::go() {
         try {
-            this->lastRunTime = TestCase::duration(this->test).count();
-            if(this->notifyTestPassed) {
-                clog << "Test " << this->testName << " passed! ("
-                        << static_cast<double>(this->lastRunTime)
-                            /1000000000.0 << "s)" << endl;
-            }
-            this->pass = true;
+            runTest();
             return true;
         }
         catch(string errorMessage) {
             this->pass = false;
-            cerr << "Test " << this->testName << " failed!" << endl;
-            cerr << "Reason: " << errorMessage << endl;
-            return false;
+            logTestFailure(errorMessage);
         }
         catch(runtime_error& re) {
             this->pass = false;
-            cerr << "Test " << this->testName << " failed!" << endl;
-            cerr << "Reason: " << re.what() << endl;
-            return false;
+            logTestFailure(re.what());
         }
         catch(exception& e) {
             this->pass = false;
-            cerr << "Test " << this->testName << " failed!" << endl;
-            cerr << "Reason: " << e.what() << endl;
-            return false;
+            logTestFailure(e.what());
         }
+        
+        return false;
     }
 
     void TestCase::setNotifyPassed(bool notify) {
         this->notifyTestPassed = notify;
+    }
+    
+    void TestCase::captureStdout() {
+        this->stdoutBuffer = new stringstream();
+        this->stdoutOriginal = cout.rdbuf();
+        cout.rdbuf(this->stdoutBuffer->rdbuf());
+    }
+    void TestCase::captureClog() {
+        this->clogBuffer = new stringstream();
+        this->clogOriginal = clog.rdbuf();
+        clog.rdbuf(this->clogBuffer->rdbuf());
+    }
+    void TestCase::captureStdErr() {
+        this->stderrBuffer = new stringstream();
+        this->stderrOriginal = cerr.rdbuf();
+        cerr.rdbuf(this->stderrBuffer->rdbuf());
+    }
+    
+    void TestCase::outCompareOption(TestCaseOutCompareOptions opt) {
+        switch (opt) {
+        case EXACT:
+        case CONTAINS:
+            this->option = opt;
+            break;
+            
+        default:
+            stringstream error;
+            error << "Unknown option " << opt;
+            throw std::runtime_error(error.str());
+        }
+    }
+    
+    void TestCase::clearStdoutCapture() {
+        if (this->stdoutBuffer) {
+            this->stdoutBuffer->str(string());
+        }
+    }
+    
+    void TestCase::clearLogCapture() {
+        if (this->clogBuffer) {
+            this->clogBuffer->str(string());
+        }
+    }
+    
+    void TestCase::clearStderrCapture() {
+        if (this->stderrBuffer) {
+            this->stderrBuffer->str(string());
+        }
+    }
+    
+    bool TestCase::checkStdout(string against) {
+        return checkOutput(this->option, stdoutBuffer->str(), against);
+    }
+        
+    bool TestCase::checkLog(string against) {
+        return checkOutput(this->option, clogBuffer->str(), against);
+    }
+        
+    bool TestCase::checkStderr(string against) {
+        return checkOutput(this->option, stderrBuffer->str(), against);
+    }
+    
+    bool TestCase::checkOutput(TestCase::TestCaseOutCompareOptions opt,
+                               string source, string against)
+    {
+        switch (opt) {
+        case EXACT:
+            return source == against;
+            
+        case CONTAINS:
+            return Util::stringContains(source, against);
+        
+        default:
+            stringstream re;
+            re << "Unknown comparison option! " << opt;
+            throw runtime_error(re.str());
+        }
     }
 
     void TestSuite::enableTestPassedMessage() {
@@ -99,41 +237,15 @@ namespace TestCPP {
     }
 
     void TestSuite::setSuiteName(string testSuiteName) {
-        this->suiteName = string(" ") + testSuiteName;
-    }
-
-    string TestSuite::getRegExpErrorString(
-            std::regex_constants::error_type errType
-        )
-    {
-        switch(errType) {
-        case std::regex_constants::error_collate:
-            return string("The expression contained an invalid collating element name.");
-        case std::regex_constants::error_ctype:
-            return string("The expression contained an invalid character class name.");
-        case std::regex_constants::error_escape:
-            return string("The expression contained an invalid escaped character, or a trailing escape.");
-        case std::regex_constants::error_backref:
-            return string("The expression contained an invalid back reference.");
-        case std::regex_constants::error_brack:
-            return string("The expression contained mismatched brackets ([ and ]).");
-        case std::regex_constants::error_paren:
-            return string("The expression contained mismatched parentheses (( and )).");
-        case std::regex_constants::error_brace:
-            return string("The expression contained mismatched braces ({ and }).");
-        case std::regex_constants::error_badbrace:
-            return string("The expression contained an invalid range between braces ({ and }).");
-        case std::regex_constants::error_range:
-            return string("The expression contained an invalid character range.");
-        case std::regex_constants::error_space:
-            return string("There was insufficient memory to convert the expression info a finite state machine.");
-        case std::regex_constants::error_badrepeat:
-            return string("The expression contained a repeat specifier (one of *?+{) that was not preceded by a valid regular expression.");
-        case std::regex_constants::error_complexity:
-            return string("The complexity of an attempted match against a regular expression exceeded a pre-set level.");
-        case std::regex_constants::error_stack:
-            return string("There was insufficient memory to determine whether the regular expression could match the specified character sequence.");
-        default: return string("Unknown regex error");
+        if (testSuiteName.data())
+        {
+            this->suiteName = testSuiteName;
+        }
+        else
+        {
+            stringstream e;
+            e << "An invalid string was passed as the Test Suite Name!";
+            throw invalid_argument(e.str());
         }
     }
 
@@ -148,6 +260,10 @@ namespace TestCPP {
         this->lastRunFailCount = 0;
         this->lastRunSuccessCount = 0;
         this->totalRuntime = 0;
+        
+        clog << endl
+             << "Starting to run test suite '" << this->suiteName << "'"
+             << endl << endl;
 
         for(TestCase test : this->tests) {
             bool testPassed = test.go();
@@ -168,15 +284,18 @@ namespace TestCPP {
 
         if(this->testPassedMessage &&
             this->lastRunFailCount == 0) {
-            clog << "All" << this->suiteName
-                << " suite tests passed!!! :)"
-                << endl;
+            clog << "All '" << this->suiteName
+                 << "' suite tests passed!" << endl;
         }
 
-        double suiteRuntimeElapsed = static_cast<double>(this->totalRuntime)/1000000000.0;
-        clog << "Finished running suite" << this->suiteName << " in "
-            << suiteRuntimeElapsed << "s ("<< this->lastRunSuccessCount
-            << "/" << this->tests.size() << " passed)" << endl;
+        double suiteRuntimeElapsed = static_cast<double>(
+            this->totalRuntime)/1000000000.0;
+        
+        clog << fixed;
+        clog << setprecision(0);
+        clog << "Finished running suite '" << this->suiteName << "' in "
+             << suiteRuntimeElapsed << "s ("<< this->lastRunSuccessCount
+             << "/" << this->tests.size() << " passed)" << endl;
         clog << endl;
     }
 
@@ -194,6 +313,50 @@ namespace TestCPP {
     void TestSuite::addTest(TestCase test) {
         this->tests.push_back(test);
     }
+    
+    void TestSuite::assertThrows(
+            function<void()> shouldThrow,
+            string failureMessage
+        )
+    {
+        try {
+            shouldThrow();
+        }
+        catch (const char * errStr) {
+            clog << "assertThrows Caught char*: " << errStr << endl;
+            return;
+        }
+        catch (const string errStr) {
+            clog << "assertThrows Caught string: " << errStr << endl;
+            return;
+        }
+        catch (...) {
+            exception_ptr eptr = current_exception();
+            
+            if (eptr)
+            {
+                try
+                {
+                    rethrow_exception(eptr);
+                }
+                catch (const exception& e)
+                {
+                    clog << "assertThrows caught exception: "
+                         << e.what() << endl;
+                }
+            }
+            else
+            {
+                clog << "Something was thrown, not sure what." << endl
+                     << "This satisfies the assertion, so no failure is"
+                     << " present.";
+            }
+            
+            return;
+        }
+        
+        fail(failureMessage);
+    }
 
     void TestSuite::assertTrue(
             bool condition,
@@ -201,7 +364,7 @@ namespace TestCPP {
         )
     {
         if(!condition) {
-            ostringstream err;
+            stringstream err;
 
             err << "Boolean Truth assertion failed!" << std::endl;
             err << failureMessage << std::endl;
@@ -216,7 +379,7 @@ namespace TestCPP {
         )
     {
         if(condition) {
-            ostringstream err;
+            stringstream err;
 
             err << "Boolean False assertion failed!" << std::endl;
             err << failureMessage << std::endl;
