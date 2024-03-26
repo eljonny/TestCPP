@@ -17,10 +17,12 @@ namespace TestCPP {
                 cout << "Construct with nullptr string" << endl;
                 TestSuite::assertThrows(
                     []() {
+                        cout << "Construct with nullptr string" << endl;
                         TestCase * test = new TestCase(
                             nullptr,
                             function<void()>([](){})
                         );
+                        cout << "Destroying with nullptr string" << endl;
                         delete test;
                     },
                     "Should have thrown on nullptr string!"
