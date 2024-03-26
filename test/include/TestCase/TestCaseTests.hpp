@@ -1,15 +1,20 @@
 #include "TestCaseTestChunks.h"
 
+using std::cout;
+using std::endl;
+
 namespace TestCPP {
     namespace Testing {
         namespace TestCaseTests {
             void TestConstructCase() {
+                cout << "Construct basic" << endl;
                 TestCase * test = new TestCase(
                     string("ConstructCase case Test - bare minimum"),
                     function<void()>([](){})
                 );
                 delete test;
                 
+                cout << "Construct with nullptr string" << endl;
                 TestSuite::assertThrows(
                     []() {
                         new TestCase(
