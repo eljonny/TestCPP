@@ -1,0 +1,31 @@
+#ifndef TESTCPP_TESTCASE_TEST_SUITE_
+#define TESTCPP_TESTCASE_TEST_SUITE_
+
+#include "TestCaseTests.h"
+
+namespace TestCPP {
+    namespace Testing {
+        namespace TestCaseSuite {
+            TestSuite suite(
+                "TestCPP TestCase Tests",
+
+                make_tuple(
+                    "Case construction Test",
+                    function<void()>(TestCaseTests::TestConstructCase)
+                ),
+                make_tuple(
+                    "Case runner Test",
+                    function<void()>(TestCaseTests::TestTestCaseGo)
+                ),
+                make_tuple(
+                    "Case setNotifyPassed Test",
+                    function<void()>(
+                        TestCaseTests::TestTestCaseSetNotifyPassed
+                    )
+                )
+            );
+        }
+    }
+}
+
+#endif

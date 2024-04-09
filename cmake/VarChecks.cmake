@@ -1,28 +1,47 @@
-if (NOT DEFINED CMAKE_COVERAGE_ENABLED)
-    message ("-- Not defined CMAKE_COVERAGE_ENABLED")
-    set (CMAKE_COVERAGE_ENABLED 0)
+if (NOT DEFINED TESTCPP_COVERAGE_ENABLED)
+    message (STATUS "Not defined TESTCPP_COVERAGE_ENABLED")
+    set (TESTCPP_COVERAGE_ENABLED 0)
 
 else ()
-    message ("-- Defd CMAKE_COVERAGE_ENABLED ${CMAKE_COVERAGE_ENABLED}")
+    message (STATUS
+             "Defd TESTCPP_COVERAGE_ENABLED ${TESTCPP_COVERAGE_ENABLED}")
 endif ()
 
-if (NOT DEFINED CMAKE_DEMO_ENABLED)
-    message ("-- Not defined CMAKE_DEMO_ENABLED")
-    set (CMAKE_DEMO_ENABLED 0)
+if (NOT DEFINED TESTCPP_DEMO_ENABLED)
+    message (STATUS "Not defined TESTCPP_DEMO_ENABLED")
+    set (TESTCPP_DEMO_ENABLED 0)
 
 else ()
-    message ("-- Defd CMAKE_DEMO_ENABLED ${CMAKE_DEMO_ENABLED}")
+    message (STATUS "Defd TESTCPP_DEMO_ENABLED ${TESTCPP_DEMO_ENABLED}")
 endif ()
 
-if (NOT DEFINED CMAKE_TEST_ENABLED)
-    message ("-- Not defined CMAKE_TEST_ENABLED")
-    set (CMAKE_TEST_ENABLED 0)
+if (NOT DEFINED TESTCPP_TEST_ENABLED)
+    message (STATUS "Not defined TESTCPP_TEST_ENABLED")
+    set (TESTCPP_TEST_ENABLED 0)
 
 else ()
-    message ("-- Defd CMAKE_TEST_ENABLED ${CMAKE_TEST_ENABLED}")
+    message (STATUS "Defd TESTCPP_TEST_ENABLED ${TESTCPP_TEST_ENABLED}")
 endif ()
 
-if (${CMAKE_TEST_ENABLED})
-    message ("-- Testing enabled!")
+if (NOT DEFINED TESTCPP_ANALYSIS_ENABLED)
+    message (STATUS "Not defined TESTCPP_ANALYSIS_ENABLED")
+    set (TESTCPP_ANALYSIS_ENABLED 0)
+
+else ()
+    message (STATUS
+             "Defd TESTCPP_ANALYSIS_ENABLED ${TESTCPP_ANALYSIS_ENABLED}")
+endif ()
+
+if (NOT DEFINED TESTCPP_STACKTRACE_ENABLED)
+    message (STATUS "Not defined TESTCPP_STACKTRACE_ENABLED")
+    set (TESTCPP_STACKTRACE_ENABLED 0)
+
+else ()
+    message (STATUS
+     "Defd TESTCPP_STACKTRACE_ENABLED ${TESTCPP_STACKTRACE_ENABLED}")
+endif ()
+
+if (${TESTCPP_TEST_ENABLED})
+    message (STATUS "Testing enabled!")
     include (CTest)
 endif ()

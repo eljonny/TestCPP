@@ -3,12 +3,12 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <File Name="src/Test.cpp"/>
-    <File Name="src/TestUtil.cpp"/>
+    <File Name="src/TestCPP.cpp"/>
+    <File Name="src/TestCPPUtil.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
-    <File Name="include/Test.h"/>
-    <File Name="include/TestUtil.h"/>
+    <File Name="include/TestCPPUtil.h"/>
+    <File Name="include/TestCPP.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="git">
     <File Name=".gitignore"/>
@@ -30,6 +30,7 @@
     <File Name="cmake/Testing.cmake"/>
     <File Name="cmake/VarChecks.cmake"/>
     <File Name="cmake/BuildTypeHandling.cmake"/>
+    <File Name="cmake/Analyzing.cmake"/>
   </VirtualDirectory>
   <VirtualDirectory Name="vcpkg">
     <File Name="custom-overlay/testcpp/usage"/>
@@ -42,17 +43,21 @@
       <File Name="test/src/TestCPPTestSuiteMain.cpp"/>
       <VirtualDirectory Name="TestCase">
         <File Name="test/src/TestCase/TestCaseTestChunks.cpp"/>
+        <File Name="test/src/TestCase/TestCaseTests.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="TestSuite">
+        <File Name="test/src/TestSuite/TestSuiteTests.cpp"/>
       </VirtualDirectory>
     </VirtualDirectory>
     <VirtualDirectory Name="include">
       <VirtualDirectory Name="TestCase">
-        <File Name="test/include/TestCase/TestCaseSuite.hpp"/>
-        <File Name="test/include/TestCase/TestCaseTests.hpp"/>
         <File Name="test/include/TestCase/TestCaseTestChunks.h"/>
+        <File Name="test/include/TestCase/TestCaseSuite.h"/>
+        <File Name="test/include/TestCase/TestCaseTests.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="TestSuite">
-        <File Name="test/include/TestSuite/TestSuiteSuite.hpp"/>
-        <File Name="test/include/TestSuite/TestSuiteTests.hpp"/>
+        <File Name="test/include/TestSuite/TestSuiteSuite.h"/>
+        <File Name="test/include/TestSuite/TestSuiteTests.h"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
@@ -76,6 +81,456 @@
       </VirtualDirectory>
     </VirtualDirectory>
     <File Name="conanfile.py"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="demo">
+    <VirtualDirectory Name="include">
+      <File Name="demo/include/tests.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="src">
+      <File Name="demo/src/main.cpp"/>
+      <File Name="demo/src/tests.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <VirtualDirectory Name="clang-tidy">
+    <File Name=".clang-tidy"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="3rdparty">
+    <VirtualDirectory Name="include">
+      <VirtualDirectory Name="boost">
+        <File Name="3rdparty/include/boost/stacktrace.hpp"/>
+        <VirtualDirectory Name="stacktrace">
+          <File Name="3rdparty/include/boost/stacktrace/frame.hpp"/>
+          <File Name="3rdparty/include/boost/stacktrace/safe_dump_to.hpp"/>
+          <File Name="3rdparty/include/boost/stacktrace/stacktrace.hpp"/>
+          <File Name="3rdparty/include/boost/stacktrace/stacktrace_fwd.hpp"/>
+          <File Name="3rdparty/include/boost/stacktrace/this_thread.hpp"/>
+          <VirtualDirectory Name="detail">
+            <File Name="3rdparty/include/boost/stacktrace/detail/addr2line_impls.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/addr_base.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/collect_msvc.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/collect_noop.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/collect_unwind.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/frame_decl.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/frame_msvc.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/frame_noop.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/frame_unwind.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/libbacktrace_impls.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/location_from_symbol.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/pop_options.h"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/push_options.h"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/safe_dump_noop.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/safe_dump_posix.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/safe_dump_win.ipp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/to_dec_array.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/to_hex_array.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/try_dec_convert.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/unwind_base_impls.hpp"/>
+            <File Name="3rdparty/include/boost/stacktrace/detail/void_ptr_cast.hpp"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <File Name="3rdparty/include/boost/checked_delete.hpp"/>
+        <File Name="3rdparty/include/boost/config.hpp"/>
+        <File Name="3rdparty/include/boost/cstdint.hpp"/>
+        <File Name="3rdparty/include/boost/cxx11_char_types.hpp"/>
+        <File Name="3rdparty/include/boost/get_pointer.hpp"/>
+        <File Name="3rdparty/include/boost/iterator.hpp"/>
+        <File Name="3rdparty/include/boost/limits.hpp"/>
+        <File Name="3rdparty/include/boost/noncopyable.hpp"/>
+        <File Name="3rdparty/include/boost/non_type.hpp"/>
+        <File Name="3rdparty/include/boost/predef.h"/>
+        <File Name="3rdparty/include/boost/ref.hpp"/>
+        <File Name="3rdparty/include/boost/swap.hpp"/>
+        <File Name="3rdparty/include/boost/type.hpp"/>
+        <File Name="3rdparty/include/boost/version.hpp"/>
+        <File Name="3rdparty/include/boost/visit_each.hpp"/>
+        <VirtualDirectory Name="config">
+          <File Name="3rdparty/include/boost/config/abi_prefix.hpp"/>
+          <File Name="3rdparty/include/boost/config/abi_suffix.hpp"/>
+          <File Name="3rdparty/include/boost/config/assert_cxx03.hpp"/>
+          <File Name="3rdparty/include/boost/config/assert_cxx11.hpp"/>
+          <File Name="3rdparty/include/boost/config/assert_cxx14.hpp"/>
+          <File Name="3rdparty/include/boost/config/assert_cxx17.hpp"/>
+          <File Name="3rdparty/include/boost/config/assert_cxx20.hpp"/>
+          <File Name="3rdparty/include/boost/config/assert_cxx23.hpp"/>
+          <File Name="3rdparty/include/boost/config/assert_cxx98.hpp"/>
+          <File Name="3rdparty/include/boost/config/auto_link.hpp"/>
+          <File Name="3rdparty/include/boost/config/header_deprecated.hpp"/>
+          <File Name="3rdparty/include/boost/config/helper_macros.hpp"/>
+          <File Name="3rdparty/include/boost/config/pragma_message.hpp"/>
+          <File Name="3rdparty/include/boost/config/requires_threads.hpp"/>
+          <File Name="3rdparty/include/boost/config/user.hpp"/>
+          <File Name="3rdparty/include/boost/config/warning_disable.hpp"/>
+          <File Name="3rdparty/include/boost/config/workaround.hpp"/>
+          <VirtualDirectory Name="abi">
+            <File Name="3rdparty/include/boost/config/abi/borland_prefix.hpp"/>
+            <File Name="3rdparty/include/boost/config/abi/borland_suffix.hpp"/>
+            <File Name="3rdparty/include/boost/config/abi/msvc_prefix.hpp"/>
+            <File Name="3rdparty/include/boost/config/abi/msvc_suffix.hpp"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="compiler">
+            <File Name="3rdparty/include/boost/config/compiler/borland.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/clang.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/clang_version.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/codegear.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/comeau.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/common_edg.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/compaq_cxx.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/cray.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/diab.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/digitalmars.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/gcc.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/gcc_xml.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/greenhills.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/hp_acc.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/intel.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/kai.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/metrowerks.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/mpw.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/nvcc.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/pathscale.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/pgi.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/sgi_mipspro.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/sunpro_cc.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/vacpp.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/visualc.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/xlcpp.hpp"/>
+            <File Name="3rdparty/include/boost/config/compiler/xlcpp_zos.hpp"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="detail">
+            <File Name="3rdparty/include/boost/config/detail/cxx_composite.hpp"/>
+            <File Name="3rdparty/include/boost/config/detail/posix_features.hpp"/>
+            <File Name="3rdparty/include/boost/config/detail/select_compiler_config.hpp"/>
+            <File Name="3rdparty/include/boost/config/detail/select_platform_config.hpp"/>
+            <File Name="3rdparty/include/boost/config/detail/select_stdlib_config.hpp"/>
+            <File Name="3rdparty/include/boost/config/detail/suffix.hpp"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="no_tr1">
+            <File Name="3rdparty/include/boost/config/no_tr1/cmath.hpp"/>
+            <File Name="3rdparty/include/boost/config/no_tr1/complex.hpp"/>
+            <File Name="3rdparty/include/boost/config/no_tr1/functional.hpp"/>
+            <File Name="3rdparty/include/boost/config/no_tr1/memory.hpp"/>
+            <File Name="3rdparty/include/boost/config/no_tr1/utility.hpp"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="platform">
+            <File Name="3rdparty/include/boost/config/platform/aix.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/amigaos.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/beos.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/bsd.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/cloudabi.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/cray.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/cygwin.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/haiku.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/hpux.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/irix.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/linux.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/macos.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/qnxnto.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/solaris.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/symbian.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/vms.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/vxworks.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/wasm.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/win32.hpp"/>
+            <File Name="3rdparty/include/boost/config/platform/zos.hpp"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="stdlib">
+            <File Name="3rdparty/include/boost/config/stdlib/dinkumware.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/libcomo.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/libcpp.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/libstdcpp3.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/modena.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/msl.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/roguewave.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/sgi.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/stlport.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/vacpp.hpp"/>
+            <File Name="3rdparty/include/boost/config/stdlib/xlcpp_zos.hpp"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <VirtualDirectory Name="container_hash">
+          <File Name="3rdparty/include/boost/container_hash/extensions.hpp"/>
+          <File Name="3rdparty/include/boost/container_hash/hash.hpp"/>
+          <File Name="3rdparty/include/boost/container_hash/hash_fwd.hpp"/>
+          <File Name="3rdparty/include/boost/container_hash/is_contiguous_range.hpp"/>
+          <File Name="3rdparty/include/boost/container_hash/is_described_class.hpp"/>
+          <File Name="3rdparty/include/boost/container_hash/is_range.hpp"/>
+          <File Name="3rdparty/include/boost/container_hash/is_tuple_like.hpp"/>
+          <File Name="3rdparty/include/boost/container_hash/is_unordered_range.hpp"/>
+          <VirtualDirectory Name="detail">
+            <File Name="3rdparty/include/boost/container_hash/detail/hash_integral.hpp"/>
+            <File Name="3rdparty/include/boost/container_hash/detail/hash_mix.hpp"/>
+            <File Name="3rdparty/include/boost/container_hash/detail/hash_range.hpp"/>
+            <File Name="3rdparty/include/boost/container_hash/detail/hash_tuple_like.hpp"/>
+            <File Name="3rdparty/include/boost/container_hash/detail/limits.hpp"/>
+            <File Name="3rdparty/include/boost/container_hash/detail/mulx.hpp"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <VirtualDirectory Name="core">
+          <File Name="3rdparty/include/boost/core/addressof.hpp"/>
+          <File Name="3rdparty/include/boost/core/alignof.hpp"/>
+          <File Name="3rdparty/include/boost/core/allocator_access.hpp"/>
+          <File Name="3rdparty/include/boost/core/allocator_traits.hpp"/>
+          <File Name="3rdparty/include/boost/core/alloc_construct.hpp"/>
+          <File Name="3rdparty/include/boost/core/bit.hpp"/>
+          <File Name="3rdparty/include/boost/core/checked_delete.hpp"/>
+          <File Name="3rdparty/include/boost/core/cmath.hpp"/>
+          <File Name="3rdparty/include/boost/core/data.hpp"/>
+          <File Name="3rdparty/include/boost/core/default_allocator.hpp"/>
+          <File Name="3rdparty/include/boost/core/demangle.hpp"/>
+          <File Name="3rdparty/include/boost/core/empty_value.hpp"/>
+          <File Name="3rdparty/include/boost/core/enable_if.hpp"/>
+          <File Name="3rdparty/include/boost/core/exchange.hpp"/>
+          <File Name="3rdparty/include/boost/core/explicit_operator_bool.hpp"/>
+          <File Name="3rdparty/include/boost/core/fclose_deleter.hpp"/>
+          <File Name="3rdparty/include/boost/core/first_scalar.hpp"/>
+          <File Name="3rdparty/include/boost/core/functor.hpp"/>
+          <File Name="3rdparty/include/boost/core/identity.hpp"/>
+          <File Name="3rdparty/include/boost/core/ignore_unused.hpp"/>
+          <File Name="3rdparty/include/boost/core/invoke_swap.hpp"/>
+          <File Name="3rdparty/include/boost/core/is_same.hpp"/>
+          <File Name="3rdparty/include/boost/core/launder.hpp"/>
+          <File Name="3rdparty/include/boost/core/lightweight_test.hpp"/>
+          <File Name="3rdparty/include/boost/core/lightweight_test_trait.hpp"/>
+          <File Name="3rdparty/include/boost/core/make_span.hpp"/>
+          <File Name="3rdparty/include/boost/core/max_align.hpp"/>
+          <File Name="3rdparty/include/boost/core/memory_resource.hpp"/>
+          <File Name="3rdparty/include/boost/core/no_exceptions_support.hpp"/>
+          <File Name="3rdparty/include/boost/core/noinit_adaptor.hpp"/>
+          <File Name="3rdparty/include/boost/core/noncopyable.hpp"/>
+          <File Name="3rdparty/include/boost/core/null_deleter.hpp"/>
+          <File Name="3rdparty/include/boost/core/nvp.hpp"/>
+          <File Name="3rdparty/include/boost/core/pointer_traits.hpp"/>
+          <File Name="3rdparty/include/boost/core/quick_exit.hpp"/>
+          <File Name="3rdparty/include/boost/core/ref.hpp"/>
+          <File Name="3rdparty/include/boost/core/scoped_enum.hpp"/>
+          <File Name="3rdparty/include/boost/core/serialization.hpp"/>
+          <File Name="3rdparty/include/boost/core/size.hpp"/>
+          <File Name="3rdparty/include/boost/core/snprintf.hpp"/>
+          <File Name="3rdparty/include/boost/core/span.hpp"/>
+          <File Name="3rdparty/include/boost/core/swap.hpp"/>
+          <File Name="3rdparty/include/boost/core/typeinfo.hpp"/>
+          <File Name="3rdparty/include/boost/core/type_name.hpp"/>
+          <File Name="3rdparty/include/boost/core/uncaught_exceptions.hpp"/>
+          <File Name="3rdparty/include/boost/core/underlying_type.hpp"/>
+          <File Name="3rdparty/include/boost/core/use_default.hpp"/>
+          <File Name="3rdparty/include/boost/core/verbose_terminate_handler.hpp"/>
+          <File Name="3rdparty/include/boost/core/yield_primitives.hpp"/>
+          <VirtualDirectory Name="detail">
+            <File Name="3rdparty/include/boost/core/detail/is_same.hpp"/>
+            <File Name="3rdparty/include/boost/core/detail/lwt_unattended.hpp"/>
+            <File Name="3rdparty/include/boost/core/detail/splitmix64.hpp"/>
+            <File Name="3rdparty/include/boost/core/detail/sp_thread_pause.hpp"/>
+            <File Name="3rdparty/include/boost/core/detail/sp_thread_sleep.hpp"/>
+            <File Name="3rdparty/include/boost/core/detail/sp_thread_yield.hpp"/>
+            <File Name="3rdparty/include/boost/core/detail/sp_win32_sleep.hpp"/>
+            <File Name="3rdparty/include/boost/core/detail/string_view.hpp"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <VirtualDirectory Name="detail">
+          <File Name="3rdparty/include/boost/detail/iterator.hpp"/>
+          <File Name="3rdparty/include/boost/detail/lightweight_test.hpp"/>
+          <File Name="3rdparty/include/boost/detail/no_exceptions_support.hpp"/>
+          <File Name="3rdparty/include/boost/detail/scoped_enum_emulation.hpp"/>
+          <File Name="3rdparty/include/boost/detail/sp_typeinfo.hpp"/>
+          <File Name="3rdparty/include/boost/detail/workaround.hpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="functional">
+          <File Name="3rdparty/include/boost/functional/hash.hpp"/>
+          <File Name="3rdparty/include/boost/functional/hash_fwd.hpp"/>
+          <VirtualDirectory Name="hash">
+            <File Name="3rdparty/include/boost/functional/hash/extensions.hpp"/>
+            <File Name="3rdparty/include/boost/functional/hash/hash.hpp"/>
+            <File Name="3rdparty/include/boost/functional/hash/hash_fwd.hpp"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <VirtualDirectory Name="predef">
+          <File Name="3rdparty/include/boost/predef/architecture.h"/>
+          <File Name="3rdparty/include/boost/predef/compiler.h"/>
+          <File Name="3rdparty/include/boost/predef/hardware.h"/>
+          <File Name="3rdparty/include/boost/predef/language.h"/>
+          <File Name="3rdparty/include/boost/predef/library.h"/>
+          <File Name="3rdparty/include/boost/predef/make.h"/>
+          <File Name="3rdparty/include/boost/predef/os.h"/>
+          <File Name="3rdparty/include/boost/predef/other.h"/>
+          <File Name="3rdparty/include/boost/predef/platform.h"/>
+          <File Name="3rdparty/include/boost/predef/version.h"/>
+          <File Name="3rdparty/include/boost/predef/version_number.h"/>
+          <VirtualDirectory Name="architecture">
+            <File Name="3rdparty/include/boost/predef/architecture/alpha.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/arm.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/blackfin.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/convex.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/e2k.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/ia64.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/loongarch.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/m68k.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/mips.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/parisc.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/ppc.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/ptx.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/pyramid.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/riscv.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/rs6k.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/sparc.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/superh.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/sys370.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/sys390.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/x86.h"/>
+            <File Name="3rdparty/include/boost/predef/architecture/z.h"/>
+            <VirtualDirectory Name="x86">
+              <File Name="3rdparty/include/boost/predef/architecture/x86/32.h"/>
+              <File Name="3rdparty/include/boost/predef/architecture/x86/64.h"/>
+            </VirtualDirectory>
+          </VirtualDirectory>
+          <VirtualDirectory Name="compiler">
+            <File Name="3rdparty/include/boost/predef/compiler/borland.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/clang.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/comeau.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/compaq.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/diab.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/digitalmars.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/dignus.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/edg.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/ekopath.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/gcc.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/gcc_xml.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/greenhills.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/hp_acc.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/iar.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/ibm.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/intel.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/kai.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/llvm.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/metaware.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/metrowerks.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/microtec.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/mpw.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/nvcc.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/palm.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/pgi.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/sgi_mipspro.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/sunpro.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/tendra.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/visualc.h"/>
+            <File Name="3rdparty/include/boost/predef/compiler/watcom.h"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="detail">
+            <File Name="3rdparty/include/boost/predef/detail/_cassert.h"/>
+            <File Name="3rdparty/include/boost/predef/detail/comp_detected.h"/>
+            <File Name="3rdparty/include/boost/predef/detail/_exception.h"/>
+            <File Name="3rdparty/include/boost/predef/detail/os_detected.h"/>
+            <File Name="3rdparty/include/boost/predef/detail/platform_detected.h"/>
+            <File Name="3rdparty/include/boost/predef/detail/test.h"/>
+            <File Name="3rdparty/include/boost/predef/detail/test_def.h"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="hardware">
+            <File Name="3rdparty/include/boost/predef/hardware/simd.h"/>
+            <VirtualDirectory Name="simd">
+              <File Name="3rdparty/include/boost/predef/hardware/simd/arm.h"/>
+              <File Name="3rdparty/include/boost/predef/hardware/simd/ppc.h"/>
+              <File Name="3rdparty/include/boost/predef/hardware/simd/x86.h"/>
+              <File Name="3rdparty/include/boost/predef/hardware/simd/x86_amd.h"/>
+              <VirtualDirectory Name="arm">
+                <File Name="3rdparty/include/boost/predef/hardware/simd/arm/versions.h"/>
+              </VirtualDirectory>
+              <VirtualDirectory Name="ppc">
+                <File Name="3rdparty/include/boost/predef/hardware/simd/ppc/versions.h"/>
+              </VirtualDirectory>
+              <VirtualDirectory Name="x86">
+                <File Name="3rdparty/include/boost/predef/hardware/simd/x86/versions.h"/>
+              </VirtualDirectory>
+              <VirtualDirectory Name="x86_amd">
+                <File Name="3rdparty/include/boost/predef/hardware/simd/x86_amd/versions.h"/>
+              </VirtualDirectory>
+            </VirtualDirectory>
+          </VirtualDirectory>
+          <VirtualDirectory Name="language">
+            <File Name="3rdparty/include/boost/predef/language/cuda.h"/>
+            <File Name="3rdparty/include/boost/predef/language/objc.h"/>
+            <File Name="3rdparty/include/boost/predef/language/stdc.h"/>
+            <File Name="3rdparty/include/boost/predef/language/stdcpp.h"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="library">
+            <File Name="3rdparty/include/boost/predef/library/c.h"/>
+            <File Name="3rdparty/include/boost/predef/library/std.h"/>
+            <VirtualDirectory Name="c">
+              <File Name="3rdparty/include/boost/predef/library/c/cloudabi.h"/>
+              <File Name="3rdparty/include/boost/predef/library/c/gnu.h"/>
+              <File Name="3rdparty/include/boost/predef/library/c/_prefix.h"/>
+              <File Name="3rdparty/include/boost/predef/library/c/uc.h"/>
+              <File Name="3rdparty/include/boost/predef/library/c/vms.h"/>
+              <File Name="3rdparty/include/boost/predef/library/c/zos.h"/>
+            </VirtualDirectory>
+            <VirtualDirectory Name="std">
+              <File Name="3rdparty/include/boost/predef/library/std/cxx.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/dinkumware.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/libcomo.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/modena.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/msl.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/msvc.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/_prefix.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/roguewave.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/sgi.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/stdcpp3.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/stlport.h"/>
+              <File Name="3rdparty/include/boost/predef/library/std/vacpp.h"/>
+            </VirtualDirectory>
+          </VirtualDirectory>
+          <VirtualDirectory Name="os">
+            <File Name="3rdparty/include/boost/predef/os/aix.h"/>
+            <File Name="3rdparty/include/boost/predef/os/amigaos.h"/>
+            <File Name="3rdparty/include/boost/predef/os/beos.h"/>
+            <File Name="3rdparty/include/boost/predef/os/bsd.h"/>
+            <File Name="3rdparty/include/boost/predef/os/cygwin.h"/>
+            <File Name="3rdparty/include/boost/predef/os/haiku.h"/>
+            <File Name="3rdparty/include/boost/predef/os/hpux.h"/>
+            <File Name="3rdparty/include/boost/predef/os/ios.h"/>
+            <File Name="3rdparty/include/boost/predef/os/irix.h"/>
+            <File Name="3rdparty/include/boost/predef/os/linux.h"/>
+            <File Name="3rdparty/include/boost/predef/os/macos.h"/>
+            <File Name="3rdparty/include/boost/predef/os/os400.h"/>
+            <File Name="3rdparty/include/boost/predef/os/qnxnto.h"/>
+            <File Name="3rdparty/include/boost/predef/os/solaris.h"/>
+            <File Name="3rdparty/include/boost/predef/os/unix.h"/>
+            <File Name="3rdparty/include/boost/predef/os/vms.h"/>
+            <File Name="3rdparty/include/boost/predef/os/windows.h"/>
+            <VirtualDirectory Name="bsd">
+              <File Name="3rdparty/include/boost/predef/os/bsd/bsdi.h"/>
+              <File Name="3rdparty/include/boost/predef/os/bsd/dragonfly.h"/>
+              <File Name="3rdparty/include/boost/predef/os/bsd/free.h"/>
+              <File Name="3rdparty/include/boost/predef/os/bsd/net.h"/>
+              <File Name="3rdparty/include/boost/predef/os/bsd/open.h"/>
+            </VirtualDirectory>
+          </VirtualDirectory>
+          <VirtualDirectory Name="other">
+            <File Name="3rdparty/include/boost/predef/other/endian.h"/>
+            <File Name="3rdparty/include/boost/predef/other/wordsize.h"/>
+            <File Name="3rdparty/include/boost/predef/other/workaround.h"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="platform">
+            <File Name="3rdparty/include/boost/predef/platform/android.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/cloudabi.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/ios.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/mingw.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/mingw32.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/mingw64.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/windows_desktop.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/windows_phone.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/windows_runtime.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/windows_server.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/windows_store.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/windows_system.h"/>
+            <File Name="3rdparty/include/boost/predef/platform/windows_uwp.h"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <VirtualDirectory Name="utility">
+          <File Name="3rdparty/include/boost/utility/addressof.hpp"/>
+          <File Name="3rdparty/include/boost/utility/enable_if.hpp"/>
+          <File Name="3rdparty/include/boost/utility/explicit_operator_bool.hpp"/>
+          <File Name="3rdparty/include/boost/utility/swap.hpp"/>
+        </VirtualDirectory>
+      </VirtualDirectory>
+    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -118,7 +573,12 @@ cpack --config CPackSourceConfig.cmake
 cpack -G DEB
 cpack -G RPM
 cpack -G ZIP</Target>
-        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=1 -DCMAKE_DEMO_ENABLED=1
+        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DTESTCPP_TEST_ENABLED=1 -DTESTCPP_COVERAGE_ENABLED=1 -DTESTCPP_DEMO_ENABLED=1 -DTESTCPP_STACKTRACE_ENABLED=1
+make</Target>
+        <Target Name="clean">cmake --build . --target clean
+cd ..
+rm -Rf build-debug</Target>
+        <Target Name="clang-tidy">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DTESTCPP_TEST_ENABLED=1 -DTESTCPP_COVERAGE_ENABLED=1 -DTESTCPP_DEMO_ENABLED=1 -DTESTCPP_ANALYSIS_ENABLED=1 -DTESTCPP_STACKTRACE_ENABLED=1
 make</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
         <CleanCommand>make clean</CleanCommand>
@@ -168,8 +628,11 @@ cpack --config CPackSourceConfig.cmake
 cpack -G DEB
 cpack -G RPM
 cpack -G ZIP</Target>
-        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DCMAKE_TEST_ENABLED=1 -DCMAKE_COVERAGE_ENABLED=0 -DCMAKE_DEMO_ENABLED=1
+        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DTESTCPP_TEST_ENABLED=1 -DTESTCPP_COVERAGE_ENABLED=0 -DTESTCPP_DEMO_ENABLED=1 -DTESTCPP_ANALYSIS_ENABLED=1 -DTESTCPP_STACKTRACE_ENABLED=1
 make</Target>
+        <Target Name="clean">cmake --build . --target clean
+cd ..
+rm -Rf build-release</Target>
         <RebuildCommand>make clean &amp;&amp; make -j4</RebuildCommand>
         <CleanCommand>make clean</CleanCommand>
         <BuildCommand>make -j4</BuildCommand>
@@ -191,8 +654,4 @@ make</Target>
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="demo">
-    <VirtualDirectory Name="include"/>
-    <VirtualDirectory Name="src"/>
-  </VirtualDirectory>
 </CodeLite_Project>
