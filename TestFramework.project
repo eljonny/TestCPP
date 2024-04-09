@@ -64,10 +64,14 @@
   <VirtualDirectory Name="github">
     <File Name=".github/FUNDING.yml"/>
     <File Name=".github/workflows/codeql.yml"/>
-    <File Name=".github/workflows/cmake-multi-platform.yml"/>
-    <File Name=".github/workflows/cmake-linux-pack.yml"/>
-    <File Name=".github/workflows/cmake-build-test.yml"/>
-    <File Name=".github/workflows/cmake-build-cov.yml"/>
+    <File Name=".github/workflows/cmake-build-cov-st.yml"/>
+    <File Name=".github/workflows/cmake-build-test-st.yml"/>
+    <File Name=".github/workflows/cmake-linux-pack-st.yml"/>
+    <File Name=".github/workflows/cmake-multi-platform-st.yml"/>
+    <File Name=".github/workflows/cmake-build-test-nost.yml"/>
+    <File Name=".github/workflows/cmake-linux-pack-nost.yml"/>
+    <File Name=".github/workflows/cmake-multi-platform-nost.yml"/>
+    <File Name=".github/cmake-static-analysis.yml"/>
   </VirtualDirectory>
   <VirtualDirectory Name="codecov">
     <File Name="codecov.yml"/>
