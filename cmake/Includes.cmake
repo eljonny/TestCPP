@@ -1,9 +1,18 @@
-target_include_directories (
-    ${PROJECT_NAME} PRIVATE
-    include
-)
+if (${TESTCPP_STACKTRACE_ENABLED})
+    target_include_directories (
+        ${PROJECT_NAME} PRIVATE
+        3rdparty/include
+        include
+    )
 
-if (${CMAKE_DEMO_ENABLED})
+else ()
+    target_include_directories (
+        ${PROJECT_NAME} PRIVATE
+        include
+    )
+endif ()
+
+if (${TESTCPP_DEMO_ENABLED})
     target_include_directories (
         ${PROJECT_NAME}_run PRIVATE
         demo/include
@@ -17,7 +26,7 @@ if (BUILD_TESTING)
         test/include
         include
     )
-    
+
     target_include_directories (
         ${PROJECT_NAME}_TestSuite_test PRIVATE
         test/include

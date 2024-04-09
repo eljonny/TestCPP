@@ -2,7 +2,7 @@ set_target_properties (
     ${PROJECT_NAME}
     PROPERTIES
         PUBLIC_HEADER
-        include/Test.h
+        include/TestCPP.h
 )
 include (GNUInstallDirs)
 install (

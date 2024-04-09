@@ -1,57 +1,57 @@
 if (${CMAKE_BUILD_TYPE} EQUAL "Release")
-    message ("-- Release build compilation options enabled")
+    message (STATUS "Release build compilation options enabled")
 
     if (MSVC)
         target_compile_options (
             ${PROJECT_NAME}
             PUBLIC
-            /W4 /O2
+            /Wall /WX /O2
         )
-        
-        if (${CMAKE_DEMO_ENABLED})
+
+        if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
                 PUBLIC
-                /W4 /O2
+                /Wall /WX /O2
             )
         endif ()
-        
+
         if (BUILD_TESTING)
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
-                /W4 /O2
+                /Wall /WX /O2
             )
-            
+
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
-                /W4 /O2
+                /Wall /WX /O2
             )
         endif ()
-        
+
     else ()
         target_compile_options (
             ${PROJECT_NAME}
             PUBLIC
             -O3 -Wall -Wextra -Wpedantic
         )
-        
-        if (${CMAKE_DEMO_ENABLED})
+
+        if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
                 PUBLIC
                 -O3 -Wall -Wextra -Wpedantic
             )
         endif ()
-        
+
         if (BUILD_TESTING)
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
                 -O3 -Wall -Wextra -Wpedantic
             )
-            
+
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
@@ -59,49 +59,72 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
             )
         endif ()
     endif ()
-    
+
 else ()
-    message ("-- Debug build compilation options enabled")
-    
+    message (STATUS "Debug build compilation options enabled")
+
+    target_compile_definitions (${PROJECT_NAME} PUBLIC DEBUG_LOG)
+
+    if (${TESTCPP_DEMO_ENABLED})
+        target_compile_definitions (
+            ${PROJECT_NAME}_run
+            PUBLIC
+                DEBUG_LOG
+        )
+    endif ()
+
+    if (BUILD_TESTING)
+        target_compile_definitions (
+            ${PROJECT_NAME}_TestCase_test
+            PUBLIC
+                DEBUG_LOG
+        )
+        target_compile_definitions (
+            ${PROJECT_NAME}_TestSuite_test
+            PUBLIC
+                DEBUG_LOG
+        )
+    endif ()
+
     if (MSVC)
         target_compile_options (
             ${PROJECT_NAME}
             PUBLIC
-            /W4 /Od
+            /Wall /WX /Od
         )
-        
-        if (${CMAKE_DEMO_ENABLED})
+
+        if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
                 PUBLIC
-                /W4 /Od
+                /Wall /WX /Od
             )
         endif ()
-        
+
         if (BUILD_TESTING)
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
-                /W4 /Od
+                /Wall /WX /Od
             )
-            
+
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
-                /W4 /Od
+                /Wall /WX /Od
             )
         endif ()
-        
+
     else ()
-        if (${CMAKE_DEMO_ENABLED})
+        if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
                 PUBLIC -g -Og -Wall -Wextra -Wpedantic
             )
         endif ()
-        
-        if (BUILD_TESTING AND ${CMAKE_COVERAGE_ENABLED})
-            message ("-- Coverage compilation options enabled")
+
+        if (BUILD_TESTING AND ${TESTCPP_COVERAGE_ENABLED})
+            message (STATUS "Coverage compilation options enabled")
 
             target_compile_options (
                 ${PROJECT_NAME}
@@ -109,21 +132,21 @@ else ()
                     -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
                     -ftest-coverage
             )
-            
+
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
                     -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
                     -ftest-coverage
             )
-            
+
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
                     -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
                     -ftest-coverage
             )
-        
+
         else ()
             target_compile_options (
                 ${PROJECT_NAME}
@@ -131,4 +154,12 @@ else ()
             )
         endif ()
     endif ()
+endif ()
+
+if (${TESTCPP_STACKTRACE_ENABLED})
+    target_compile_definitions (
+        ${PROJECT_NAME}
+        PUBLIC
+            TESTCPP_STACKTRACE_ENABLED
+    )
 endif ()

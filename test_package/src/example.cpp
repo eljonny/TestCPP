@@ -1,11 +1,18 @@
-#include "TestCPP/Test.h"
+#include "TestCPP/TestCPP.h"
 
 using TestCPP::TestSuite;
 
 int main() {
-    TestSuite suite;
+    try {
+        TestSuite suite;
 
-    suite.run();
+        suite.run();
+    }
+    catch (std::exception& e) {
+        std::cerr << "Package test failed with exception: "
+                  << e.what() << std::endl;
+        throw e;
+    }
     
     return 0;
 }

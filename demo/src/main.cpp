@@ -1,28 +1,34 @@
-#include "Test.h"
+#include "TestCPP.h"
 
 using TestCPP::TestSuite;
 using std::string;
 using std::make_tuple;
 using std::function;
 
-#include "tests.hpp"
+#include "tests.h"
 
 int main(void)
 {
-	TestSuite suite(
-        string("Demo Test Suite"),
-        
-		make_tuple(
-			string("simpleTest"),
-			function<void()>(simpleTest)
-		),
-        make_tuple(
-			string("otherSimpleTest"),
-			function<void()>(otherSimpleTest)
-		)
-	);
+    try {
+        TestSuite suite(
+            string("Demo Test Suite"),
 
-	suite.run();
+            make_tuple(
+                "simpleTest",
+                function<void()>(TestCPP::Demo::Tests::simpleTest)
+            ),
+            make_tuple(
+                "otherSimpleTest",
+                function<void()>(TestCPP::Demo::Tests::otherSimpleTest)
+            )
+        );
 
-	return 0;
+        suite.run();
+    }
+    catch (std::exception& e) {
+        std::cerr << "Demo run failed with an exception: "
+                  << e.what() << std::endl;
+    }
+
+    return 0;
 }
