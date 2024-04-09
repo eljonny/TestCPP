@@ -1,4 +1,6 @@
-name: TestCPP CMake RPM/DEB Pack
+# This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
+# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
+name: TestCPP CMake Build - linux/windows - No Stacktraces
 
 on:
   push:
@@ -21,16 +23,26 @@ jobs:
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
         build_type: [Release, Debug]
-        c_compiler: [gcc, clang]
+        c_compiler: [gcc, clang, cl]
         include:
+          - os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
+        exclude:
+          - os: windows-latest
+            c_compiler: gcc
+          - os: windows-latest
+            c_compiler: clang
+          - os: ubuntu-latest
+            c_compiler: cl
 
     steps:
     - uses: actions/checkout@v4
@@ -50,8 +62,6 @@ jobs:
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DCMAKE_TEST_ENABLED=0
-        -DCMAKE_COVERAGE_ENABLED=0
         -S ${{ github.workspace }}
 
     - name: Build
@@ -61,12 +71,12 @@ jobs:
     - name: Pack
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: |
-        cpack -G DEB
-        cpack -G RPM
+        cpack --config CPackConfig.cmake -C ${{ matrix.build_type }}
+        cpack --config CPackConfig.cmake -C ${{ matrix.build_type }} -G ZIP
 
     - name: 'Artifact Storage'
       uses: actions/upload-artifact@v4
       with:
-        name: linux-packages-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.build_type }}
+        name: build-packages-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.build_type }}
         path: ${{ github.workspace }}/_packages/**
         overwrite: true
