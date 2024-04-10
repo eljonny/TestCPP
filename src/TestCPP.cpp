@@ -294,17 +294,21 @@ namespace TestCPP {
             runTest();
             return true;
         }
+        catch(const char * errorMessage) {
+            this->pass = false;
+            logTestFailure(errorMessage);
+        }
         catch(string errorMessage) {
             this->pass = false;
             logTestFailure(errorMessage);
         }
-        catch(runtime_error& re) {
-            this->pass = false;
-            logTestFailure(re.what());
-        }
-        catch(exception& e) {
+        catch (exception& e) {
             this->pass = false;
             logTestFailure(e.what());
+        }
+        catch (...) {
+            this->pass = false;
+            logTestFailure("Unknown error occurred in test!");
         }
 
         return false;
