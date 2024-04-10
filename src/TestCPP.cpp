@@ -524,7 +524,7 @@ namespace TestCPP {
             return;
         }
 
-        throw TestFailedException(failureMessage);
+        throw TestFailedException(move(failureMessage));
     }
 
     void TestSuite::assertNoThrows (
@@ -533,10 +533,10 @@ namespace TestCPP {
         )
     {
         try {
-            shouldNotThrow()
+            shouldNotThrow();
         }
         catch (...) {
-            throw TestFailedException(failureMessage);
+            throw TestFailedException(move(failureMessage));
         }
     }
 

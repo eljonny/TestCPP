@@ -282,12 +282,14 @@ namespace TestCPP {
 
         static void assertThrows (
             function<void()> shouldThrow,
-            string failureMessage = "Should have thrown something!"
+            string failureMessage =
+                "Should have thrown something!"
         );
 
         static void assertNoThrows (
             function<void()> shouldNotThrow,
-            string failureMessage = "Should not have thrown anything!"
+            string failureMessage =
+                "Should not have thrown anything!"
         );
 
         static void assertTrue (
