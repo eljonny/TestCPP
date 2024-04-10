@@ -496,14 +496,6 @@ namespace TestCPP {
         try {
             shouldThrow();
         }
-        catch (const char * errStr) {
-            clog << "assertThrows Caught char*: " << errStr << endl;
-            return;
-        }
-        catch (const string errStr) {
-            clog << "assertThrows Caught string: " << errStr << endl;
-            return;
-        }
         catch (...) {
             exception_ptr eptr = current_exception();
 
@@ -528,7 +520,20 @@ namespace TestCPP {
             return;
         }
 
-        fail(failureMessage);
+        throw TestFailedException(failureMessage);
+    }
+
+    void TestSuite::assertNoThrows (
+            function<void()> shouldNotThrow,
+            string failureMessage
+        )
+    {
+        try {
+            shouldNotThrow()
+        }
+        catch (...) {
+            throw TestFailedException(failureMessage);
+        }
     }
 
     void TestSuite::assertTrue (

@@ -71,7 +71,7 @@
     <File Name=".github/workflows/cmake-build-test-nost.yml"/>
     <File Name=".github/workflows/cmake-linux-pack-nost.yml"/>
     <File Name=".github/workflows/cmake-multi-platform-nost.yml"/>
-    <File Name=".github/cmake-static-analysis.yml"/>
+    <File Name=".github/workflows/cmake-static-analysis.yml"/>
   </VirtualDirectory>
   <VirtualDirectory Name="codecov">
     <File Name="codecov.yml"/>
