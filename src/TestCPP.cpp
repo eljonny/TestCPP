@@ -31,6 +31,10 @@
 #include <boost/stacktrace.hpp>
 #endif
 
+#ifdef _WIN32
+#include <corecrt.h>
+#endif
+
 #include <iomanip>
 
 #include "TestCPP.h"
