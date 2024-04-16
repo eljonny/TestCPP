@@ -1,15 +1,10 @@
 #ifdef DEBUG_LOG
 
 #ifdef WIN32
-#pragma warning(push)
-#pragma warning(disable: 4668)
+#include <corecrt.h>
 #endif
 
 #include <iostream>
-
-#ifdef WIN32
-#pragma warning(pop)
-#endif
 
 #endif
 
