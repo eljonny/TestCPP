@@ -30,13 +30,12 @@
 #ifndef TESTCPP_CLASSES_
 #define TESTCPP_CLASSES_
 
-#include <chrono>
-#include <functional>
-
 #ifdef WIN32
-#include <corecrt.h>
+#include <climits>
 #endif
 
+#include <chrono>
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <regex>

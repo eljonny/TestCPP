@@ -1,6 +1,10 @@
 #ifndef TESTCPP_UTIL_
 #define TESTCPP_UTIL_
 
+#ifdef WIN32
+#include <climits>
+#endif
+
 #include <string>
 
 using std::string;
