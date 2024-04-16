@@ -1,5 +1,16 @@
 #ifdef DEBUG_LOG
+
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable: 4668)
+#endif
+
 #include <iostream>
+
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
+
 #endif
 
 #include "TestCPPUtil.h"
