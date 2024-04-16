@@ -30,10 +30,6 @@
 #ifndef TESTCPP_CLASSES_
 #define TESTCPP_CLASSES_
 
-#ifdef WIN32
-#include <climits>
-#endif
-
 #include <chrono>
 #include <functional>
 #include <iostream>
