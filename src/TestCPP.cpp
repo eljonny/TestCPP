@@ -27,13 +27,14 @@
 
 //Original author: Jonathan Hyry CSU-Fullerton SECS 6896-02 Fall 2014/15
 
+#include "TestCPP.h"
+
 #ifdef TESTCPP_STACKTRACE_ENABLED
 #include <boost/stacktrace.hpp>
 #endif
 
 #include <iomanip>
 
-#include "TestCPP.h"
 #include "TestCPPUtil.h"
 
 using std::cerr;

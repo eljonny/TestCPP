@@ -1,14 +1,8 @@
-#ifdef DEBUG_LOG
-
-#ifdef WIN32
-#include <corecrt.h>
-#endif
-
-#include <iostream>
-
-#endif
-
 #include "TestCPPUtil.h"
+
+#ifdef DEBUG_LOG
+#include <iostream>
+#endif
 
 #ifdef DEBUG_LOG
 using std::clog;
