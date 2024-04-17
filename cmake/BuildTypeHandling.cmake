@@ -1,12 +1,12 @@
 list (
     APPEND
     MSVC_RELEASE_BUILD_OPTS
-    /Wall /WX /O2 /wd4710 /wd4820
+    /Wall /WX /O2 /wd4710 /wd4820 /wd4668
 )
 list (
     APPEND
     MSVC_DEBUG_BUILD_OPTS 
-    /Wall /WX /Od /wd4710 /wd4820
+    /Wall /WX /Od /wd4710 /wd4820 /wd4668
 )
 list (
     APPEND
