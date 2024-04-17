@@ -264,7 +264,7 @@ namespace TestCPP {
         return *this;
     }
 
-    unsigned long long TestCase::getLastRuntime () {
+    long long TestCase::getLastRuntime () {
         return this->lastRunTime;
     }
 

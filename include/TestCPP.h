@@ -126,12 +126,12 @@ namespace TestCPP {
         bool checkLog (string against);
         bool checkStderr (string against);
         bool go ();
-        unsigned long long getLastRuntime ();
+        long long getLastRuntime ();
 
     private:
         bool notifyTestPassed;
         bool pass;
-        unsigned long long lastRunTime;
+        long long lastRunTime;
 
         TestCaseName testName;
         function<void()> test;
