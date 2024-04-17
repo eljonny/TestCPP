@@ -1,3 +1,10 @@
+set (MSVC_RELEASE_BUILD_OPTS "/Wall /WX /O2 /wd4710")
+set (MSVC_DEBUG_BUILD_OPTS "/Wall /WX /Od /wd4710")
+set (GCC_CLANG_RELEASE_BUILD_OPTS "-O3 -Wall -Wextra -Wpedantic")
+set (GCC_CLANG_DEBUG_BUILD_OPTS "-g -Og -Wall -Wextra -Wpedantic")
+set (COVERAGE_BUILD_OPTS "-g -Og -Wall -Wextra -Wpedantic\
+-fprofile-arcs -ftest-coverage")
+
 if (${CMAKE_BUILD_TYPE} EQUAL "Release")
     message (STATUS "Release build compilation options enabled")
 
@@ -5,14 +12,14 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
         target_compile_options (
             ${PROJECT_NAME}
             PUBLIC
-            /Wall /WX /O2
+            ${MSVC_RELEASE_BUILD_OPTS}
         )
 
         if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
                 PUBLIC
-                /Wall /WX /O2
+                ${MSVC_RELEASE_BUILD_OPTS}
             )
         endif ()
 
@@ -20,13 +27,13 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
-                /Wall /WX /O2
+                ${MSVC_RELEASE_BUILD_OPTS}
             )
 
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
-                /Wall /WX /O2
+                ${MSVC_RELEASE_BUILD_OPTS}
             )
         endif ()
 
@@ -34,14 +41,14 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
         target_compile_options (
             ${PROJECT_NAME}
             PUBLIC
-            -O3 -Wall -Wextra -Wpedantic
+            ${GCC_CLANG_RELEASE_BUILD_OPTS}
         )
 
         if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
                 PUBLIC
-                -O3 -Wall -Wextra -Wpedantic
+                ${GCC_CLANG_RELEASE_BUILD_OPTS}
             )
         endif ()
 
@@ -49,13 +56,13 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
-                -O3 -Wall -Wextra -Wpedantic
+                ${GCC_CLANG_RELEASE_BUILD_OPTS}
             )
 
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
-                -O3 -Wall -Wextra -Wpedantic
+                ${GCC_CLANG_RELEASE_BUILD_OPTS}
             )
         endif ()
     endif ()
@@ -63,13 +70,17 @@ if (${CMAKE_BUILD_TYPE} EQUAL "Release")
 else ()
     message (STATUS "Debug build compilation options enabled")
 
-    target_compile_definitions (${PROJECT_NAME} PUBLIC DEBUG_LOG)
+    target_compile_definitions (
+        ${PROJECT_NAME}
+        PUBLIC
+        DEBUG_LOG
+    )
 
     if (${TESTCPP_DEMO_ENABLED})
         target_compile_definitions (
             ${PROJECT_NAME}_run
             PUBLIC
-                DEBUG_LOG
+            DEBUG_LOG
         )
     endif ()
 
@@ -77,12 +88,12 @@ else ()
         target_compile_definitions (
             ${PROJECT_NAME}_TestCase_test
             PUBLIC
-                DEBUG_LOG
+            DEBUG_LOG
         )
         target_compile_definitions (
             ${PROJECT_NAME}_TestSuite_test
             PUBLIC
-                DEBUG_LOG
+            DEBUG_LOG
         )
     endif ()
 
@@ -90,14 +101,14 @@ else ()
         target_compile_options (
             ${PROJECT_NAME}
             PUBLIC
-            /Wall /WX /Od
+            ${MSVC_DEBUG_BUILD_OPTS}
         )
 
         if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
                 PUBLIC
-                /Wall /WX /Od
+                ${MSVC_DEBUG_BUILD_OPTS}
             )
         endif ()
 
@@ -105,13 +116,13 @@ else ()
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
-                /Wall /WX /Od
+                ${MSVC_DEBUG_BUILD_OPTS}
             )
 
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
-                /Wall /WX /Od
+                ${MSVC_DEBUG_BUILD_OPTS}
             )
         endif ()
 
@@ -119,7 +130,8 @@ else ()
         if (${TESTCPP_DEMO_ENABLED})
             target_compile_options (
                 ${PROJECT_NAME}_run
-                PUBLIC -g -Og -Wall -Wextra -Wpedantic
+                PUBLIC
+                ${GCC_CLANG_DEBUG_BUILD_OPTS}
             )
         endif ()
 
@@ -129,28 +141,26 @@ else ()
             target_compile_options (
                 ${PROJECT_NAME}
                 PUBLIC
-                    -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
-                    -ftest-coverage
+                ${COVERAGE_BUILD_OPTS}
             )
 
             target_compile_options (
                 ${PROJECT_NAME}_TestCase_test
                 PUBLIC
-                    -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
-                    -ftest-coverage
+                ${COVERAGE_BUILD_OPTS}
             )
 
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
                 PUBLIC
-                    -g -Og -Wall -Wextra -Wpedantic -fprofile-arcs
-                    -ftest-coverage
+                ${COVERAGE_BUILD_OPTS}
             )
 
         else ()
             target_compile_options (
                 ${PROJECT_NAME}
-                PUBLIC -g -Og -Wall -Wextra -Wpedantic
+                PUBLIC
+                ${GCC_CLANG_DEBUG_BUILD_OPTS}
             )
         endif ()
     endif ()
@@ -160,6 +170,6 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     target_compile_definitions (
         ${PROJECT_NAME}
         PUBLIC
-            TESTCPP_STACKTRACE_ENABLED
+        TESTCPP_STACKTRACE_ENABLED
     )
 endif ()
