@@ -13,12 +13,12 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_RELEASE_BUILD_OPTS
-        /wd4710 /wd4668 /wd5039 /wd4625 /wd4626 /wd5026
+        /wd4710 /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
     )
     list (
         APPEND
         MSVC_DEBUG_BUILD_OPTS 
-        /wd4710 /wd4668 /wd5039 /wd4625 /wd4626 /wd5026
+        /wd4710 /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
     )
 endif ()
 
