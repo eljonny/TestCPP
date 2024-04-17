@@ -1,27 +1,27 @@
 list (
     APPEND
     MSVC_RELEASE_BUILD_OPTS
-    /Wall /WX /O2 /wd4710
+    /Wall /WX /O2 /wd4710 /wd4820
 )
 list (
     APPEND
     MSVC_DEBUG_BUILD_OPTS 
-    /Wall /WX /Od /wd4710
+    /Wall /WX /Od /wd4710 /wd4820
 )
 list (
     APPEND
     GCC_CLANG_RELEASE_BUILD_OPTS
-    -O3 -Wall -Wextra -Wpedantic
+    -O3 -Wall -Wextra -Wpedantic -Werror
 )
 list (
     APPEND
     GCC_CLANG_DEBUG_BUILD_OPTS
-    -g -Og -Wall -Wextra -Wpedantic
+    -g -Og -Wall -Wextra -Wpedantic -Werror
 )
 list (
     APPEND
     COVERAGE_BUILD_OPTS
-    -g -Og -Wall -Wextra -Wpedantic
+    -g -Og -Wall -Wextra -Wpedantic -Werror
     -fprofile-arcs -ftest-coverage
 )
 
