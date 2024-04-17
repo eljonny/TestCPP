@@ -1,9 +1,29 @@
-set (MSVC_RELEASE_BUILD_OPTS "/Wall /WX /O2 /wd4710")
-set (MSVC_DEBUG_BUILD_OPTS "/Wall /WX /Od /wd4710")
-set (GCC_CLANG_RELEASE_BUILD_OPTS "-O3 -Wall -Wextra -Wpedantic")
-set (GCC_CLANG_DEBUG_BUILD_OPTS "-g -Og -Wall -Wextra -Wpedantic")
-set (COVERAGE_BUILD_OPTS "-g -Og -Wall -Wextra -Wpedantic\
--fprofile-arcs -ftest-coverage")
+list (
+    APPEND
+    MSVC_RELEASE_BUILD_OPTS
+    /Wall /WX /O2 /wd4710
+)
+list (
+    APPEND
+    MSVC_DEBUG_BUILD_OPTS 
+    /Wall /WX /Od /wd4710
+)
+list (
+    APPEND
+    GCC_CLANG_RELEASE_BUILD_OPTS
+    -O3 -Wall -Wextra -Wpedantic
+)
+list (
+    APPEND
+    GCC_CLANG_DEBUG_BUILD_OPTS
+    -g -Og -Wall -Wextra -Wpedantic
+)
+list (
+    APPEND
+    COVERAGE_BUILD_OPTS
+    -g -Og -Wall -Wextra -Wpedantic
+    -fprofile-arcs -ftest-coverage
+)
 
 if (${CMAKE_BUILD_TYPE} EQUAL "Release")
     message (STATUS "Release build compilation options enabled")
