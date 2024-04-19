@@ -571,7 +571,7 @@ namespace TestCPP {
         }
     }
 
-    void TestSuite::fail(const string& failureMessage) {
-        throw TestFailedException(move(string(failureMessage)));
+    void TestSuite::fail(string failureMessage) {
+        throw TestFailedException(move(failureMessage));
     }
 }

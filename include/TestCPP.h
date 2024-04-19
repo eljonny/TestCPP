@@ -303,7 +303,7 @@ namespace TestCPP {
         );
 
         static void fail (
-            const string& failureMessage = "Forced test failure!"
+            string failureMessage = "Forced test failure!"
         );
 
         void enableTestPassedMessage ();
