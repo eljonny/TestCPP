@@ -10,6 +10,8 @@ list (
             #  about speed, not space, and the natural alignment
             #  is generally fastest. Let the compiler add the padding.
     /wd4100 # Unused parameters occur in the Release build in debugLog
+    /wd4514 # It's ok if the compiler removes unreferenced inline
+            #  functions.
 )
 list (
     APPEND
