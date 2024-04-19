@@ -10,8 +10,6 @@ list (
             #  about speed, not space, and the natural alignment
             #  is generally fastest. Let the compiler add the padding.
     /wd4100 # Unused parameters occur in the Release build in debugLog
-    /wd4514 # It's ok if the compiler removes unreferenced inline
-            #  functions.
 )
 list (
     APPEND
@@ -60,6 +58,20 @@ if (${TESTCPP_STACKTRACE_ENABLED})
                   #  warning suppression since /Qspectre is specified.
         /Qspectre # Instructs the compiler to apply Spectre
                   #  vulnerability mitigations.
+    )
+endif ()
+
+if (BUILD_TESTING)
+    list (
+        APPEND
+        MSVC_RELEASE_BUILD_OPTS
+        /wd4514 # It's ok if the compiler removes unreferenced inline
+                #  functions.
+    )
+    list (
+        APPEND
+        MSVC_DEBUG_BUILD_OPTS
+        /wd4514
     )
 endif ()
 
