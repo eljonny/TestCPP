@@ -1,7 +1,15 @@
 list (
     APPEND
     MSVC_RELEASE_BUILD_OPTS
-    /Wall /WX /O2 /wd4710 /wd4820
+    /Wall   # Enable all warnings and treat them as errors
+    /WX     # Treat linker warnings as errors also
+    /O2     # Do optimizations for the Release build
+    /wd4710 # It's ok if functions are not inlined
+    /wd4711 # It's also ok if functions are inlined
+    /wd4820 # Struct/class data member padding is ok, we're concerned
+            #  about speed, not space, and the natural alignment
+            #  is generally fastest. Let the compiler add the padding.
+    /wd4100 # Unused parameters occur in the Release build in debugLog
 )
 list (
     APPEND
@@ -13,31 +21,72 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_RELEASE_BUILD_OPTS
-        /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
+        /wd4668 # There are undefined preprocessor macros in the Windows
+                #  SDK in internal headers. This is a workaround until
+                #  these issues are fixed by Microsoft.
+        /wd5039 # There's a function or two in the Windows SDK that are
+                #  passed to extern 'C' APIs that are not marked as
+                #  noexcept which causes this warning, which is treated
+                #  as an error. There's nothing we can do about this so
+                #  this is added as a workaround.
+        /wd4625 # In the Boost.StackTrace code, there are copy
+                #  constructors that are implicitly deleted. Since this
+                #  is in an external library, suppress the warning to
+                #  work around this to ensure clean compilation.
+        /wd4626 # In the Boost.StackTrace code, there are copy
+                #  assignment operators that are implicitly deleted.
+                #  Since this is in an external library, suppress the
+                #  warning to work around this to ensure clean
+                #  compilation.
+        /wd5026 # In the Boost.StackTrace code, there are move
+                #  constructors that are implicitly deleted. Since this
+                #  is in an external library, suppress the warning to
+                #  work around this to ensure clean compilation.
+        /wd5027 # In the Boost.StackTrace code, there are move
+                #  assignment operators that are implicitly deleted.
+                #  Since this is in an external library, suppress the
+                #  warning to work around this to ensure clean
+                #  compilation.
     )
     list (
         APPEND
         MSVC_DEBUG_BUILD_OPTS 
-        /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027 /wd5045
-        /Qspectre
+        /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
+        /wd5045   # Warns about code that can cause the Spectre
+                  #  vulnerability to become exploitable, does not
+                  #  go away when /Qspectre is specified. Applied this
+                  #  warning suppression since /Qspectre is specified.
+        /Qspectre # Instructs the compiler to apply Spectre
+                  #  vulnerability mitigations.
     )
 endif ()
 
 list (
     APPEND
     GCC_CLANG_RELEASE_BUILD_OPTS
-    -O3 -Wall -Wextra -Wpedantic -Werror -Wno-unused-parameter
+    -O3                   # Optimize the Release build
+    -Wall                 # Enable most warnings
+    -Wextra               # Enable even more warnings
+    -Wpedantic            # Enable most of the rest of the warnings
+    -Werror               # Treat all warnings as errors
+    -Wno-unused-parameter # Unused parameters occur in the Release
+                          #  build in debugLog
 )
 list (
     APPEND
     GCC_CLANG_DEBUG_BUILD_OPTS
-    -g -Og -Wall -Wextra -Wpedantic -Werror
+    -g  # Enable all debugging information
+    -Og # Ensure the compiler doesn't use optimizations that would harm
+        #  debuggability of the resulting code
+    -Wall -Wextra -Wpedantic -Werror
 )
 list (
     APPEND
     COVERAGE_BUILD_OPTS
     -g -Og -Wall -Wextra -Wpedantic -Werror
-    -fprofile-arcs -ftest-coverage
+    -fprofile-arcs   # Enable profile points that help with code
+                     #  coverage
+    -ftest-coverage  # Enable core code coverage compilation
 )
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
