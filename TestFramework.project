@@ -632,7 +632,7 @@ cpack --config CPackSourceConfig.cmake
 cpack -G DEB
 cpack -G RPM
 cpack -G ZIP</Target>
-        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DTESTCPP_TEST_ENABLED=1 -DTESTCPP_COVERAGE_ENABLED=0 -DTESTCPP_DEMO_ENABLED=1 -DTESTCPP_ANALYSIS_ENABLED=1 -DTESTCPP_STACKTRACE_ENABLED=1
+        <Target Name="cmake">cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DTESTCPP_TEST_ENABLED=1 -DTESTCPP_DEMO_ENABLED=1 -DTESTCPP_STACKTRACE_ENABLED=1
 make</Target>
         <Target Name="clean">cmake --build . --target clean
 cd ..

@@ -13,7 +13,7 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_RELEASE_BUILD_OPTS
-        /wd4710 /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
+        /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
     )
     list (
         APPEND
@@ -26,7 +26,7 @@ endif ()
 list (
     APPEND
     GCC_CLANG_RELEASE_BUILD_OPTS
-    -O3 -Wall -Wextra -Wpedantic -Werror
+    -O3 -Wall -Wextra -Wpedantic -Werror -Wno-unused-parameter
 )
 list (
     APPEND
@@ -40,7 +40,7 @@ list (
     -fprofile-arcs -ftest-coverage
 )
 
-if (${CMAKE_BUILD_TYPE} EQUAL "Release")
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     message (STATUS "Release build compilation options enabled")
 
     if (MSVC)
