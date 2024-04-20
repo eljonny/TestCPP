@@ -30,6 +30,7 @@ For more information, please refer to <http://unlicense.org/>
 #ifndef TESTCPP_CLASSES_
 #define TESTCPP_CLASSES_
 
+#include <atomic>
 #include <chrono>
 #include <functional>
 #include <iostream>
@@ -39,6 +40,7 @@ For more information, please refer to <http://unlicense.org/>
 #include <tuple>
 #include <vector>
 
+using std::atomic_int;
 using std::chrono::nanoseconds;
 using std::chrono::system_clock;
 using std::chrono::duration_cast;
@@ -115,9 +117,6 @@ namespace TestCPP {
         ~TestCase ();
 
         void setNotifyPassed (bool);
-        void captureStdout ();
-        void captureClog ();
-        void captureStdErr ();
         void outCompareOption (TestCaseOutCompareOptions opt);
         void clearStdoutCapture ();
         void clearLogCapture ();
@@ -138,12 +137,27 @@ namespace TestCPP {
 
         TestCaseOutCompareOptions option;
 
-        unique_ptr<stringstream> stdoutBuffer = nullptr;
-        unique_ptr<stringstream> clogBuffer = nullptr;
-        unique_ptr<stringstream> stderrBuffer = nullptr;
-        unique_ptr<streambuf> stdoutOriginal = nullptr;
-        unique_ptr<streambuf> clogOriginal = nullptr;
-        unique_ptr<streambuf> stderrOriginal = nullptr;
+        void captureStdout ();
+        void captureClog ();
+        void captureStdErr ();
+        void logTestFailure (string);
+        void runTest ();
+        bool checkOutput (TestCaseOutCompareOptions opt, string source,
+                          string against);
+
+        static atomic_int stdoutCaptureCasesConstructed;
+        static atomic_int logCaptureCasesConstructed;
+        static atomic_int stderrCaptureCasesConstructed;
+        static atomic_int stdoutCaptureCasesDestroyed;
+        static atomic_int logCaptureCasesDestroyed;
+        static atomic_int stderrCaptureCasesDestroyed;
+
+        static unique_ptr<stringstream> stdoutBuffer;
+        static unique_ptr<stringstream> clogBuffer;
+        static unique_ptr<stringstream> stderrBuffer;
+        static unique_ptr<streambuf> stdoutOriginal;
+        static unique_ptr<streambuf> clogOriginal;
+        static unique_ptr<streambuf> stderrOriginal;
 
         template<typename F, typename ...Args>
         static nanoseconds duration (F func, Args&&... args)
@@ -154,11 +168,6 @@ namespace TestCPP {
                 system_clock::now() - start
             );
         }
-
-        void logTestFailure (string);
-        void runTest ();
-        bool checkOutput (TestCaseOutCompareOptions opt, string source,
-                          string against);
     };
 
     class TestSuite {
@@ -308,6 +317,8 @@ namespace TestCPP {
 
         void enableTestPassedMessage ();
         void disableTestPassedMessage ();
+
+        unsigned getLastRunFailCount ();
 
         void run ();
 
