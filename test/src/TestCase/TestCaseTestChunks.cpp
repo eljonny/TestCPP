@@ -1,21 +1,33 @@
 #include <memory>
 
 #include "TestCPP.h"
+#include "TestCPPUtil.h"
 #include "TestCase/TestCaseTestChunks.h"
 
 using TestCPP::TestCase;
+using TestCPP::Util::debugLog;
 using std::unique_ptr;
 
 namespace TestCPP {
     namespace Testing {
         namespace TestCaseTests {
             void parameterVariationTestChunks () {
+                debugLog("Start ctor param variation test chunks");
+
+                debugLog("PassMessage param ctor test chunks");
                 varyingPassMessageEnabled();
+                debugLog("CaptureStdout param ctor test chunks");
                 varyingCaptureStdout();
+                debugLog("CaptureLog param ctor test chunks");
                 varyingCaptureLog();
+                debugLog("CaptureStderr param ctor test chunks");
                 varyingCaptureStderr();
+                debugLog("OCO Exact param ctor test chunks");
                 varyingTestCaseOutCompareOptionsExact();
+                debugLog("OCO Contains param ctor test chunks");
                 varyingTestCaseOutCompareOptionsContains();
+
+                debugLog("Ctor param variation test chunks complete");
             }
 
             void varyingPassMessageEnabled () {
