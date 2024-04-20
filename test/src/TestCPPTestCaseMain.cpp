@@ -12,11 +12,12 @@ int main(void)
 {
     try {
         TestCPP::Testing::TestCaseSuite::suite.run();
+        return TestCPP::Testing::TestCaseSuite::suite.
+            getLastRunFailCount();
     }
     catch (std::exception& e) {
         std::cerr << "Test suite run failed with an exception: "
                   << e.what() << std::endl;
+        return -1;
     }
-
-	return 0;
 }

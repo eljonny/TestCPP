@@ -24,11 +24,12 @@ int main(void)
         );
 
         suite.run();
+
+        return suite.getLastRunFailCount();
     }
     catch (std::exception& e) {
         std::cerr << "Demo run failed with an exception: "
                   << e.what() << std::endl;
+        return -1;
     }
-
-    return 0;
 }
