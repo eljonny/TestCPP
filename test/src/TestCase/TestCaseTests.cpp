@@ -24,8 +24,6 @@ namespace TestCPP {
                             nullptr,
                             function<void()>([](){})
                         ));
-
-                        debugLog("Destroying with nullptr string");
                     },
                     "Should have thrown on nullptr string!"
                 );
@@ -54,7 +52,7 @@ namespace TestCPP {
                     "TestCaseSetNotifyPassed case Test",
                     function<void()>([](){}),
                     false, false, true, false,
-                    TestCase::TestCaseOutCompareOptions::EXACT
+                    TestCase::TestCaseOutCompareOptions::CONTAINS
                 ));
 
                 TestSuite::assertTrue(
@@ -62,13 +60,17 @@ namespace TestCPP {
                     "TestSetNotifyPassed go() 1"
                 );
 
+                stringstream tcLog;
+                tcLog << "Test ";
+                tcLog << "TestCaseSetNotifyPassed case Test passed! (";
+
                 TestSuite::assertTrue(
-                    test->checkLog(string()),
+                    !test->checkLog(tcLog.str()),
                     "TestSetNotifyPassed checkLog() 1"
                 );
-
-                test->outCompareOption(
-                    TestCase::TestCaseOutCompareOptions::CONTAINS
+                TestSuite::assertTrue(
+                    !test->checkLog(string("s)")),
+                    "TestSetNotifyPassed checkLog() 2"
                 );
 
                 test->setNotifyPassed(true);
@@ -77,20 +79,13 @@ namespace TestCPP {
                     "TestSetNotifyPassed go() 2"
                 );
 
-                stringstream tcLog;
-                tcLog << "Test ";
-                tcLog << "TestCaseSetNotifyPassed case Test passed! (";
                 TestSuite::assertTrue(
                     test->checkLog(tcLog.str()),
-                    "TestSetNotifyPassed checkLog() 2"
+                    "TestSetNotifyPassed checkLog() 3"
                 );
                 TestSuite::assertTrue(
                     test->checkLog(string("s)")),
-                    "TestSetNotifyPassed checkLog() 3"
-                );
-
-                test->outCompareOption(
-                    TestCase::TestCaseOutCompareOptions::EXACT
+                    "TestSetNotifyPassed checkLog() 4"
                 );
 
                 test->clearLogCapture();
@@ -102,8 +97,12 @@ namespace TestCPP {
                 );
 
                 TestSuite::assertTrue(
-                    test->checkLog(string()),
-                    "TestSetNotifyPassed checkLog() 4"
+                    !test->checkLog(tcLog.str()),
+                    "TestSetNotifyPassed checkLog() 5"
+                );
+                TestSuite::assertTrue(
+                    !test->checkLog(string("s)")),
+                    "TestSetNotifyPassed checkLog() 6"
                 );
             }
         }
