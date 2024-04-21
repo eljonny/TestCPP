@@ -1,24 +1,31 @@
 list (
     APPEND
     MSVC_RELEASE_BUILD_OPTS
-    /Wall   # Enable all warnings and treat them as errors
-    /WX     # Treat linker warnings as errors also
-    /O2     # Do optimizations for the Release build
-    /wd4668 # There are undefined preprocessor macros in the Windows
-            #  SDK in internal headers. This is a workaround until
-            #  these issues are fixed by Microsoft.
-    /wd4710 # It's ok if functions are not inlined
-    /wd4711 # It's also ok if functions are inlined
-    /wd4820 # Struct/class data member padding is ok, we're concerned
-            #  about speed, not space, and the natural alignment
-            #  is generally fastest. Let the compiler add the padding.
-    /wd4100 # Unused parameters occur in the Release build in debugLog
+    /Wall     # Enable all warnings and treat them as errors
+    /WX       # Treat linker warnings as errors also
+    /O2       # Do optimizations for the Release build
+    /wd4668   # There are undefined preprocessor macros in the Windows
+              #  SDK in internal headers. This is a workaround until
+              #  these issues are fixed by Microsoft.
+    /wd4710   # It's ok if functions are not inlined
+    /wd4711   # It's also ok if functions are inlined
+    /wd4820   # Struct/class data member padding is ok, we're concerned
+              #  about speed, not space, and the natural alignment
+              #  is generally fastest. Let the compiler add the padding.
+    /wd4100   # Unused parameters occur in the Release build in debugLog
+    /wd5045   # Warns about code that can cause the Spectre
+              #  vulnerability to become exploitable, does not
+              #  go away when /Qspectre is specified. Applied this
+              #  warning suppression since /Qspectre is specified.
+    /Qspectre # Instructs the compiler to apply Spectre
+              #  vulnerability mitigations.
 )
 list (
     APPEND
     MSVC_DEBUG_BUILD_OPTS 
     /Wall /WX /Od
-    /wd4820 /wd4668
+    /wd4820 /wd4668 /wd5045
+    /Qspectre
 )
 
 if (${TESTCPP_STACKTRACE_ENABLED})
@@ -53,12 +60,6 @@ if (${TESTCPP_STACKTRACE_ENABLED})
         APPEND
         MSVC_DEBUG_BUILD_OPTS 
         /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
-        /wd5045   # Warns about code that can cause the Spectre
-                  #  vulnerability to become exploitable, does not
-                  #  go away when /Qspectre is specified. Applied this
-                  #  warning suppression since /Qspectre is specified.
-        /Qspectre # Instructs the compiler to apply Spectre
-                  #  vulnerability mitigations.
     )
 endif ()
 
