@@ -1,4 +1,4 @@
-name: TestCPP Static analysis
+name: TestCPP Static analysis - Release
 
 on:
   # Will run on push when merging to 'branches'. The output will be shown in the console
