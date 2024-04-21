@@ -28,6 +28,6 @@ jobs:
         exclude_dir: lib
 
         use_cmake: true
-        cmake_args: -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev -DTESTCPP_TEST_ENABLED=1 -DTESTCPP_COVERAGE_ENABLED=1 -DTESTCPP_DEMO_ENABLED=1 -DTESTCPP_ANALYSIS_ENABLED=1
+        cmake_args: -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev
 
         cppcheck_args: --enable=all --suppress=missingInclude
