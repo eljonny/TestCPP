@@ -4,6 +4,9 @@ list (
     /Wall   # Enable all warnings and treat them as errors
     /WX     # Treat linker warnings as errors also
     /O2     # Do optimizations for the Release build
+    /wd4668 # There are undefined preprocessor macros in the Windows
+            #  SDK in internal headers. This is a workaround until
+            #  these issues are fixed by Microsoft.
     /wd4710 # It's ok if functions are not inlined
     /wd4711 # It's also ok if functions are inlined
     /wd4820 # Struct/class data member padding is ok, we're concerned
@@ -14,16 +17,14 @@ list (
 list (
     APPEND
     MSVC_DEBUG_BUILD_OPTS 
-    /Wall /WX /Od /wd4820
+    /Wall /WX /Od
+    /wd4820 /wd4668
 )
 
 if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_RELEASE_BUILD_OPTS
-        /wd4668 # There are undefined preprocessor macros in the Windows
-                #  SDK in internal headers. This is a workaround until
-                #  these issues are fixed by Microsoft.
         /wd5039 # There's a function or two in the Windows SDK that are
                 #  passed to extern 'C' APIs that are not marked as
                 #  noexcept which causes this warning, which is treated
@@ -51,7 +52,7 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_DEBUG_BUILD_OPTS 
-        /wd4668 /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
+        /wd5039 /wd4625 /wd4626 /wd5026 /wd5027
         /wd5045   # Warns about code that can cause the Spectre
                   #  vulnerability to become exploitable, does not
                   #  go away when /Qspectre is specified. Applied this
