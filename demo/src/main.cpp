@@ -1,4 +1,5 @@
 #include "TestCPP.h"
+#include "TestCPPUtil.h"
 
 using TestCPP::TestSuite;
 using std::string;
@@ -25,7 +26,9 @@ int main(void)
 
         suite.run();
 
-        return suite.getLastRunFailCount();
+        return TestCPP::Util::unsignedToSigned(
+            suite.getLastRunFailCount()
+        );
     }
     catch (std::exception& e) {
         std::cerr << "Demo run failed with an exception: "
