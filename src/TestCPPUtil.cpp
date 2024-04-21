@@ -25,6 +25,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <http://unlicense.org/>
  */
 
+#include <climits>
+
 #include "TestCPPUtil.h"
 
 #ifdef DEBUG_LOG
@@ -51,6 +53,20 @@ namespace TestCPP {
                             const string& contains)
         {
             return source.find(contains) != string::npos;
+        }
+
+        int unsignedToSigned(unsigned toCast) {
+            if (toCast <= INT_MAX) {
+                return static_cast<int>(toCast);
+            }
+
+            if (toCast >= static_cast<unsigned>(INT_MIN)) {
+                return static_cast<int>(toCast - INT_MIN) + INT_MIN;
+            }
+
+            throw std::runtime_error(
+                "Conversion would produce an invalid value!"
+            );
         }
     }
 }

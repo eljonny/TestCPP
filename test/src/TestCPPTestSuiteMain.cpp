@@ -1,4 +1,5 @@
 #include "TestCPP.h"
+#include "TestCPPUtil.h"
 
 using TestCPP::TestCase;
 using TestCPP::TestSuite;
@@ -12,8 +13,10 @@ int main(void)
 {
     try {
         TestCPP::Testing::TestSuiteSuite::suite.run();
-        return TestCPP::Testing::TestSuiteSuite::suite.
-            getLastRunFailCount();
+        return TestCPP::Util::unsignedToSigned(
+            TestCPP::Testing::TestSuiteSuite::suite.
+                getLastRunFailCount()
+        );
     }
     catch (std::exception& e) {
         std::cerr << "Test suite run failed with an exception: "

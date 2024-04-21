@@ -37,6 +37,7 @@ namespace TestCPP {
         void debugLog (const string& message, bool omitNewline = false);
         bool stringContains (const string& source,
                              const string& contains);
+        int unsignedToSigned(unsigned toCast);
     }
 }
 
