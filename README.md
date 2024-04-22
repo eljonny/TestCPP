@@ -44,7 +44,9 @@ Features of the test framework are very minimal and include:
    - assertFalse
    - assertThrows
    - assertNoThrows
- - fail function, for marking incomplete or skeleton tests
+ - fail function, for marking incomplete or skeleton tests,
+   or failing in certain cases in a managed way that reduces
+   boilerplate.
 
 # Getting Started
 
@@ -118,16 +120,18 @@ Link in the test library through a linker flag if you
  installed it, most commonly `-lTestCPP`.
 
 Now you're ready to write tests.
-There are contrived examples provided through test.hpp and
- programmatic test registration and test running in main.cpp.
+There are contrived examples provided through demo/include/tests.h
+ and programmatic test registration and test running in
+ demo/src/main.cpp.
+The contrived example tests are defined in demo/src/tests.cpp.
 Also, the library is tested with itself, so these can also be
  used as examples.
 
 The Test Suite creation API is used to collect and run tests
- as in the example files.
-Test Cases are defined as C++ STL tuples where the first
- element is the test name and the second element is the
- function that contains the test code to execute.
+ as in the example files and the tests for the library itself.
+Test Cases are defined as STL tuples where the first element is
+ the test name and the second element is the function that
+ contains the test code to execute.
 The framework can be easily modified to support other test
  definition formats if desired as the constructor is
  vararg templatized, so you would just need to add a new
@@ -148,9 +152,10 @@ As long as there is an `operator==` implementation for the types
  being compared, the `assertEquals` and `assertNotEquals` will work
  as expected.
 
-Test failures are handled through a range of exceptions and
- an error message will be logged describing the failure for
- each test.
+Test failures are handled with TestFailedException and an error
+ message will be logged describing the failure for each test.
+Internal library errors are handled with TestCPPException.
+Both of these custom exceptions are based on the STL runtime_error.
 
 # Building
 
@@ -172,13 +177,14 @@ To build within the CodeLite IDE:
  - Select your desired build configuration (Debug or Release)
  - Right click on the TestFramework project
  - Move to the Custom Targets... context menu option
- - Click cmake
+ - Click cmake (or for Release builds where you actually want to
+   deploy the library, cmake-rls or cmake-nost-rls)
 
-In the Custom Targets... context menu option there are also ctest,
- cpack, clean, and clang-tidy targets, which will, respectively:
- - Run the test suite for the library and (if the Debug
-   configuration is selected) generate code coverage reports for
-   the library code.
+In the Custom Targets... context menu option there are also, depending
+ on the build configuration chose, ctest, cpack, clean, clang-tidy,
+ cmake-nost-rls, and cmake-rls targets, which will, respectively:
+ - Run the test suite for the library and, if the Debug configuration
+   is selected, generate code coverage reports for the library code.
  - Create binary and/or source packages (depending on the build
    configuration selected), and if you're on a Linux distro that
    supports building RPM and/or DEB packages, will build those too.
@@ -188,6 +194,14 @@ In the Custom Targets... context menu option there are also ctest,
    set, which enables clang-tidy for each compilation step, as in
    it will run clang-tidy on each file that is compiled immediately
    after successful compilation.
+ - Configures the build with the minimal amount of code to build the
+   library, such that the result is suitable for distribution.
+   In this way, the build omits the demo, lib tests, and dependencies
+   to provide a pure C++11 library.
+ - Configures the build in the same way as cmake-nost-rls but
+   includes stack trace functionality via Boost.StackTrace, which
+   causes the library to have link-time dependencies as explained in
+   other elements of this README.
 
 ## CMake build structure and variables
 
@@ -228,6 +242,7 @@ The CMake build is split into components that get included into the
      - Boost.Functional
      - Boost.Predef
      - Boost.Utility
+     - Boost.Winapi on Windows
     Note that none of these require binaries, they are all header-
      only, so they are not required in downstream builds.
     This also adds dependencies on platform-specific libraries at
@@ -293,6 +308,10 @@ The Release configuration does not support code coverage because of the
 Both Release and Debug configurations support building the demo app,
  which you can enable by adding the following flag to `cmake`:
  - `-DCMAKE_DEMO_ENABLED=1`
+
+Both Release and Debug configurations support building with stack trace
+ functionality with the folloeing flag:
+ - `-DTESTCPP_STACKTRACE_ENABLED`
 
 # Testing and Code Coverage
 
