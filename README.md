@@ -6,8 +6,7 @@
 [![RPM_DEB-Packaging-NoStacktraces](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack-nost.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack-nost.yml)
 [![Coverage](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov-st.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov-st.yml)
 [![Security](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml)
-[![StaticAnalysis-Debug](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis-dbg.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis-dbg.yml)
-[![StaticAnalysis-Release](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis-rls.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis-rls.yml)
+[![StaticAnalysis](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis-dbg.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml)
 [![codecov](https://codecov.io/gh/eljonny/TestCPP/graph/badge.svg?token=WFG41QY4BB)](https://codecov.io/gh/eljonny/TestCPP)
 
 # Introduction
@@ -181,13 +180,18 @@ To build within the CodeLite IDE:
    deploy the library, cmake-rls or cmake-nost-rls)
 
 In the Custom Targets... context menu option there are also, depending
- on the build configuration chose, ctest, cpack, clean, clang-tidy,
- cmake-nost-rls, and cmake-rls targets, which will, respectively:
+ on the build configuration chose, ctest, cpack, cppcheck, clean,
+ clang-tidy, cmake-nost-rls, and cmake-rls targets, which will,
+ respectively:
  - Run the test suite for the library and, if the Debug configuration
    is selected, generate code coverage reports for the library code.
  - Create binary and/or source packages (depending on the build
    configuration selected), and if you're on a Linux distro that
    supports building RPM and/or DEB packages, will build those too.
+ - Runs CMake without actually running the build so the build system
+   is generated with compile_commands.json, then runs cppcheck against
+   what is defined in compile_commands.json. In this case, this is
+   only the core library header and source files.
  - Runs the CMake clean command and completely removes the build
    directory, based on the selected configuration.
  - Runs the build with the TESTCPP_ANALYSIS_ENABLED build variable
@@ -312,6 +316,32 @@ Both Release and Debug configurations support building the demo app,
 Both Release and Debug configurations support building with stack trace
  functionality with the folloeing flag:
  - `-DTESTCPP_STACKTRACE_ENABLED`
+
+You can run cppcheck and clang-tidy on the generated
+ compile_commands.json.
+For clang-tidy, you can also use the CMake flag to have CMake run
+ clang-tidy during the build.
+
+My suggested options for cppcheck are:
+ - --project=compile_commands.json
+   - Uses the generated CMake output to define a check project
+ - -itest
+   - Ignores tests, in case building with tests enabled
+ - -idemo
+   - Ignores demo code, in case building with demo enabled
+ - --enable=all
+   - Enables all CPPCheck checks
+ - --suppress=missingIncludeSystem
+   - Then suppress missing system includes, there are no <>-enclosed
+     includes that need to be checked for this project.
+ - --suppress=unusedFunction
+   - Then suppress checking for unused functions. Most API functions
+     are not used within the library itself, and CPPCheck will generate
+     numerous errors saying the functions are unused.
+
+clang-tidy uses the .clang-tidy configuration file so you don't need to
+ specify any options unless you want to run it with different checks/
+ behavior from what I usually run for this project.
 
 # Testing and Code Coverage
 
