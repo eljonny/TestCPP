@@ -30,4 +30,4 @@ jobs:
         use_cmake: true
         cmake_args: -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev
 
-        cppcheck_args: --enable=all --suppress=missingIncludeSystem
+        cppcheck_args: --enable=all --suppress=missingIncludeSystem --std=c++11
