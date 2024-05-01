@@ -1,3 +1,2 @@
 Checks: '-*,bugprone-*,cert-*,clang-analyzer-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*'
-AnalyzeTemporaryDtors: false
 FormatStyle: "file"

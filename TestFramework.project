@@ -71,8 +71,7 @@
     <File Name=".github/workflows/cmake-build-test-nost.yml"/>
     <File Name=".github/workflows/cmake-linux-pack-nost.yml"/>
     <File Name=".github/workflows/cmake-multi-platform-nost.yml"/>
-    <File Name=".github/workflows/cmake-static-analysis-dbg.yml"/>
-    <File Name=".github/workflows/cmake-static-analysis-rls.yml"/>
+    <File Name=".github/workflows/cmake-static-analysis.yml"/>
   </VirtualDirectory>
   <VirtualDirectory Name="codecov">
     <File Name="codecov.yml"/>
@@ -573,6 +572,8 @@
 mkdir -p coverage &amp;&amp; cd coverage
 find .. -name '*.gcda' | xargs gcov -abcfmu
 find . -type f -not -name 'Test*.gcov' | xargs rm</Target>
+        <Target Name="cppcheck">cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev
+cppcheck --project=compile_commands.json -itest -idemo --enable=all --suppress=missingIncludeSystem --suppress=unusedFunction</Target>
         <Target Name="cpack">cpack --config CPackConfig.cmake
 cpack --config CPackSourceConfig.cmake
 cpack -G DEB
