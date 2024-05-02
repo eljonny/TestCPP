@@ -259,7 +259,7 @@ namespace TestCPP {
             this->pass = false;
             logTestFailure(errorMessage);
         }
-        catch(string errorMessage) {
+        catch(string& errorMessage) {
             this->pass = false;
             logTestFailure(errorMessage);
         }
