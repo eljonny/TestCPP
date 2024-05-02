@@ -22,6 +22,8 @@ jobs:
     - name: Run static analysis
       uses: JacobDomagala/StaticAnalysis@master
       with:
+		github_token: ${{ secrets.GITHUB_TOKEN }}
+
         language: c++
 
         # Exclude any issues found in ${Project_root_dir}/lib
