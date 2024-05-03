@@ -12,7 +12,7 @@ int main(void)
 {
     try {
         TestSuite suite(
-            string("Demo Test Suite"),
+            "Demo Test Suite",
 
             make_tuple(
                 "simpleTest",
