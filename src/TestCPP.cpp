@@ -88,16 +88,16 @@ namespace TestCPP {
 #endif
     }
 
-    TestCaseName::TestCaseName (const char* name) {
+    TestObjName::TestObjName (const char* name) {
         if (name) {
             this->testCaseName = name;
         }
         else {
-            throw TestCPPException("Not a valid test name!");
+            throw TestCPPException(TCNStr::NVTN);
         }
     }
 
-    const string& TestCaseName::getTestName () {
+    const string& TestObjName::getTestName () {
         return this->testCaseName;
     }
 
@@ -115,7 +115,7 @@ namespace TestCPP {
     unique_ptr<streambuf> TestCase::clogOriginal = nullptr;
     unique_ptr<streambuf> TestCase::stderrOriginal = nullptr;
 
-    TestCase::TestCase (TestCaseName&& name,
+    TestCase::TestCase (TestObjName&& name,
                         function<void()> test,
                         bool msg,
                         bool captureOut, bool captureLog,
@@ -231,21 +231,21 @@ namespace TestCPP {
     void TestCase::logTestFailure (string reason) {
         clog << fixed;
         clog << setprecision(4);
-        clog << "Test " << this->testName << " failed! ("
+        clog << TCStr::TEST_ << this->testName << TCStr::FAIL
                 << static_cast<double>(this->lastRunTime)
-                    /1000000000.0 << "s)" << endl;
-        clog << "Reason: " << reason << endl;
+                    /1000000000.0 << TCStr::SEC << endl;
+        clog << TCStr::REASON << reason << endl;
     }
 
     void TestCase::runTest () {
-        clog << "Starting run of test " << this->testName << endl;
+        clog << TCStr::START_RUN << this->testName << endl;
         this->lastRunTime = duration(this->test).count();
         if (this->notifyTestPassed) {
             clog << fixed;
             clog << setprecision(4);
-            clog << "Test " << this->testName << " passed! ("
+            clog << TCStr::TEST_ << this->testName << TCStr::PASS
                     << static_cast<double>(this->lastRunTime)
-                        /1000000000.0 << "s)" << endl;
+                        /1000000000.0 << TCStr::SEC << endl;
         }
         this->pass = true;
     }
@@ -269,7 +269,7 @@ namespace TestCPP {
         }
         catch (...) {
             this->pass = false;
-            logTestFailure("Unknown error occurred in test!");
+            logTestFailure(TCStr::UNK_EXC);
         }
 
         return false;
@@ -342,7 +342,7 @@ namespace TestCPP {
 
         default:
             stringstream error;
-            error << "Unknown option " << opt;
+            error << TCStr::UNK_OPT << opt;
             throw TestCPPException(error.str());
         }
     }
@@ -390,8 +390,9 @@ namespace TestCPP {
             }
             else {
                 stringstream nomatch;
-                nomatch << "'" << source << "' is not equivalent to '";
-                nomatch << against << "'";
+                nomatch << TCStr::APOS << source << TCStr::APOS;
+                nomatch << TCStr::NEQUIV << TCStr::APOS;
+                nomatch << against << TCStr::APOS;
 
                 if (this->clogOriginal != nullptr) {
                     ostream tmp(this->clogOriginal.get());
@@ -411,8 +412,9 @@ namespace TestCPP {
             }
             else {
                 stringstream nomatch;
-                nomatch << "'" << source << "' does not contain '";
-                nomatch << against << "'";
+                nomatch << TCStr::APOS << source << TCStr::APOS;
+                nomatch << TCStr::NCONTAIN << TCStr::APOS;
+                nomatch << against << TCStr::APOS;
 
                 if (this->clogOriginal != nullptr) {
                     ostream tmp(this->clogOriginal.get());
@@ -428,7 +430,7 @@ namespace TestCPP {
 
         default:
             stringstream re;
-            re << "Unknown comparison option! " << opt;
+            re << TCStr::UNK_CMP_OPT << opt;
             throw TestCPPException(re.str());
         }
     }
@@ -446,15 +448,8 @@ namespace TestCPP {
         }
     }
 
-    void TestSuite::setSuiteName (string testSuiteName) {
-        if (testSuiteName.data()) {
-            this->suiteName = testSuiteName;
-        }
-        else {
-            stringstream e;
-            e << "An invalid string was passed as the Test Suite Name!";
-            throw TestCPPException(e.str());
-        }
+    void TestSuite::setSuiteName (TestObjName&& testSuiteName) {
+        this->suiteName = move(testSuiteName);
     }
 
     unsigned TestSuite::getLastRunFailCount () {

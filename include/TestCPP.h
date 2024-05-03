@@ -69,16 +69,16 @@ namespace TestCPP {
         TestFailedException (string&& msg);
     };
 
-    class TestCaseName {
+    class TestObjName {
     public:
-        TestCaseName () = default;
-        TestCaseName (const char* name);
+        TestObjName () = default;
+        TestObjName (const char* name);
 
         const string& getTestName ();
 
         friend std::ostream& operator<< (
             std::ostream& s,
-            TestCaseName& tcName
+            TestObjName& tcName
         )
         {
             s << tcName.getTestName();
@@ -88,6 +88,10 @@ namespace TestCPP {
     private:
         string testCaseName;
 
+        struct TCNStr {
+            static constexpr const char * NVTN =
+                "Not a valid test name!";
+        };
     };
 
     class TestCase {
@@ -99,7 +103,7 @@ namespace TestCPP {
         };
 
         TestCase (
-            TestCaseName&& testName,
+            TestObjName&& testName,
             function<void()> test,
             bool testPassedMessage = true,
             bool captureOut = false,
@@ -132,7 +136,7 @@ namespace TestCPP {
         bool pass;
         long long lastRunTime;
 
-        TestCaseName testName;
+        TestObjName testName;
         function<void()> test;
 
         TestCaseOutCompareOptions option;
@@ -168,24 +172,44 @@ namespace TestCPP {
                 system_clock::now() - start
             );
         }
+
+        struct TCStr {
+            static constexpr const char * APOS = "'";
+            static constexpr const char * FAIL = " failed! (";
+            static constexpr const char * NCONTAIN =
+                " does not contain ";
+            static constexpr const char * NEQUIV =
+                " is not equivalent to ";
+            static constexpr const char * PASS = " passed! (";
+            static constexpr const char * REASON = "Reason: ";
+            static constexpr const char * SEC = "s)";
+            static constexpr const char * START_RUN =
+                "Starting run of test ";
+            static constexpr const char * TEST_ = "Test ";
+            static constexpr const char * UNK_CMP_OPT =
+                "Unknown comparison option! ";
+            static constexpr const char * UNK_EXC =
+                "Unknown error occurred in test!";
+            static constexpr const char * UNK_OPT = "Unknown option ";
+        };
     };
 
     class TestSuite {
 
     public:
         template<typename... TestType>
-        TestSuite (string suiteName,
+        TestSuite (TestObjName&& suiteName,
                    typename enable_if<sizeof...(TestType) == 0>::type)
         {
             this->testPassedMessage = true;
-            this->setSuiteName(suiteName);
+            this->setSuiteName(move(suiteName));
             this->tests = vector<TestCase>();
         }
 
         template<typename... TestType>
-        TestSuite (string suiteName, TestType ...tests) {
+        TestSuite (TestObjName&& suiteName, TestType ...tests) {
             this->testPassedMessage = true;
-            this->setSuiteName(suiteName);
+            this->setSuiteName(move(suiteName));
             this->tests = vector<TestCase>();
 
             this->addTests(tests...);
@@ -215,7 +239,7 @@ namespace TestCPP {
             return T(args...);
         }
 
-        void setSuiteName (string testSuiteName);
+        void setSuiteName (TestObjName&& testSuiteName);
 
         template<typename T1, typename T2>
         static void assertEquals (
@@ -329,7 +353,7 @@ namespace TestCPP {
         unsigned lastRunFailCount;
         unsigned long long totalRuntime;
 
-        string suiteName;
+        TestObjName suiteName;
         vector<TestCase> tests;
     };
 }
