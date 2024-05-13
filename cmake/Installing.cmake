@@ -1,19 +1,31 @@
+list (
+    APPEND
+    TESTCPP_PUBLIC_HEADERS
+    include/TestCPP.h
+)
+
+list (
+    APPEND
+    TESTCPP_PRIVATE_HEADERS
+    include/internal/TestCPPAssertions.h
+    include/internal/TestCPPCommon.h
+    include/internal/TestCPPExceptions.h
+    include/internal/TestCPPTestCase.h
+    include/internal/TestCPPTestSuite.h
+    include/internal/TestCPPUtil.h
+)
+
 set_target_properties (
     ${PROJECT_NAME}
     PROPERTIES
         PUBLIC_HEADER
-        include/TestCPP.h
+        "${TESTCPP_PUBLIC_HEADERS}"
 )
 set_target_properties (
     ${PROJECT_NAME}
     PROPERTIES
         PRIVATE_HEADER
-        include/internal/TestCPPAssertions.h
-        include/internal/TestCPPCommon.h
-        include/internal/TestCPPExceptions.h
-        include/internal/TestCPPTestCase.h
-        include/internal/TestCPPTestSuite.h
-        include/internal/TestCPPUtil.h
+        "${TESTCPP_PRIVATE_HEADERS}"
 )
 include (GNUInstallDirs)
 install (
