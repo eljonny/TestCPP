@@ -4,12 +4,25 @@ set_target_properties (
         PUBLIC_HEADER
         include/TestCPP.h
 )
+set_target_properties (
+    ${PROJECT_NAME}
+    PROPERTIES
+        PRIVATE_HEADER
+        include/internal/TestCPPAssertions.h
+        include/internal/TestCPPCommon.h
+        include/internal/TestCPPExceptions.h
+        include/internal/TestCPPTestCase.h
+        include/internal/TestCPPTestSuite.h
+        include/internal/TestCPPUtil.h
+)
 include (GNUInstallDirs)
 install (
     TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Targets
     PUBLIC_HEADER
       DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+    PRIVATE_HEADER
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/internal
 )
 export (
     EXPORT ${PROJECT_NAME}Targets
