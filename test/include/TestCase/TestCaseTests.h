@@ -6,6 +6,9 @@ namespace TestCPP {
         namespace TestCaseTests {
             void TestConstructCase ();
             void TestTestCaseGo ();
+            void TestTestCaseGoThrowStr ();
+            void TestTestCaseGoThrowChr ();
+            void TestTestCaseGoThrowInt ();
             void TestTestCaseSetNotifyPassed ();
         }
     }
