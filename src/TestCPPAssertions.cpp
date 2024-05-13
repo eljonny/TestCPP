@@ -26,7 +26,7 @@ For more information, please refer to <http://unlicense.org/>
  */
 
 #include "internal/TestCPPAssertions.h"
-#include "internal/TestCPPTestCase.h"
+#include "internal/TestCPPExceptions.h"
 
 using std::clog;
 using std::current_exception;
