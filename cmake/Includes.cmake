@@ -32,4 +32,10 @@ if (BUILD_TESTING)
         test/include
         include
     )
+
+    target_include_directories (
+        ${PROJECT_NAME}_Assertions_test PRIVATE
+        test/include
+        include
+    )
 endif ()
