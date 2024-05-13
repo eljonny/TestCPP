@@ -28,8 +28,17 @@ For more information, please refer to <http://unlicense.org/>
 #ifndef TESTCPP_ASSERTIONS_
 #define TESTCPP_ASSERTIONS_
 
+#include <functional>
+#include <iostream>
+#include <sstream>
+#include <string>
+
 #include "TestCPPExceptions.h"
-#include "TestCPPTestCase.h"
+
+using std::endl;
+using std::function;
+using std::string;
+using std::stringstream;
 
 /**
  * The base namespace for all TestCPP library code.
