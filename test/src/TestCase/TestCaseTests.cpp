@@ -77,7 +77,7 @@ namespace TestCPP {
 
                 auto test = unique_ptr<TestCase>(new TestCase(
                     "SUB-TEST TestCaseGo case Test - throws chr",
-                    function<void()>([&throwChr](){
+                    function<void()>([](){
                         throw throwChr;
                     }),
                     true, false, true, false,
