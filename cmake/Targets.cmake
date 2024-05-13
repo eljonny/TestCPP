@@ -1,7 +1,10 @@
 add_library (
     ${PROJECT_NAME}
+    src/TestCPPAssertions.cpp
+    src/TestCPPExceptions.cpp
+    src/TestCPPTestCase.cpp
+    src/TestCPPTestSuite.cpp
     src/TestCPPUtil.cpp
-    src/TestCPP.cpp
 )
 add_library (
     ${PROJECT_GROUP_NAME}::${PROJECT_NAME}
@@ -29,5 +32,11 @@ if (BUILD_TESTING)
         ${PROJECT_NAME}_TestSuite_test
         test/src/TestSuite/TestSuiteTests.cpp
         test/src/TestCPPTestSuiteMain.cpp
+    )
+
+    add_executable (
+        ${PROJECT_NAME}_Assertions_test
+        test/src/Assertions/AssertionsTests.cpp
+        test/src/TestCPPAssertionsMain.cpp
     )
 endif ()

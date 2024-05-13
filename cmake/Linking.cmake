@@ -46,6 +46,13 @@ if (BUILD_TESTING)
                 ole32
                 dbgeng
             )
+            target_link_libraries (
+                ${PROJECT_NAME}_Assertions_test
+                ${PROJECT_NAME}
+                gcov
+                ole32
+                dbgeng
+            )
 
         elseif (${TESTCPP_STACKTRACE_ENABLED})
             target_link_libraries (
@@ -60,6 +67,12 @@ if (BUILD_TESTING)
                 gcov
                 dl
             )
+            target_link_libraries (
+                ${PROJECT_NAME}_Assertions_test
+                ${PROJECT_NAME}
+                gcov
+                dl
+            )
 
         else ()
             target_link_libraries (
@@ -69,6 +82,11 @@ if (BUILD_TESTING)
             )
             target_link_libraries (
                 ${PROJECT_NAME}_TestSuite_test
+                ${PROJECT_NAME}
+                gcov
+            )
+            target_link_libraries (
+                ${PROJECT_NAME}_Assertions_test
                 ${PROJECT_NAME}
                 gcov
             )
@@ -88,6 +106,12 @@ if (BUILD_TESTING)
                 ole32
                 dbgeng
             )
+            target_link_libraries (
+                ${PROJECT_NAME}_Assertions_test
+                ${PROJECT_NAME}
+                ole32
+                dbgeng
+            )
 
         elseif (${TESTCPP_STACKTRACE_ENABLED})
             target_link_libraries (
@@ -100,6 +124,11 @@ if (BUILD_TESTING)
                 ${PROJECT_NAME}
                 dl
             )
+            target_link_libraries (
+                ${PROJECT_NAME}_Assertions_test
+                ${PROJECT_NAME}
+                dl
+            )
 
         else ()
             target_link_libraries (
@@ -108,6 +137,10 @@ if (BUILD_TESTING)
             )
             target_link_libraries (
                 ${PROJECT_NAME}_TestSuite_test
+                ${PROJECT_NAME}
+            )
+            target_link_libraries (
+                ${PROJECT_NAME}_Assertions_test
                 ${PROJECT_NAME}
             )
         endif ()
