@@ -25,20 +25,49 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <http://unlicense.org/>
  */
 
-#ifndef TESTCPP_UTIL_
-#define TESTCPP_UTIL_
+#include <iostream>
 
-#include <string>
+#include "internal/TestCPPExceptions.h"
 
+#ifdef TESTCPP_STACKTRACE_ENABLED
+#include <boost/stacktrace.hpp>
+#endif
+
+using std::clog;
+using std::move;
 using std::string;
+using std::runtime_error;
 
 namespace TestCPP {
-    namespace Util {
-        void debugLog (const string& message, bool omitNewline = false);
-        bool stringContains (const string& source,
-                             const string& contains);
-        int unsignedToSigned(unsigned toCast);
+    
+    TestCPPException::TestCPPException (const char * msg) :
+        runtime_error(msg)
+    {
+#ifdef TESTCPP_STACKTRACE_ENABLED
+        clog << boost::stacktrace::stacktrace();
+#endif
+    }
+    TestCPPException::TestCPPException (string&& msg) :
+        runtime_error(move(msg))
+    {
+#ifdef TESTCPP_STACKTRACE_ENABLED
+        clog << boost::stacktrace::stacktrace();
+#endif
+    }
+
+    TestFailedException::TestFailedException (const char * msg) :
+        TestCPPException(msg)
+    {
+#ifdef TESTCPP_STACKTRACE_ENABLED
+        clog << boost::stacktrace::stacktrace();
+#endif
+    }
+
+    TestFailedException::TestFailedException (string&& msg) :
+        TestCPPException(move(msg))
+    {
+#ifdef TESTCPP_STACKTRACE_ENABLED
+        clog << boost::stacktrace::stacktrace();
+#endif
     }
 }
-
-#endif
