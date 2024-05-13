@@ -28,7 +28,9 @@ For more information, please refer to <http://unlicense.org/>
 #include <climits>
 #include <stdexcept>
 
-#include "TestCPPUtil.h"
+#include "internal/TestCPPCommon.h"
+#include "internal/TestCPPExceptions.h"
+#include "internal/TestCPPUtil.h"
 
 #ifdef DEBUG_LOG
 #include <iostream>
@@ -39,8 +41,25 @@ using std::clog;
 using std::endl;
 #endif
 
+using TCPPStr = TestCPP::TestCPPCommon::Strings;
+
 namespace TestCPP {
+
+    TestObjName::TestObjName (const char* name) {
+        if (name) {
+            this->testCaseName = name;
+        }
+        else {
+            throw TestCPPException(TCPPStr::NVTN);
+        }
+    }
+
+    const string& TestObjName::getName () {
+        return this->testCaseName;
+    }
+
     namespace Util {
+
         void debugLog(const string& message, bool omitNewline) {
 #ifdef DEBUG_LOG
             clog << message;

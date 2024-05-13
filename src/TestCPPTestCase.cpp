@@ -27,7 +27,9 @@ For more information, please refer to <http://unlicense.org/>
 
 //Original author: Jonathan Hyry CSU-Fullerton SECS 6896-02 Fall 2014/15
 
-#include "TestCPP.h"
+#include "internal/TestCPPCommon.h"
+#include "internal/TestCPPExceptions.h"
+#include "internal/TestCPPTestCase.h"
 
 #ifdef TESTCPP_STACKTRACE_ENABLED
 #include <boost/stacktrace.hpp>
@@ -35,16 +37,14 @@ For more information, please refer to <http://unlicense.org/>
 
 #include <iomanip>
 
-#include "TestCPPUtil.h"
+#include "internal/TestCPPUtil.h"
 
 using TestCPP::Util::debugLog;
 using std::cerr;
 using std::clog;
 using std::cout;
-using std::current_exception;
 using std::endl;
 using std::exception;
-using std::exception_ptr;
 using std::fixed;
 using std::function;
 using std::invalid_argument;
@@ -56,50 +56,10 @@ using std::setprecision;
 using std::string;
 using std::tuple;
 
+using TCPPNum = TestCPP::TestCPPCommon::Nums;
+using TCPPStr = TestCPP::TestCPPCommon::Strings;
+
 namespace TestCPP {
-    TestCPPException::TestCPPException (const char * msg) :
-        runtime_error(msg)
-    {
-#ifdef TESTCPP_STACKTRACE_ENABLED
-        clog << boost::stacktrace::stacktrace();
-#endif
-    }
-    TestCPPException::TestCPPException (string&& msg) :
-        runtime_error(move(msg))
-    {
-#ifdef TESTCPP_STACKTRACE_ENABLED
-        clog << boost::stacktrace::stacktrace();
-#endif
-    }
-
-    TestFailedException::TestFailedException (const char * msg) :
-        TestCPPException(msg)
-    {
-#ifdef TESTCPP_STACKTRACE_ENABLED
-        clog << boost::stacktrace::stacktrace();
-#endif
-    }
-
-    TestFailedException::TestFailedException (string&& msg) :
-        TestCPPException(move(msg))
-    {
-#ifdef TESTCPP_STACKTRACE_ENABLED
-        clog << boost::stacktrace::stacktrace();
-#endif
-    }
-
-    TestObjName::TestObjName (const char* name) {
-        if (name) {
-            this->testCaseName = name;
-        }
-        else {
-            throw TestCPPException(TCNStr::NVTN);
-        }
-    }
-
-    const string& TestObjName::getTestName () {
-        return this->testCaseName;
-    }
 
     atomic_int TestCase::stdoutCaptureCasesConstructed;
     atomic_int TestCase::logCaptureCasesConstructed;
@@ -230,22 +190,28 @@ namespace TestCPP {
 
     void TestCase::logTestFailure (string reason) {
         clog << fixed;
-        clog << setprecision(4);
-        clog << TCStr::TEST_ << this->testName << TCStr::FAIL
-                << static_cast<double>(this->lastRunTime)
-                    /1000000000.0 << TCStr::SEC << endl;
-        clog << TCStr::REASON << reason << endl;
+        clog << setprecision(TCPPNum::TIME_PRECISION);
+        clog << TCPPStr::TEST_ << this->testName << TCPPStr::_FAIL_
+             << TCPPStr::PARENL
+             << static_cast<double>(this->lastRunTime)/
+                TCPPNum::NANOS_IN_SEC
+             << TCPPStr::SEC << TCPPStr::PARENR
+             << endl;
+        clog << TCPPStr::REASON_ << reason << endl;
     }
 
     void TestCase::runTest () {
-        clog << TCStr::START_RUN << this->testName << endl;
+        clog << TCPPStr::START_RUN << this->testName << endl;
         this->lastRunTime = duration(this->test).count();
         if (this->notifyTestPassed) {
             clog << fixed;
-            clog << setprecision(4);
-            clog << TCStr::TEST_ << this->testName << TCStr::PASS
-                    << static_cast<double>(this->lastRunTime)
-                        /1000000000.0 << TCStr::SEC << endl;
+            clog << setprecision(TCPPNum::TIME_PRECISION);
+            clog << TCPPStr::TEST_ << this->testName << TCPPStr::_PASS_
+                 << TCPPStr::PARENL
+                 << static_cast<double>(this->lastRunTime)/
+                    TCPPNum::NANOS_IN_SEC
+                 << TCPPStr::SEC << TCPPStr::PARENR
+                 << endl;
         }
         this->pass = true;
     }
@@ -269,7 +235,7 @@ namespace TestCPP {
         }
         catch (...) {
             this->pass = false;
-            logTestFailure(TCStr::UNK_EXC);
+            logTestFailure(TCPPStr::UNK_EXC);
         }
 
         return false;
@@ -342,7 +308,7 @@ namespace TestCPP {
 
         default:
             stringstream error;
-            error << TCStr::UNK_OPT << opt;
+            error << TCPPStr::UNK_OPT_ << opt;
             throw TestCPPException(error.str());
         }
     }
@@ -390,9 +356,9 @@ namespace TestCPP {
             }
             else {
                 stringstream nomatch;
-                nomatch << TCStr::APOS << source << TCStr::APOS;
-                nomatch << TCStr::NEQUIV << TCStr::APOS;
-                nomatch << against << TCStr::APOS;
+                nomatch << TCPPStr::APOS << source << TCPPStr::APOS;
+                nomatch << TCPPStr::_NEQUIV_ << TCPPStr::APOS;
+                nomatch << against << TCPPStr::APOS;
 
                 if (this->clogOriginal != nullptr) {
                     ostream tmp(this->clogOriginal.get());
@@ -412,9 +378,9 @@ namespace TestCPP {
             }
             else {
                 stringstream nomatch;
-                nomatch << TCStr::APOS << source << TCStr::APOS;
-                nomatch << TCStr::NCONTAIN << TCStr::APOS;
-                nomatch << against << TCStr::APOS;
+                nomatch << TCPPStr::APOS << source << TCPPStr::APOS;
+                nomatch << TCPPStr::_NCONTAIN_ << TCPPStr::APOS;
+                nomatch << against << TCPPStr::APOS;
 
                 if (this->clogOriginal != nullptr) {
                     ostream tmp(this->clogOriginal.get());
@@ -430,178 +396,8 @@ namespace TestCPP {
 
         default:
             stringstream re;
-            re << TCStr::UNK_CMP_OPT << opt;
+            re << TCPPStr::UNK_CMP_OPT_ << opt;
             throw TestCPPException(re.str());
         }
-    }
-
-    void TestSuite::enableTestPassedMessage () {
-        this->testPassedMessage = true;
-        for (TestCase test : this->tests) {
-            test.setNotifyPassed(true);
-        }
-    }
-    void TestSuite::disableTestPassedMessage () {
-        this->testPassedMessage = false;
-        for (TestCase test : this->tests) {
-            test.setNotifyPassed(false);
-        }
-    }
-
-    void TestSuite::setSuiteName (TestObjName&& testSuiteName) {
-        this->suiteName = move(testSuiteName);
-    }
-
-    unsigned TestSuite::getLastRunFailCount () {
-        return this->lastRunFailCount;
-    }
-
-    void TestSuite::run () {
-        if (this->tests.size() == 0) {
-            clog << "No tests to run!" << endl;
-            return;
-        }
-
-        this->lastRunSucceeded = true;
-        this->lastRunFailCount = 0;
-        this->lastRunSuccessCount = 0;
-        this->totalRuntime = 0;
-
-        clog << endl
-             << "Starting to run test suite '" << this->suiteName << "'"
-             << endl << endl;
-
-        for (TestCase test : this->tests) {
-            bool testPassed = false;
-            try {
-                testPassed = test.go();
-            }
-            catch (exception& e) {
-                clog << "Exception occurred during test run: "
-                     << e.what() << endl;
-            }
-            catch (...) {
-                cerr << "An unknown error occurred during test run."
-                     << endl;
-            }
-
-            if (!testPassed && this->lastRunSucceeded) {
-                this->lastRunFailCount++;
-                this->lastRunSucceeded = false;
-            }
-            else if (!testPassed) {
-                this->lastRunFailCount++;
-            }
-            else {
-                this->lastRunSuccessCount++;
-            }
-
-            this->totalRuntime += test.getLastRuntime();
-        }
-
-        clog << endl;
-
-        if (this->testPassedMessage &&
-            this->lastRunFailCount == 0) {
-            clog << "All '" << this->suiteName
-                 << "' suite tests passed!" << endl;
-        }
-
-        double suiteRuntimeElapsed = static_cast<double>(
-            this->totalRuntime)/1000000000.0;
-
-        clog << fixed;
-        clog << setprecision(0);
-        clog << "Finished running suite '" << this->suiteName << "' in "
-             << suiteRuntimeElapsed << "s ("<< this->lastRunSuccessCount
-             << "/" << this->tests.size() << " passed)" << endl;
-        clog << endl;
-    }
-
-    template<>
-    void TestSuite::addTest (TestCase&& test) {
-        this->tests.emplace_back(test);
-    }
-
-    void TestSuite::assertThrows (
-            function<void()> shouldThrow,
-            string failureMessage
-        )
-    {
-        try {
-            shouldThrow();
-        }
-        catch (...) {
-            exception_ptr eptr = current_exception();
-
-            if (eptr) {
-                try {
-                    rethrow_exception(eptr);
-                }
-                catch (const exception& e) {
-                    clog << "assertThrows caught exception: "
-                         << TestFailedException(e.what()).what()
-                         << endl;
-                }
-            }
-            else {
-                clog << "Something was thrown, not sure what." << endl
-                     << "This satisfies the assertion, so no failure is"
-                     << " present. "
-                     << TestFailedException("Unknown thrown object").
-                            what();
-            }
-
-            return;
-        }
-
-        throw TestFailedException(move(failureMessage));
-    }
-
-    void TestSuite::assertNoThrows (
-            function<void()> shouldNotThrow,
-            string failureMessage
-        )
-    {
-        try {
-            shouldNotThrow();
-        }
-        catch (...) {
-            throw TestFailedException(move(failureMessage));
-        }
-    }
-
-    void TestSuite::assertTrue (
-            bool condition,
-            string failureMessage
-        )
-    {
-        if (!condition) {
-            stringstream err;
-
-            err << "Boolean Truth assertion failed!" << std::endl;
-            err << failureMessage << std::endl;
-
-            throw TestFailedException(err.str());
-        }
-    }
-
-    void TestSuite::assertFalse (
-            bool condition,
-            string failureMessage
-        )
-    {
-        if (condition) {
-            stringstream err;
-
-            err << "Boolean False assertion failed!" << std::endl;
-            err << failureMessage << std::endl;
-
-            throw TestFailedException(err.str());
-        }
-    }
-
-    void TestSuite::fail(string failureMessage) {
-        throw TestFailedException(move(failureMessage));
     }
 }
