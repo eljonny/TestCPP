@@ -18,6 +18,18 @@ namespace TestCPP {
                     function<void()>(TestCaseTests::TestTestCaseGo)
                 ),
                 make_tuple(
+                    "Case runner Test - string thrown",
+                    function<void()>(TestCaseTests::TestTestCaseGoThrowStr)
+                ),
+                make_tuple(
+                    "Case runner Test - char thrown",
+                    function<void()>(TestCaseTests::TestTestCaseGoThrowChr)
+                ),
+                make_tuple(
+                    "Case runner Test - test catchall",
+                    function<void()>(TestCaseTests::TestTestCaseGoThrowInt)
+                ),
+                make_tuple(
                     "Case setNotifyPassed Test",
                     function<void()>(
                         TestCaseTests::TestTestCaseSetNotifyPassed
