@@ -84,11 +84,7 @@ namespace TestCPP {
         friend std::ostream& operator<< (
             std::ostream& s,
             TestObjName& tcName
-        )
-        {
-            s << tcName.getName();
-            return s;
-        }
+        );
 
     private:
         string testCaseName;

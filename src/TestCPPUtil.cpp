@@ -58,6 +58,15 @@ namespace TestCPP {
         return this->testCaseName;
     }
 
+    std::ostream& operator<< (
+        std::ostream& s,
+        TestObjName& tcName
+    )
+    {
+        s << tcName.getName();
+        return s;
+    }
+
     namespace Util {
 
         void debugLog(const string& message, bool omitNewline) {
