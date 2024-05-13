@@ -26,7 +26,6 @@ For more information, please refer to <http://unlicense.org/>
  */
 
 #include <climits>
-#include <ostream>
 #include <stdexcept>
 
 #include "internal/TestCPPCommon.h"
@@ -35,6 +34,8 @@ For more information, please refer to <http://unlicense.org/>
 
 #ifdef DEBUG_LOG
 #include <iostream>
+#else
+#include <ostream>
 #endif
 
 #ifdef DEBUG_LOG
