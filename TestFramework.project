@@ -18,7 +18,6 @@
       <File Name="include/internal/TestCPPTestCase.h"/>
       <File Name="include/internal/TestCPPExceptions.h"/>
       <File Name="include/internal/TestCPPCommon.h"/>
-      <File Name="test/src/TestCase/TestCaseTests.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="git">
@@ -54,6 +53,7 @@
       <File Name="test/src/TestCPPTestSuiteMain.cpp"/>
       <VirtualDirectory Name="TestCase">
         <File Name="test/src/TestCase/TestCaseTestChunks.cpp"/>
+        <File Name="test/src/TestCase/TestCaseTests.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="TestSuite">
         <File Name="test/src/TestSuite/TestSuiteTests.cpp"/>
