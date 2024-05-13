@@ -1,7 +1,6 @@
 #include <memory>
 
 #include "TestCPP.h"
-#include "TestCPPUtil.h"
 #include "TestCase/TestCaseTestChunks.h"
 
 using TestCPP::TestCase;

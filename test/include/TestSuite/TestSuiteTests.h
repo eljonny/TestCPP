@@ -5,10 +5,6 @@ namespace TestCPP {
     namespace Testing {
         namespace TestSuiteTests {
             void TestConstructSuite ();
-            void TestAssertTrue ();
-            void TestAssertFalse ();
-            void TestAssertNull ();
-            void TestAssertNotNull ();
         }
     }
 }
