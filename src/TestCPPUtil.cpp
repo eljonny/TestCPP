@@ -26,6 +26,7 @@ For more information, please refer to <http://unlicense.org/>
  */
 
 #include <climits>
+#include <ostream>
 #include <stdexcept>
 
 #include "internal/TestCPPCommon.h"
