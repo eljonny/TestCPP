@@ -135,6 +135,12 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
                 PUBLIC
                 ${MSVC_RELEASE_BUILD_OPTS}
             )
+
+            target_compile_options (
+                ${PROJECT_NAME}_Assertions_test
+                PUBLIC
+                ${MSVC_RELEASE_BUILD_OPTS}
+            )
         endif ()
 
     else ()
@@ -161,6 +167,12 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
 
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
+                PUBLIC
+                ${GCC_CLANG_RELEASE_BUILD_OPTS}
+            )
+
+            target_compile_options (
+                ${PROJECT_NAME}_Assertions_test
                 PUBLIC
                 ${GCC_CLANG_RELEASE_BUILD_OPTS}
             )
@@ -195,6 +207,11 @@ else ()
             PUBLIC
             DEBUG_LOG
         )
+        target_compile_definitions (
+            ${PROJECT_NAME}_Assertions_test
+            PUBLIC
+            DEBUG_LOG
+        )
     endif ()
 
     if (MSVC)
@@ -221,6 +238,12 @@ else ()
 
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
+                PUBLIC
+                ${MSVC_DEBUG_BUILD_OPTS}
+            )
+
+            target_compile_options (
+                ${PROJECT_NAME}_Assertions_test
                 PUBLIC
                 ${MSVC_DEBUG_BUILD_OPTS}
             )
@@ -252,6 +275,12 @@ else ()
 
             target_compile_options (
                 ${PROJECT_NAME}_TestSuite_test
+                PUBLIC
+                ${COVERAGE_BUILD_OPTS}
+            )
+
+            target_compile_options (
+                ${PROJECT_NAME}_Assertions_test
                 PUBLIC
                 ${COVERAGE_BUILD_OPTS}
             )

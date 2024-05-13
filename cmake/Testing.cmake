@@ -8,4 +8,9 @@ if (BUILD_TESTING)
         NAME ${PROJECT_NAME}TestSuiteTests
         COMMAND ${PROJECT_NAME}_TestSuite_test
     )
+
+    add_test (
+        NAME ${PROJECT_NAME}AssertionsTests
+        COMMAND ${PROJECT_NAME}_Assertions_test
+    )
 endif ()
