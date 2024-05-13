@@ -1,5 +1,4 @@
 #include "TestCPP.h"
-#include "TestCPPUtil.h"
 
 using TestCPP::TestSuite;
 using std::string;
