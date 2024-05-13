@@ -3,12 +3,23 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <File Name="src/TestCPP.cpp"/>
     <File Name="src/TestCPPUtil.cpp"/>
+    <File Name="src/TestCPPAssertions.cpp"/>
+    <File Name="src/TestCPPExceptions.cpp"/>
+    <File Name="src/TestCPPTestCase.cpp"/>
+    <File Name="src/TestCPPTestSuite.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
-    <File Name="include/TestCPPUtil.h"/>
     <File Name="include/TestCPP.h"/>
+    <VirtualDirectory Name="internal">
+      <File Name="include/internal/TestCPPAssertions.h"/>
+      <File Name="include/internal/TestCPPUtil.h"/>
+      <File Name="include/internal/TestCPPTestSuite.h"/>
+      <File Name="include/internal/TestCPPTestCase.h"/>
+      <File Name="include/internal/TestCPPExceptions.h"/>
+      <File Name="include/internal/TestCPPCommon.h"/>
+      <File Name="test/src/TestCase/TestCaseTests.cpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="git">
     <File Name=".gitignore"/>
@@ -43,11 +54,14 @@
       <File Name="test/src/TestCPPTestSuiteMain.cpp"/>
       <VirtualDirectory Name="TestCase">
         <File Name="test/src/TestCase/TestCaseTestChunks.cpp"/>
-        <File Name="test/src/TestCase/TestCaseTests.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="TestSuite">
         <File Name="test/src/TestSuite/TestSuiteTests.cpp"/>
       </VirtualDirectory>
+      <VirtualDirectory Name="Assertions">
+        <File Name="test/src/Assertions/AssertionsTests.cpp"/>
+      </VirtualDirectory>
+      <File Name="test/src/TestCPPAssertionsMain.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="include">
       <VirtualDirectory Name="TestCase">
@@ -58,6 +72,10 @@
       <VirtualDirectory Name="TestSuite">
         <File Name="test/include/TestSuite/TestSuiteSuite.h"/>
         <File Name="test/include/TestSuite/TestSuiteTests.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Assertions">
+        <File Name="test/include/Assertions/AssertionsSuite.h"/>
+        <File Name="test/include/Assertions/AssertionsTests.h"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
