@@ -230,19 +230,23 @@ namespace TestCPP {
         long long getLastRuntime ();
 
     private:
-        bool notifyTestPassed;
-        bool pass;
-        long long lastRunTime;
+        bool notifyTestPassed = false;
+        bool pass = false;
+        bool stdoutCaptured = false;
+        bool clogCaptured = false;
+        bool stderrCaptured = false;
+        long long lastRunTime = -1;
 
         TestObjName testName;
         function<void()> test;
 
-        TestCaseOutCompareOptions option;
+        TestCaseOutCompareOptions option =
+            TestCaseOutCompareOptions::CONTAINS;
 
         void captureStdout ();
         void captureClog ();
         void captureStdErr ();
-        void logTestFailure (string);
+        void logTestFailure (string failureMessage);
         void runTest ();
         bool checkOutput (TestCaseOutCompareOptions opt, string source,
                           string against);
