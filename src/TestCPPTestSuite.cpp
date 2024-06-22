@@ -55,15 +55,15 @@ using TCPPStr = TestCPP::TestCPPCommon::Strings;
 namespace TestCPP {
 
     void TestSuite::enableTestPassedMessage () {
-        this->testPassedMessage = true;
-        for (TestCase test : this->tests) {
-            test.setNotifyPassed(true);
+        this->testSuitePassedMessage = true;
+        for (unsigned i = 0; i < this->tests.size(); i += 1) {
+            this->tests[i].setNotifyPassed(true);
         }
     }
     void TestSuite::disableTestPassedMessage () {
-        this->testPassedMessage = false;
-        for (TestCase test : this->tests) {
-            test.setNotifyPassed(false);
+        this->testSuitePassedMessage = false;
+        for (unsigned i = 0; i < this->tests.size(); i += 1) {
+            this->tests[i].setNotifyPassed(false);
         }
     }
 
@@ -122,7 +122,7 @@ namespace TestCPP {
 
         clog << endl;
 
-        if (this->testPassedMessage &&
+        if (this->testSuitePassedMessage &&
             this->lastRunFailCount == 0) {
             clog << TCPPStr::ALL_ << TCPPStr::APOS << this->suiteName
                  << TCPPStr::APOS << TCPPStr::_SUITE_TESTS_PASSED
@@ -143,8 +143,30 @@ namespace TestCPP {
              << endl;
     }
 
+    /**
+     * @brief Add a test to this test suite.
+     *
+     * The test should be a TestCase object.
+     */
     template<>
     void TestSuite::addTest (TestCase&& test) {
         this->tests.emplace_back(test);
+    }
+
+    /**
+     * @brief Add a test to this test suite.
+     *
+     * The test should be defined as a tuple with 2 elements to use
+     *  this. The first element is the test name, and the second
+     *  element is the test function that defines the test.
+     */
+    template<>
+    void TestSuite::addTest (tuple<const char *,
+                             function<void()>>&& test) {
+        this->tests.emplace_back(
+            std::get<0>(test),
+            std::get<1>(test),
+            this->testSuitePassedMessage
+        );
     }
 }

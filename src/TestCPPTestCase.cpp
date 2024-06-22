@@ -97,6 +97,10 @@ namespace TestCPP {
             captureStdErr();
         }
 
+        this->stdoutCaptured = captureOut;
+        this->clogCaptured = captureLog;
+        this->stderrCaptured = captureErr;
+
         this->option = opt;
     }
 
@@ -106,6 +110,20 @@ namespace TestCPP {
 
         this->pass = o.pass;
         this->lastRunTime = o.lastRunTime;
+
+        this->stdoutCaptured = o.stdoutCaptured;
+        this->clogCaptured = o.clogCaptured;
+        this->stderrCaptured = o.stderrCaptured;
+
+        if (this->stdoutCaptured) {
+            captureStdout();
+        }
+        if (this->clogCaptured) {
+            captureClog();
+        }
+        if (this->stderrCaptured) {
+            captureStdErr();
+        }
 
         this->testName = o.testName;
         this->test = o.test;
@@ -117,6 +135,20 @@ namespace TestCPP {
 
         this->pass = move(o.pass);
         this->lastRunTime = move(o.lastRunTime);
+
+        this->stdoutCaptured = move(o.stdoutCaptured);
+        this->clogCaptured = move(o.clogCaptured);
+        this->stderrCaptured = move(o.stderrCaptured);
+
+        if (this->stdoutCaptured) {
+            captureStdout();
+        }
+        if (this->clogCaptured) {
+            captureClog();
+        }
+        if (this->stderrCaptured) {
+            captureStdErr();
+        }
 
         this->testName = move(o.testName);
         this->test = move(o.test);
@@ -165,6 +197,20 @@ namespace TestCPP {
         this->pass = rhs.pass;
         this->lastRunTime = rhs.lastRunTime;
 
+        this->stdoutCaptured = rhs.stdoutCaptured;
+        this->clogCaptured = rhs.clogCaptured;
+        this->stderrCaptured = rhs.stderrCaptured;
+
+        if (this->stdoutCaptured) {
+            captureStdout();
+        }
+        if (this->clogCaptured) {
+            captureClog();
+        }
+        if (this->stderrCaptured) {
+            captureStdErr();
+        }
+
         this->testName = rhs.testName;
         this->test = rhs.test;
 
@@ -177,6 +223,20 @@ namespace TestCPP {
 
         this->pass = move(rhs.pass);
         this->lastRunTime = move(rhs.lastRunTime);
+
+        this->stdoutCaptured = move(rhs.stdoutCaptured);
+        this->clogCaptured = move(rhs.clogCaptured);
+        this->stderrCaptured = move(rhs.stderrCaptured);
+
+        if (this->stdoutCaptured) {
+            captureStdout();
+        }
+        if (this->clogCaptured) {
+            captureClog();
+        }
+        if (this->stderrCaptured) {
+            captureStdErr();
+        }
 
         this->testName = move(rhs.testName);
         this->test = move(rhs.test);
