@@ -4,7 +4,16 @@
 namespace TestCPP {
     namespace Testing {
         namespace TestSuiteTests {
-            void TestConstructSuite ();
+            void TestConstructSuiteBare ();
+            void TestConstructSuiteTestCases ();
+            void TestConstructSuiteTuples ();
+            void TestConstructSuiteMixed ();
+            void TestEnableTestPassedMessageNoTests ();
+            void TestEnableTestPassedMessageOneTest ();
+            void TestEnableTestPassedMessageManyTests ();
+            void TestDisableTestPassedMessageNoTests ();
+            void TestDisableTestPassedMessageOneTest ();
+            void TestDisableTestPassedMessageManyTests ();
         }
     }
 }
