@@ -81,7 +81,7 @@ namespace TestCPP {
         TestSuite (TestObjName&& suiteName,
                    typename enable_if<sizeof...(TestType) == 0>::type)
         {
-            this->testPassedMessage = true;
+            this->testSuitePassedMessage = true;
             this->setSuiteName(move(suiteName));
             this->tests = vector<TestCase>();
         }
@@ -92,7 +92,7 @@ namespace TestCPP {
          */
         template<typename... TestType>
         TestSuite (TestObjName&& suiteName, TestType ...tests) {
-            this->testPassedMessage = true;
+            this->testSuitePassedMessage = true;
             this->setSuiteName(move(suiteName));
             this->tests = vector<TestCase>();
 
@@ -102,18 +102,10 @@ namespace TestCPP {
         /**
          * @brief Add a test to this test suite.
          *
-         * The test should be defined as a tuple with 2 elements to use
-         *  this. The first element is the test name, and the second
-         *  element is the test function that defines the test.
+         * Appropriate specializations defined in the source file.
          */
         template<typename T>
-        void addTest (T&& test) {
-            this->tests.emplace_back(
-                std::get<0>(test),
-                std::get<1>(test),
-                this->testPassedMessage
-            );
-        }
+        void addTest (T&& test);
 
         /**
          * @brief Specialization to handle when someone tries to call
@@ -128,6 +120,7 @@ namespace TestCPP {
         /**
          * @brief Add one or more tests at once to the test suite.
          * @param test The first test to add.
+         * @param tests The rest of the tests to add.
          */
         template<typename Test, typename... OtherTests>
         void addTests (Test test, OtherTests ...tests) {
@@ -176,7 +169,7 @@ namespace TestCPP {
         void run ();
 
     private:
-        bool testPassedMessage;
+        bool testSuitePassedMessage;
         bool lastRunSucceeded;
         unsigned lastRunSuccessCount;
         unsigned lastRunFailCount;
