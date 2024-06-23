@@ -392,24 +392,23 @@ namespace TestCPP {
     }
 
     bool TestCase::checkStdout (string against) {
-        return checkOutput(this->option, TestCase::stdoutBuffer->str(),
+        return checkOutput(TestCase::stdoutBuffer->str(),
                            against);
     }
 
     bool TestCase::checkLog (string against) {
-        return checkOutput(this->option, TestCase::clogBuffer->str(),
+        return checkOutput(TestCase::clogBuffer->str(),
                            against);
     }
 
     bool TestCase::checkStderr (string against) {
-        return checkOutput(this->option, TestCase::stderrBuffer->str(),
+        return checkOutput(TestCase::stderrBuffer->str(),
                            against);
     }
 
-    bool TestCase::checkOutput (TestCase::TestCaseOutCompareOptions opt,
-                                string source, string against)
+    bool TestCase::checkOutput (string source, string against)
     {
-        switch (opt) {
+        switch (this->option) {
         case EXACT:
             if (source == against) {
                 return true;
