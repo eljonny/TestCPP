@@ -69,7 +69,7 @@ namespace TestCPP {
      * @date 03/05/24
      * @file TestCPP.h
      * @brief Provides an interface for implementing tests.
-     * 
+     *
      * TestCase is one of three core types that define the TestCPP API.
      * TestCase provides faculties for defining and controlling tests
      *  and the stdout/stderr/clog environment.
@@ -94,6 +94,22 @@ namespace TestCPP {
         };
 
         /**
+         * @brief Construct a test case with possibility to use all
+         *         options.
+         *
+         * @param testName The name of the test as a TestObjName.
+         * @param test The implementation or pointer to the test.
+         * @param testPassedMessage Whether to omit a message indicating
+         *          test passage.
+         * @param captureOut Whether to capture stdout output for
+         *          analysis after the test run.
+         * @param captureLog Whether to capture clog output for
+         *          analysis after the test run.
+         * @param captureErr Whether to capture stderr output for
+         *          analysis after the test run.
+         * @param opt Technique for comparing actual output with
+         *          expected output after the test run.
+         *
          * Instantiate and define a test case.
          * All parameters are optional other than the test name and the
          *  test function.
@@ -122,24 +138,32 @@ namespace TestCPP {
         );
 
         /**
-         * Construct a TestCase by copying it from another TestCase.
+         * @brief Construct a TestCase by copying it from another
+         *          TestCase.
+         * @param o The test case from which to make a copy.
          */
         TestCase (TestCase& o);
 
         /**
-         * Construct a TestCase by moving all data from another
-         *  TestCase.
+         * @brief Construct a TestCase by moving all data from another
+         *          TestCase.
+         * @param o Move everything from this TestCase into the new one.
          */
         TestCase (TestCase&& o);
 
         /**
          * @brief Copy a TestCase into another TestCase.
          * @param rhs The test case to copy from.
+         * @return A reference to the new TestCase copy.
          */
         TestCase& operator= (TestCase& rhs);
         
         /**
          * @brief Move a TestCase into another TestCase.
+         * @param rhs Move everything from this TestCase into the new
+         *          one.
+         * @return A reference to the TestCase that everything from the
+         *          old TestCase was moved into.
          */
         TestCase& operator= (TestCase&& rhs);
 
@@ -157,7 +181,7 @@ namespace TestCPP {
         /**
          * @brief Set the output comparison mode.
          * @param opt Accepts specified mode from the referenced enum.
-         * 
+         *
          * If this is called with an option specified that is different
          *  from what is set for this test case already, subsequent
          *  calls to any of the output check functions will use the
@@ -167,7 +191,7 @@ namespace TestCPP {
 
         /**
          * @brief Clears the captured output from stdout.
-         * 
+         *
          * This can be used for checking sections of output based on
          *  test configuration.
          */
@@ -175,7 +199,7 @@ namespace TestCPP {
 
         /**
          * @brief Clears the captured output from std::clog.
-         * 
+         *
          * This can be used for checking sections of output based on
          *  test configuration.
          */
@@ -183,7 +207,7 @@ namespace TestCPP {
 
         /**
          * @brief Clears the captured output from stderr.
-         * 
+         *
          * This can be used for checking sections of output based on
          *  test configuration.
          */
@@ -225,7 +249,8 @@ namespace TestCPP {
 
         /**
          * @brief Returns the duration of the last run in nanoseconds.
-         * @return The duration of the last run in nanoseconds.
+         * @return The duration of the last run of this TestCase in
+         *          nanoseconds.
          */
         long long getLastRuntime ();
 
@@ -243,13 +268,44 @@ namespace TestCPP {
         TestCaseOutCompareOptions option =
             TestCaseOutCompareOptions::CONTAINS;
 
+        /**
+         * @brief If instructed, capture stdout while this test is
+         *          active.
+         */
         void captureStdout ();
+        /**
+         * @brief If instructed, capture clog while this test is
+         *          active.
+         */
         void captureClog ();
+        /**
+         * @brief If instructed, capture stderr while this test is
+         *          active.
+         */
         void captureStdErr ();
+        /**
+         * @brief If a test encounters an error while running, this
+         *          function will be called to log the test error.
+         * @param failureMessage The error message from the test that
+         *          should be logged.
+         */
         void logTestFailure (string failureMessage);
+        /**
+         * @brief Internal test run controller.
+         */
         void runTest ();
-        bool checkOutput (TestCaseOutCompareOptions opt, string source,
-                          string against);
+        /**
+         * @brief Handles the internal logic for calls to checkStdout,
+         *          checkLog, and checkStderr based on the selected
+         *          comparison technique for this test.
+         * @param source The actual output
+         * @param against The expected output, or a portion of the
+         *          expected output.
+         * @return True if the argument results in a successful check
+         *          using the configured comparison mode, false
+         *          otherwise.
+         */
+        bool checkOutput (string source, string against);
 
         static atomic_int stdoutCaptureCasesConstructed;
         static atomic_int logCaptureCasesConstructed;
@@ -265,6 +321,13 @@ namespace TestCPP {
         static unique_ptr<streambuf> clogOriginal;
         static unique_ptr<streambuf> stderrOriginal;
 
+        /**
+         * @brief Measure the duration of a function when run.
+         * @param func Measure the duration of this function when run.
+         * @param args A template pack of arguments to apply to the
+         *          given function of which to measure the duration.
+         * @return The duration of the function run, in nanoseconds.
+         */
         template<typename F, typename ...Args>
         static nanoseconds duration (F func, Args&&... args)
         {
