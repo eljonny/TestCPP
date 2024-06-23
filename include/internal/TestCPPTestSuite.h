@@ -129,16 +129,6 @@ namespace TestCPP {
         }
 
         /**
-         * @brief Get the TestCase object that is associated with the
-         *          given test case construction arguments.
-         * @return The TestCase with the given construction arguments.
-         */
-        template<typename T, typename... ConstructionArgs>
-        static T getTestObject (ConstructionArgs ...args) {
-            return T(args...);
-        }
-
-        /**
          * @brief Sets the name of this test suite.
          */
         void setSuiteName (TestObjName&& testSuiteName);
