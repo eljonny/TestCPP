@@ -455,7 +455,7 @@ namespace TestCPP {
 
         default:
             stringstream re;
-            re << TCPPStr::UNK_CMP_OPT_ << opt;
+            re << TCPPStr::UNK_CMP_OPT_ << this->option;
             throw TestCPPException(re.str());
         }
     }
