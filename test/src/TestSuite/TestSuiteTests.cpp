@@ -336,6 +336,8 @@ namespace TestCPP {
                     suiteName, test
                 ));
 
+                test.clearLogCapture();
+
                 testSuite->disableTestPassedMessage();
                 testSuite->run();
 
@@ -376,6 +378,8 @@ namespace TestCPP {
                 testSuite = unique_ptr<TestSuite>(new TestSuite(
                     suiteName, test
                 ));
+
+                test.clearLogCapture();
 
                 testSuite->disableTestPassedMessage();
                 testSuite->run();
@@ -431,6 +435,9 @@ namespace TestCPP {
                 auto testSuite = unique_ptr<TestSuite>(new TestSuite(
                     suiteName, test1, test2, test3
                 ));
+
+                test1.clearLogCapture();
+
                 testSuite->disableTestPassedMessage();
                 testSuite->run();
 
@@ -503,6 +510,8 @@ namespace TestCPP {
                 testSuite = unique_ptr<TestSuite>(new TestSuite(
                     suiteName, test1, test2, test3
                 ));
+
+                test1.clearLogCapture();
 
                 testSuite->disableTestPassedMessage();
                 testSuite->run();

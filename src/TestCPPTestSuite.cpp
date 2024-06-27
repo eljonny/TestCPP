@@ -106,12 +106,12 @@ namespace TestCPP {
                      << endl;
             }
 
-            if (!testPassed && this->lastRunSucceeded) {
+            if (!testPassed) {
                 this->lastRunFailCount++;
-                this->lastRunSucceeded = false;
-            }
-            else if (!testPassed) {
-                this->lastRunFailCount++;
+
+                if (this->lastRunSucceeded) {
+                    this->lastRunSucceeded = false;
+                }
             }
             else {
                 this->lastRunSuccessCount++;
