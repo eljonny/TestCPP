@@ -51,6 +51,7 @@ using std::endl;
 using std::forward;
 using std::function;
 using std::move;
+using std::ostream;
 using std::runtime_error;
 using std::string;
 using std::streambuf;
@@ -284,6 +285,12 @@ namespace TestCPP {
          */
         void captureStdErr ();
         /**
+         * @brief Write a test failure reason to the specified stream.
+         * @param out The stream to write the test failure reason to.
+         * @param reason The test failure reason to write.
+         */
+        void logFailure (ostream& out, string& reason);
+        /**
          * @brief If a test encounters an error while running, this
          *          function will be called to log the test error.
          * @param failureMessage The error message from the test that
@@ -314,12 +321,18 @@ namespace TestCPP {
         static atomic_int logCaptureCasesDestroyed;
         static atomic_int stderrCaptureCasesDestroyed;
 
-        static unique_ptr<stringstream> stdoutBuffer;
-        static unique_ptr<stringstream> clogBuffer;
-        static unique_ptr<stringstream> stderrBuffer;
-        static unique_ptr<streambuf> stdoutOriginal;
-        static unique_ptr<streambuf> clogOriginal;
-        static unique_ptr<streambuf> stderrOriginal;
+        static unique_ptr<stringstream, void(*)(stringstream*)>
+            stdoutBuffer;
+        static unique_ptr<stringstream, void(*)(stringstream*)>
+            clogBuffer;
+        static unique_ptr<stringstream, void(*)(stringstream*)>
+            stderrBuffer;
+        static unique_ptr<streambuf, void(*)(streambuf*)>
+            stdoutOriginal;
+        static unique_ptr<streambuf, void(*)(streambuf*)>
+            clogOriginal;
+        static unique_ptr<streambuf, void(*)(streambuf*)>
+            stderrOriginal;
 
         /**
          * @brief Measure the duration of a function when run.
