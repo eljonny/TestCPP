@@ -105,26 +105,40 @@ namespace TestCPP {
                         bool captureErr,
                         TestCase::TestCaseOutCompareOptions opt)
     {
+        debugLog("CaptureLog windows segfault check - open");
         this->notifyTestPassed = msg;
+        debugLog("CaptureLog windows segfault check - ntp bool");
         this->test = test;
+        debugLog("CaptureLog windows segfault check - test fn");
 
         this->testName = name;
+        debugLog("CaptureLog windows segfault check - test name");
 
         if (captureOut) {
+            debugLog("CaptureLog windows segfault check - stdout cap");
             captureStdout();
+            debugLog("CaptureLog windows segfault check - stdout end");
         }
         if (captureLog) {
+            debugLog("CaptureLog windows segfault check - clog cap");
             captureClog();
+            debugLog("CaptureLog windows segfault check - clog end");
         }
         if (captureErr) {
+            debugLog("CaptureLog windows segfault check - stderr cap");
             captureStdErr();
+            debugLog("CaptureLog windows segfault check - stderr end");
         }
 
         this->stdoutCaptured = captureOut;
+        debugLog("CaptureLog windows segfault check - stdout bool");
         this->clogCaptured = captureLog;
+        debugLog("CaptureLog windows segfault check - clog bool");
         this->stderrCaptured = captureErr;
+        debugLog("CaptureLog windows segfault check - stderr bool");
 
         this->option = opt;
+        debugLog("CaptureLog windows segfault check - cmp opt");
     }
 
     TestCase::TestCase (TestCase& o) {
