@@ -88,35 +88,30 @@ namespace TestCPP {
                     false, true, false
                 ));
 
-                debugLog("CaptureLog param ctor test chunk FTT");
                 test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NF,COT,CLT",
                     function<void()>([](){}),
                     false, true, true
                 ));
 
-                debugLog("CaptureLog param ctor test chunk TFF");
                 test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NT,COF,CLF",
                     function<void()>([](){}),
                     true, false, false
                 ));
 
-                debugLog("CaptureLog param ctor test chunk TFT");
                 test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NT,COF,CLT",
                     function<void()>([](){}),
                     true, false, true
                 ));
 
-                debugLog("CaptureLog param ctor test chunk TTF");
                 test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NT,COT,CLF",
                     function<void()>([](){}),
                     true, true, false
                 ));
 
-                debugLog("CaptureLog param ctor test chunk TTT");
                 test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NT,COT,CLT",
                     function<void()>([](){}),
