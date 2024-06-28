@@ -394,7 +394,7 @@ namespace TestCPP {
             debugLog("captureClog winseg check - clogBuffer");
             TestCase::clogOriginal =
                 unique_ptr<streambuf, void(*)(streambuf*)>(
-                    cout.rdbuf(), [](streambuf *) {}
+                    clog.rdbuf(), [](streambuf *) {}
                 );
             debugLog("captureClog winseg check - clogStream");
             clog.rdbuf(TestCase::clogBuffer->rdbuf());
@@ -419,7 +419,7 @@ namespace TestCPP {
                 );
             TestCase::stderrOriginal =
                 unique_ptr<streambuf, void(*)(streambuf*)>(
-                    cout.rdbuf(), [](streambuf *) {}
+                    cerr.rdbuf(), [](streambuf *) {}
                 );
             cerr.rdbuf(TestCase::stderrBuffer->rdbuf());
         }
