@@ -105,19 +105,13 @@ namespace TestCPP {
                         bool captureErr,
                         TestCase::TestCaseOutCompareOptions opt)
     {
-        debugLog("CaptureLog windows segfault check - open");
         this->notifyTestPassed = msg;
-        debugLog("CaptureLog windows segfault check - ntp bool");
         this->test = test;
-        debugLog("CaptureLog windows segfault check - test fn");
 
         this->testName = name;
-        debugLog("CaptureLog windows segfault check - test name");
 
         if (captureOut) {
-            debugLog("CaptureLog windows segfault check - stdout cap");
             captureStdout();
-            debugLog("CaptureLog windows segfault check - stdout end");
         }
         if (captureLog) {
             debugLog("CaptureLog windows segfault check - clog cap");
@@ -125,20 +119,14 @@ namespace TestCPP {
             debugLog("CaptureLog windows segfault check - clog end");
         }
         if (captureErr) {
-            debugLog("CaptureLog windows segfault check - stderr cap");
             captureStdErr();
-            debugLog("CaptureLog windows segfault check - stderr end");
         }
 
         this->stdoutCaptured = captureOut;
-        debugLog("CaptureLog windows segfault check - stdout bool");
         this->clogCaptured = captureLog;
-        debugLog("CaptureLog windows segfault check - clog bool");
         this->stderrCaptured = captureErr;
-        debugLog("CaptureLog windows segfault check - stderr bool");
 
         this->option = opt;
-        debugLog("CaptureLog windows segfault check - cmp opt");
     }
 
     TestCase::TestCase (TestCase& o) {
@@ -392,23 +380,32 @@ namespace TestCPP {
     }
 
     void TestCase::captureClog () {
+        debugLog("captureClog winseg check - open");
         if (TestCase::logCaptureCasesConstructed ==
             TestCase::logCaptureCasesDestroyed)
         {
+            debugLog("captureClog winseg check - clogConstruct");
             TestCase::logCaptureCasesConstructed += 1;
+            debugLog("captureClog winseg check - atomic++");
             TestCase::clogBuffer =
                 unique_ptr<stringstream, void(*)(stringstream*)>(
                     new stringstream(), [](stringstream *) {}
                 );
+            debugLog("captureClog winseg check - clogBuffer");
             TestCase::clogOriginal =
                 unique_ptr<streambuf, void(*)(streambuf*)>(
                     cout.rdbuf(), [](streambuf *) {}
                 );
+            debugLog("captureClog winseg check - clogStream");
             clog.rdbuf(TestCase::clogBuffer->rdbuf());
+            debugLog("captureClog winseg check - clogSet");
         }
         else {
+            debugLog("captureClog winseg check - clogNoConstruct");
             TestCase::logCaptureCasesConstructed += 1;
+            debugLog("captureClog winseg check - atomic++");
         }
+        debugLog("captureClog winseg check - close");
     }
 
     void TestCase::captureStdErr () {
