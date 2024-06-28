@@ -23,7 +23,7 @@ The library is most useful for educational projects or small
 For testing more complex projects I would recommend using
  [GoogleTest](https://github.com/google/googletest).
  
-The code is <1k lines.
+The code is ~2k lines.
 The Release builds are optimized for speed over size, so the
  build could probably be tweaked to get a smaller binary if
  desired.
@@ -72,6 +72,8 @@ Then add it to your test executable target through
 
 ### vcpkg
 
+*In process, not working yet*
+
 As of 0.1.0-beta.1, you might soon be able to also include it
  in your `vcpkg` project by running the following in the root of
  your project (pending vcpkg PR approval that I have in right
@@ -81,6 +83,8 @@ As of 0.1.0-beta.1, you might soon be able to also include it
 ```
 
 ### Conan
+
+*In process, not working yet*
 
 As of 0.1.1-beta.2, you might soon be able to also include it
  in your `conan` project (pending approval from the Conan
