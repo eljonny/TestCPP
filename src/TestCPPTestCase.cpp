@@ -380,32 +380,23 @@ namespace TestCPP {
     }
 
     void TestCase::captureClog () {
-        debugLog("captureClog winseg check - open");
         if (TestCase::logCaptureCasesConstructed ==
             TestCase::logCaptureCasesDestroyed)
         {
-            debugLog("captureClog winseg check - clogConstruct");
             TestCase::logCaptureCasesConstructed += 1;
-            debugLog("captureClog winseg check - atomic++");
             TestCase::clogBuffer =
                 unique_ptr<stringstream, void(*)(stringstream*)>(
                     new stringstream(), [](stringstream *) {}
                 );
-            debugLog("captureClog winseg check - clogBuffer");
             TestCase::clogOriginal =
                 unique_ptr<streambuf, void(*)(streambuf*)>(
                     clog.rdbuf(), [](streambuf *) {}
                 );
-            debugLog("captureClog winseg check - clogStream");
             clog.rdbuf(TestCase::clogBuffer->rdbuf());
-            debugLog("captureClog winseg check - clogSet");
         }
         else {
-            debugLog("captureClog winseg check - clogNoConstruct");
             TestCase::logCaptureCasesConstructed += 1;
-            debugLog("captureClog winseg check - atomic++");
         }
-        debugLog("captureClog winseg check - close");
     }
 
     void TestCase::captureStdErr () {
