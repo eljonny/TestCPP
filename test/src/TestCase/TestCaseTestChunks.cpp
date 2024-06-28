@@ -71,21 +71,17 @@ namespace TestCPP {
             }
 
             void varyingCaptureLog () {
-                debugLog("CaptureLog param ctor test chunk FFF");
                 auto test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NF,COF,CLF",
                     function<void()>([](){}),
                     false, false, false
                 ));
 
-                debugLog("CaptureLog param ctor test chunk FFT");
                 test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NF,COF,CLT",
                     function<void()>([](){}),
                     false, false, true
                 ));
-
-                debugLog("CaptureLog param ctor test chunk FTF");
                 test = unique_ptr<TestCase>(new TestCase(
                     "ConstructCase Test - w/NF,COT,CLF",
                     function<void()>([](){}),
