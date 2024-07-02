@@ -60,13 +60,13 @@ namespace TestCPP {
          * Construct an exception of this type with a string literal for
          *  its failure message.
          */
-        TestCPPException (const char * msg);
+        explicit TestCPPException (const char * msg);
 
         /**
          * Construct an exception of this type with a string object for
          *  its failure message.
          */
-        TestCPPException (string&& msg);
+        explicit TestCPPException (string&& msg);
     };
 
     /**
@@ -89,13 +89,13 @@ namespace TestCPP {
          * Construct an exception of this type with a string literal for
          *  its failure message.
          */
-        TestFailedException (const char * msg);
+        explicit TestFailedException (const char * msg);
 
         /**
          * Construct an exception of this type with a string literal for
          *  its failure message.
          */
-        TestFailedException (string&& msg);
+        explicit TestFailedException (string&& msg);
     };
 }
 
