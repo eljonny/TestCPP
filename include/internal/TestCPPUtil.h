@@ -65,6 +65,11 @@ namespace TestCPP {
          * @return The TestObjName, where it is verified that the name
          *          used to construct it was not null.
          */
+        //
+        // This is intended to be used for implicit conversions and copy
+        //  initialization.
+        //
+        // cppcheck-suppress noExplicitConstructor
         TestObjName (const char* name);
 
         /**
