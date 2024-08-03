@@ -4,3 +4,5 @@ build-debug
 build-release
 _packages
 test_package/build
+CMakeUserPresets.json
+/.vs
