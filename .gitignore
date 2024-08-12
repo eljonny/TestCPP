@@ -6,3 +6,4 @@ _packages
 test_package/build
 CMakeUserPresets.json
 /.vs
+out/
