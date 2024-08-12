@@ -115,6 +115,10 @@ list (
     -ftest-coverage  # Enable core code coverage compilation
 )
 
+if (NOT CMAKE_BUILD_TYPE)
+    set (CMAKE_BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
+endif ()
+
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     message (STATUS "Release build compilation options enabled")
 
