@@ -1,0 +1,47 @@
+{
+  "testPresets": [
+    {
+      "name": "vs-test",
+      "configurePreset": "vs-with-test",
+      "output": {
+        "shortProgress": true,
+        "verbosity": "verbose",
+        "outputOnFailure": true,
+        "outputJUnitFile": "${sourceDir}/out/test/vs-test/results.xml"
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "vs-nost-test",
+      "configurePreset": "vs-nost-with-test",
+      "inherits": "vs-test",
+      "output": {
+        "outputJUnitFile": "${sourceDir}/out/test/vs-nost-test/results.xml"
+      }
+    },
+    {
+      "name": "vs64-test",
+      "configurePreset": "vs64-with-test",
+      "inherits": "vs-test",
+      "output": {
+        "outputJUnitFile": "${sourceDir}/out/test/vs64-test/results.xml"
+      }
+    },
+    {
+      "name": "vs64-nost-test",
+      "configurePreset": "vs64-nost-with-test",
+      "inherits": "vs-nost-test",
+      "output": {
+        "outputJUnitFile": "${sourceDir}/out/test/vs64-nost-test/results.xml"
+      }
+    }
+  ]
+}
