@@ -1,8 +1,8 @@
 {
-  "version": 6,
+  "version": 5,
   "cmakeMinimumRequired": {
     "major": 3,
-    "minor": 25,
+    "minor": 24,
     "patch": 0
   },
   "configurePresets": [
@@ -371,8 +371,7 @@
       "output": {
         "shortProgress": true,
         "verbosity": "verbose",
-        "outputOnFailure": true,
-        "outputJUnitFile": "${sourceDir}/out/test/vs-test/results.xml"
+        "outputOnFailure": true
       },
       "execution": {
         "noTestsAction": "error",
@@ -387,26 +386,17 @@
     {
       "name": "vs-nost-test",
       "configurePreset": "vs-nost-with-test",
-      "inherits": "vs-test",
-      "output": {
-        "outputJUnitFile": "${sourceDir}/out/test/vs-nost-test/results.xml"
-      }
+      "inherits": "vs-test"
     },
     {
       "name": "vs64-test",
       "configurePreset": "vs64-with-test",
-      "inherits": "vs-test",
-      "output": {
-        "outputJUnitFile": "${sourceDir}/out/test/vs64-test/results.xml"
-      }
+      "inherits": "vs-test"
     },
     {
       "name": "vs64-nost-test",
       "configurePreset": "vs64-nost-with-test",
-      "inherits": "vs-nost-test",
-      "output": {
-        "outputJUnitFile": "${sourceDir}/out/test/vs64-nost-test/results.xml"
-      }
+      "inherits": "vs-nost-test"
     }
   ],
   "packagePresets": [
