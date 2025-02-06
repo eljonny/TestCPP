@@ -33,7 +33,6 @@ using std::endl;
 using std::exception;
 using std::exception_ptr;
 using std::function;
-using std::move;
 using std::rethrow_exception;
 using std::string;
 using std::stringstream;
@@ -72,7 +71,7 @@ namespace TestCPP {
             return;
         }
 
-        throw TestFailedException(move(failureMessage));
+        throw TestFailedException(std::move(failureMessage));
     }
 
     void Assertions::assertNoThrows (
@@ -84,7 +83,7 @@ namespace TestCPP {
             shouldNotThrow();
         }
         catch (...) {
-            throw TestFailedException(move(failureMessage));
+            throw TestFailedException(std::move(failureMessage));
         }
     }
 
@@ -118,7 +117,7 @@ namespace TestCPP {
         }
     }
 
-    void Assertions::fail(string failureMessage) {
-        throw TestFailedException(move(failureMessage));
+    [[noreturn]] void Assertions::fail(string failureMessage) {
+        throw TestFailedException(std::move(failureMessage));
     }
 }
