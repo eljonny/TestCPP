@@ -34,7 +34,6 @@ For more information, please refer to <http://unlicense.org/>
 #endif
 
 using std::clog;
-using std::move;
 using std::string;
 using std::runtime_error;
 
@@ -48,7 +47,7 @@ namespace TestCPP {
 #endif
     }
     TestCPPException::TestCPPException (string&& msg) :
-        runtime_error(move(msg))
+        runtime_error(std::move(msg))
     {
 #ifdef TESTCPP_STACKTRACE_ENABLED
         clog << boost::stacktrace::stacktrace();
@@ -64,7 +63,7 @@ namespace TestCPP {
     }
 
     TestFailedException::TestFailedException (string&& msg) :
-        TestCPPException(move(msg))
+        TestCPPException(std::move(msg))
     {
 #ifdef TESTCPP_STACKTRACE_ENABLED
         clog << boost::stacktrace::stacktrace();
