@@ -48,7 +48,6 @@ using std::exception;
 using std::fixed;
 using std::function;
 using std::invalid_argument;
-using std::move;
 using std::rethrow_exception;
 using std::runtime_error;
 using std::setprecision;
@@ -67,46 +66,46 @@ namespace TestCPP {
     atomic_int TestCase::logCaptureCasesDestroyed;
     atomic_int TestCase::stderrCaptureCasesDestroyed;
 
-    unique_ptr<stringstream, void(*)(stringstream*)>
+    [[clang::no_destroy]] unique_ptr<stringstream, void(*)(stringstream*)>
         TestCase::stdoutBuffer =
         unique_ptr<stringstream, void(*)(stringstream*)>(
             nullptr, [](stringstream*){}
         );
-    unique_ptr<stringstream, void(*)(stringstream*)>
+    [[clang::no_destroy]] unique_ptr<stringstream, void(*)(stringstream*)>
         TestCase::clogBuffer =
         unique_ptr<stringstream, void(*)(stringstream*)>(
             nullptr, [](stringstream*){}
         );
-    unique_ptr<stringstream, void(*)(stringstream*)>
+    [[clang::no_destroy]] unique_ptr<stringstream, void(*)(stringstream*)>
         TestCase::stderrBuffer =
         unique_ptr<stringstream, void(*)(stringstream*)>(
             nullptr, [](stringstream*){}
         );
-    unique_ptr<streambuf, void(*)(streambuf*)>
+    [[clang::no_destroy]] unique_ptr<streambuf, void(*)(streambuf*)>
         TestCase::stdoutOriginal =
         unique_ptr<streambuf, void(*)(streambuf*)>(
             nullptr, [](streambuf*){}
         );
-    unique_ptr<streambuf, void(*)(streambuf*)>
+    [[clang::no_destroy]] unique_ptr<streambuf, void(*)(streambuf*)>
         TestCase::clogOriginal =
         unique_ptr<streambuf, void(*)(streambuf*)>(
             nullptr, [](streambuf*){}
         );
-    unique_ptr<streambuf, void(*)(streambuf*)>
+    [[clang::no_destroy]] unique_ptr<streambuf, void(*)(streambuf*)>
         TestCase::stderrOriginal =
         unique_ptr<streambuf, void(*)(streambuf*)>(
             nullptr, [](streambuf*){}
         );
 
     TestCase::TestCase (TestObjName&& name,
-                        function<void()> test,
+                        function<void()> testFn,
                         bool msg,
                         bool captureOut, bool captureLog,
                         bool captureErr,
                         TestCase::TestCaseOutCompareOptions opt)
     {
         this->notifyTestPassed = msg;
-        this->test = test;
+        this->test = testFn;
 
         this->testName = name;
 
@@ -155,15 +154,15 @@ namespace TestCPP {
     }
 
     TestCase::TestCase (TestCase&& o) {
-        this->outCompareOption(move(o.option));
-        this->setNotifyPassed(move(o.notifyTestPassed));
+        this->outCompareOption(std::move(o.option));
+        this->setNotifyPassed(std::move(o.notifyTestPassed));
 
-        this->pass = move(o.pass);
-        this->lastRunTime = move(o.lastRunTime);
+        this->pass = std::move(o.pass);
+        this->lastRunTime = std::move(o.lastRunTime);
 
-        this->stdoutCaptured = move(o.stdoutCaptured);
-        this->clogCaptured = move(o.clogCaptured);
-        this->stderrCaptured = move(o.stderrCaptured);
+        this->stdoutCaptured = std::move(o.stdoutCaptured);
+        this->clogCaptured = std::move(o.clogCaptured);
+        this->stderrCaptured = std::move(o.stderrCaptured);
 
         if (this->stdoutCaptured) {
             captureStdout();
@@ -175,8 +174,8 @@ namespace TestCPP {
             captureStdErr();
         }
 
-        this->testName = move(o.testName);
-        this->test = move(o.test);
+        this->testName = std::move(o.testName);
+        this->test = std::move(o.test);
     }
 
     TestCase::~TestCase () {
@@ -246,15 +245,15 @@ namespace TestCPP {
     }
 
     TestCase& TestCase::operator= (TestCase&& rhs) {
-        this->outCompareOption(move(rhs.option));
-        this->setNotifyPassed(move(rhs.notifyTestPassed));
+        this->outCompareOption(std::move(rhs.option));
+        this->setNotifyPassed(std::move(rhs.notifyTestPassed));
 
-        this->pass = move(rhs.pass);
-        this->lastRunTime = move(rhs.lastRunTime);
+        this->pass = std::move(rhs.pass);
+        this->lastRunTime = std::move(rhs.lastRunTime);
 
-        this->stdoutCaptured = move(rhs.stdoutCaptured);
-        this->clogCaptured = move(rhs.clogCaptured);
-        this->stderrCaptured = move(rhs.stderrCaptured);
+        this->stdoutCaptured = std::move(rhs.stdoutCaptured);
+        this->clogCaptured = std::move(rhs.clogCaptured);
+        this->stderrCaptured = std::move(rhs.stderrCaptured);
 
         if (this->stdoutCaptured) {
             captureStdout();
@@ -266,8 +265,8 @@ namespace TestCPP {
             captureStdErr();
         }
 
-        this->testName = move(rhs.testName);
-        this->test = move(rhs.test);
+        this->testName = std::move(rhs.testName);
+        this->test = std::move(rhs.test);
 
         return *this;
     }
@@ -279,7 +278,7 @@ namespace TestCPP {
     void TestCase::logFailure(ostream& out, string& reason) {
         out << fixed;
         out << setprecision(TCPPNum::TIME_PRECISION);
-        out << TCPPStr::TEST_ << this->testName << TCPPStr::_FAIL_
+        out << TCPPStr::TEST << this->testName << TCPPStr::FAIL
             << TCPPStr::PARENL
             << static_cast<double>(this->lastRunTime)/
                TCPPNum::NANOS_IN_SEC
@@ -320,7 +319,7 @@ namespace TestCPP {
         if (this->notifyTestPassed) {
             clog << fixed;
             clog << setprecision(TCPPNum::TIME_PRECISION);
-            clog << TCPPStr::TEST_ << this->testName << TCPPStr::_PASS_
+            clog << TCPPStr::TEST << this->testName << TCPPStr::PASS
                  << TCPPStr::PARENL
                  << static_cast<double>(this->lastRunTime)/
                     TCPPNum::NANOS_IN_SEC
@@ -428,7 +427,7 @@ namespace TestCPP {
 
         default:
             stringstream error;
-            error << TCPPStr::UNK_OPT_ << opt;
+            error << TCPPStr::UNK_OPT << opt;
             throw TestCPPException(error.str());
         }
     }
@@ -476,7 +475,7 @@ namespace TestCPP {
             else {
                 stringstream nomatch;
                 nomatch << TCPPStr::APOS << source << TCPPStr::APOS;
-                nomatch << TCPPStr::_NEQUIV_ << TCPPStr::APOS;
+                nomatch << TCPPStr::NEQUIV << TCPPStr::APOS;
                 nomatch << against << TCPPStr::APOS;
 
                 if (this->clogOriginal != nullptr) {
@@ -498,7 +497,7 @@ namespace TestCPP {
             else {
                 stringstream nomatch;
                 nomatch << TCPPStr::APOS << source << TCPPStr::APOS;
-                nomatch << TCPPStr::_NCONTAIN_ << TCPPStr::APOS;
+                nomatch << TCPPStr::NCONTAIN << TCPPStr::APOS;
                 nomatch << against << TCPPStr::APOS;
 
                 if (this->clogOriginal != nullptr) {
@@ -515,7 +514,7 @@ namespace TestCPP {
 
         default:
             stringstream re;
-            re << TCPPStr::UNK_CMP_OPT_ << this->option;
+            re << TCPPStr::UNK_CMP_OPT << this->option;
             throw TestCPPException(re.str());
         }
     }

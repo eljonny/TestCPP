@@ -92,7 +92,7 @@ namespace TestCPP {
             }
 
             if (toCast >= static_cast<unsigned>(INT_MIN)) {
-                return static_cast<int>(toCast - INT_MIN) + INT_MIN;
+                return static_cast<int>(toCast - static_cast<unsigned>(INT_MIN)) + INT_MIN;
             }
 
             throw std::runtime_error(
