@@ -193,7 +193,7 @@ namespace TestCPP {
 
         /**
          * @brief Verify that a function does not throw something.
-         * @param shouldThrow The function to check, to ensure that it
+         * @param shouldNotThrow The function to check, to ensure that it
          *                      does not throw something.
          * @param failureMessage Failure message that should be logged
          *                          if the assertion fails. This
@@ -251,7 +251,7 @@ namespace TestCPP {
          *  - Forcing test failure in certain circumstances where there
          *      is nothing to assert but a certain code path is taken.
          */
-        static void fail (
+        static void fail [[noreturn]] (
             string failureMessage = "Forced test failure!"
         );
     };
