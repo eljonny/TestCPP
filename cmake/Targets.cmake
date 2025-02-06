@@ -6,6 +6,7 @@ add_library (
     src/TestCPPTestSuite.cpp
     src/TestCPPUtil.cpp
 )
+
 add_library (
     ${PROJECT_GROUP_NAME}::${PROJECT_NAME}
     ALIAS
