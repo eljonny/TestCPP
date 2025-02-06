@@ -65,40 +65,40 @@ namespace TestCPP {
          *  denote leading and trailing spaces, respectively.
          */
         struct Strings {
-            static constexpr const char * ALL_ = "All ";
+            static constexpr const char * ALL = "All ";
             static constexpr const char * APOS = "'";
-            static constexpr const char * _FAIL_ = " failed! ";
-            static constexpr const char * FINISHED_SUITE_ =
+            static constexpr const char * FAIL = " failed! ";
+            static constexpr const char * FINISHED_SUITE =
                 "Finished running test suite ";
             static constexpr const char * FWSL = "/";
-            static constexpr const char * _IN_ABOUT_ = " in about ";
-            static constexpr const char * _NCONTAIN_ =
+            static constexpr const char * IN_ABOUT = " in about ";
+            static constexpr const char * NCONTAIN =
                 " does not contain ";
-            static constexpr const char * _NEQUIV_ =
+            static constexpr const char * NEQUIV =
                 " is not equivalent to ";
             static constexpr const char * NTR = "No tests to run!";
             static constexpr const char * NVTN =
                 "Not a valid test name!";
             static constexpr const char * PARENL = "(";
             static constexpr const char * PARENR = ")";
-            static constexpr const char * _PASS_ = " passed! ";
-            static constexpr const char * _PASSED = " passed";
+            static constexpr const char * PASS = " passed! ";
+            static constexpr const char * PASSED = " passed";
             static constexpr const char * REASON_ = "Reason: ";
             static constexpr const char * SEC = "s";
             static constexpr const char * SP = " ";
             static constexpr const char * START_RUN =
                 "Starting run of test ";
-            static constexpr const char * SUITE_ = "Suite ";
-            static constexpr const char * _SUITE_TESTS_PASSED =
+            static constexpr const char * SUITE = "Suite ";
+            static constexpr const char * SUITE_TESTS_PASSED =
                 " suite tests passed!";
-            static constexpr const char * TEST_ = "Test ";
-            static constexpr const char * TEST_EXC_ =
+            static constexpr const char * TEST = "Test ";
+            static constexpr const char * TEST_EXC =
                 "Exception occurred during test run: ";
-            static constexpr const char * UNK_CMP_OPT_ =
+            static constexpr const char * UNK_CMP_OPT =
                 "Unknown comparison option! ";
             static constexpr const char * UNK_EXC =
                 "Unknown error occurred in test!";
-            static constexpr const char * UNK_OPT_ = "Unknown option ";
+            static constexpr const char * UNK_OPT = "Unknown option ";
         };
     };
 }
