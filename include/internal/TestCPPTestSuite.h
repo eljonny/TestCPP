@@ -163,7 +163,7 @@ namespace TestCPP {
         bool lastRunSucceeded;
         unsigned lastRunSuccessCount;
         unsigned lastRunFailCount;
-        unsigned long long totalRuntime;
+        long long totalRuntime;
 
         TestObjName suiteName;
         vector<TestCase> tests;
