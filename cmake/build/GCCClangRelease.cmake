@@ -1,25 +1,32 @@
 list (
     APPEND
     GCC_CLANG_RELEASE_BUILD_OPTS
-    -O3                        # Optimize the Release build.
-    -Wall                      # Enable most warnings.
-    -Wextra                    # Enable even more warnings.
-    -Wpedantic                 # Enable most of the rest of the
-                               #  warnings.
-    -Werror                    # Treat all warnings as errors.
-    -Wno-unused-parameter      # Unused parameters occur in the Release
-                               #  build in debugLog.
-    -Wno-unused-lambda-capture # Avoid MSVC error C3493 - There is
-                               #  implementation divergence here and
-                               #  since we're not using >=C++14 there
-                               #  is no workaround other than to ignore
-                               #  this warning (the MSVC issue is an
-                               #  error).
-                               # A workaround for >=C++14 is to use an
-                               #  explicit capture - if ever I change
-                               #  the library to use >=C++14 I can
-                               #  remove this and use an explicit
-                               #  capture.
+    -O3                         # Optimize the Release build.
+    -Wall                       # Enable most warnings.
+    -Wextra                     # Enable even more warnings.
+    -Wpedantic                  # Enable most of the rest of the
+                                #  warnings.
+    -Werror                     # Treat all warnings as errors.
+    -Wno-c++98-compat           # We're compiling for C++11, so it's not
+                                #  necessary to maintain compatibility
+                                #  with C++98.
+    -Wno-c++98-compat-pedantic  # We're compiling for C++11, so, again,
+                                #  it's not necessary to maintain
+                                #  compatibility with C++98.
+    -Wno-covered-switch-default # -Wswitch-default is more important.
+    -Wno-unused-parameter       # Unused parameters occur in the Release
+                                #  build in debugLog.
+    -Wno-unused-lambda-capture  # Avoid MSVC error C3493 - There is
+                                #  implementation divergence here and
+                                #  since we're not using >=C++14 there
+                                #  is no workaround other than to ignore
+                                #  this warning (the MSVC issue is an
+                                #  error).
+                                # A workaround for >=C++14 is to use an
+                                #  explicit capture - if ever I change
+                                #  the library to use >=C++14 I can
+                                #  remove this and use an explicit
+                                #  capture.
 )
 
 target_compile_options (

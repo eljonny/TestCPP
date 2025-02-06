@@ -1,26 +1,33 @@
 list (
     APPEND
     GCC_CLANG_DEBUG_BUILD_OPTS
-    -g                         # Enable all debugging information.
-    -Og                        # Ensure the compiler doesn't use
-                               #  optimizations that would harm
-                               #  debuggability of the resulting code.
-    -Wall                      # Enable most warnings.
-    -Wextra                    # Enable even more warnings.
-    -Wpedantic                 # Enable most of the rest of the
-                               #  warnings.
-    -Werror                    # Treat all warnings as errors.
-    -Wno-unused-lambda-capture # Avoid MSVC error C3493 - There is
-                               #  implementation divergence here and
-                               #  since we're not using >=C++14 there
-                               #  is no workaround other than to ignore
-                               #  this warning (the MSVC issue is an
-                               #  error).
-                               # A workaround for >=C++14 is to use an
-                               #  explicit capture - if ever I change
-                               #  the library to use >=C++14 I can
-                               #  remove this and use an explicit
-                               #  capture.
+    -g                          # Enable all debugging information.
+    -Og                         # Ensure the compiler doesn't use
+                                #  optimizations that would harm
+                                #  debuggability of the resulting code.
+    -Wall                       # Enable most warnings.
+    -Wextra                     # Enable even more warnings.
+    -Wpedantic                  # Enable most of the rest of the
+                                #  warnings.
+    -Werror                     # Treat all warnings as errors.
+    -Wno-c++98-compat           # We're compiling for C++11, so it's not
+                                #  necessary to maintain compatibility
+                                #  with C++98.
+    -Wno-c++98-compat-pedantic  # We're compiling for C++11, so, again,
+                                #  it's not necessary to maintain
+                                #  compatibility with C++98.
+    -Wno-covered-switch-default # -Wswitch-default is more important.
+    -Wno-unused-lambda-capture  # Avoid MSVC error C3493 - There is
+                                #  implementation divergence here and
+                                #  since we're not using >=C++14 there
+                                #  is no workaround other than to ignore
+                                #  this warning (the MSVC issue is an
+                                #  error).
+                                # A workaround for >=C++14 is to use an
+                                #  explicit capture - if ever I change
+                                #  the library to use >=C++14 I can
+                                #  remove this and use an explicit
+                                #  capture.
 )
 
 if (${TESTCPP_DEMO_ENABLED})
