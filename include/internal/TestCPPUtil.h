@@ -62,8 +62,8 @@ namespace TestCPP {
         /**
          * @brief Construct a Test Object Name object with a string
          *          literal or existing const char *.
-         * @return The TestObjName, where it is verified that the name
-         *          used to construct it was not null.
+         * Results in the TestObjName, where it is verified that the
+         *  name used to construct it was not null.
          */
         //
         // This is intended to be used for implicit conversions and copy
