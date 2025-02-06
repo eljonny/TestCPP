@@ -41,7 +41,6 @@ using std::exception;
 using std::fixed;
 using std::function;
 using std::invalid_argument;
-using std::move;
 using std::ostream;
 using std::rethrow_exception;
 using std::runtime_error;
@@ -68,7 +67,7 @@ namespace TestCPP {
     }
 
     void TestSuite::setSuiteName (TestObjName&& testSuiteName) {
-        this->suiteName = move(testSuiteName);
+        this->suiteName = std::move(testSuiteName);
     }
 
     unsigned TestSuite::getLastRunFailCount () {
@@ -87,7 +86,7 @@ namespace TestCPP {
         this->totalRuntime = 0;
 
         clog << endl
-             << TCPPStr::START_RUN << TCPPStr::SUITE_
+             << TCPPStr::START_RUN << TCPPStr::SUITE
              << TCPPStr::APOS << this->suiteName << TCPPStr::APOS
              << endl
              << endl;
@@ -98,7 +97,7 @@ namespace TestCPP {
                 testPassed = test.go();
             }
             catch (exception& e) {
-                clog << TCPPStr::TEST_EXC_ << e.what()
+                clog << TCPPStr::TEST_EXC << e.what()
                      << endl;
             }
             catch (...) {
@@ -124,8 +123,8 @@ namespace TestCPP {
 
         if (this->testSuitePassedMessage &&
             this->lastRunFailCount == 0) {
-            clog << TCPPStr::ALL_ << TCPPStr::APOS << this->suiteName
-                 << TCPPStr::APOS << TCPPStr::_SUITE_TESTS_PASSED
+            clog << TCPPStr::ALL << TCPPStr::APOS << this->suiteName
+                 << TCPPStr::APOS << TCPPStr::SUITE_TESTS_PASSED
                  << endl;
         }
 
@@ -134,11 +133,11 @@ namespace TestCPP {
 
         clog << fixed;
         clog << setprecision(0);
-        clog << TCPPStr::FINISHED_SUITE_ << TCPPStr::APOS
-             << this->suiteName << TCPPStr::APOS << TCPPStr::_IN_ABOUT_
+        clog << TCPPStr::FINISHED_SUITE << TCPPStr::APOS
+             << this->suiteName << TCPPStr::APOS << TCPPStr::IN_ABOUT
              << suiteRuntimeElapsed << TCPPStr::SEC << TCPPStr::SP
              << TCPPStr::PARENL << this->lastRunSuccessCount
-             << TCPPStr::FWSL << this->tests.size() << TCPPStr::_PASSED
+             << TCPPStr::FWSL << this->tests.size() << TCPPStr::PASSED
              << TCPPStr::PARENR
              << endl;
     }
