@@ -1077,5 +1077,46 @@
       "configurePreset": "vs64-nost-with-test-rel",
       "inherits": "vs-nost-test"
     }
+  ],
+  "packagePresets": [
+    {
+      "name": "base-pack",
+      "generators": [
+        "ZIP"
+      ],
+      "output": {
+        "verbose": true
+      }
+    },
+    {
+      "name": "vs-pack",
+      "configurePreset": "vs-base",
+      "inherits": "base-pack",
+      "generators": [
+        "7Z",
+        "NSIS",
+        "WIX"
+      ],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "vs-nost-pack",
+      "configurePreset": "vs-nost-base",
+      "inherits": "vs-pack"
+    },
+    {
+      "name": "vs64-pack",
+      "configurePreset": "vs64-base",
+      "inherits": "vs-pack"
+    },
+    {
+      "name": "vs64-nost-pack",
+      "configurePreset": "vs64-nost-base",
+      "inherits": "vs-nost-pack"
+    }
   ]
 }
