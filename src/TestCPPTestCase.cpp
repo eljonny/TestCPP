@@ -40,6 +40,8 @@ For more information, please refer to <http://unlicense.org/>
 #include "internal/TestCPPUtil.h"
 
 using TestCPP::Util::debugLog;
+using TestCPP::Util::no_destroy;
+
 using std::cerr;
 using std::clog;
 using std::cout;
@@ -66,35 +68,47 @@ namespace TestCPP {
     atomic_int TestCase::logCaptureCasesDestroyed;
     atomic_int TestCase::stderrCaptureCasesDestroyed;
 
-    [[clang::no_destroy]] unique_ptr<stringstream, void(*)(stringstream*)>
+    no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>
         TestCase::stdoutBuffer =
-        unique_ptr<stringstream, void(*)(stringstream*)>(
-            nullptr, [](stringstream*){}
+        no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>(
+            unique_ptr<stringstream, void(*)(stringstream*)>(
+                nullptr, [](stringstream*){}
+            )
         );
-    [[clang::no_destroy]] unique_ptr<stringstream, void(*)(stringstream*)>
+    no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>
         TestCase::clogBuffer =
-        unique_ptr<stringstream, void(*)(stringstream*)>(
-            nullptr, [](stringstream*){}
+        no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>(
+            unique_ptr<stringstream, void(*)(stringstream*)>(
+                nullptr, [](stringstream*){}
+            )
         );
-    [[clang::no_destroy]] unique_ptr<stringstream, void(*)(stringstream*)>
+    no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>
         TestCase::stderrBuffer =
-        unique_ptr<stringstream, void(*)(stringstream*)>(
-            nullptr, [](stringstream*){}
+        no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>(
+            unique_ptr<stringstream, void(*)(stringstream*)>(
+                nullptr, [](stringstream*){}
+            )
         );
-    [[clang::no_destroy]] unique_ptr<streambuf, void(*)(streambuf*)>
+    no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>
         TestCase::stdoutOriginal =
-        unique_ptr<streambuf, void(*)(streambuf*)>(
-            nullptr, [](streambuf*){}
+        no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>(
+            unique_ptr<streambuf, void(*)(streambuf*)>(
+                nullptr, [](streambuf*){}
+            )
         );
-    [[clang::no_destroy]] unique_ptr<streambuf, void(*)(streambuf*)>
+    no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>
         TestCase::clogOriginal =
-        unique_ptr<streambuf, void(*)(streambuf*)>(
-            nullptr, [](streambuf*){}
+        no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>(
+            unique_ptr<streambuf, void(*)(streambuf*)>(
+                nullptr, [](streambuf*){}
+            )
         );
-    [[clang::no_destroy]] unique_ptr<streambuf, void(*)(streambuf*)>
+    no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>
         TestCase::stderrOriginal =
-        unique_ptr<streambuf, void(*)(streambuf*)>(
-            nullptr, [](streambuf*){}
+        no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>(
+            unique_ptr<streambuf, void(*)(streambuf*)>(
+                nullptr, [](streambuf*){}
+            )
         );
 
     TestCase::TestCase (TestObjName&& name,
@@ -153,7 +167,7 @@ namespace TestCPP {
         this->test = o.test;
     }
 
-    TestCase::TestCase (TestCase&& o) {
+    TestCase::TestCase (TestCase&& o) noexcept {
         this->outCompareOption(std::move(o.option));
         this->setNotifyPassed(std::move(o.notifyTestPassed));
 
@@ -179,38 +193,38 @@ namespace TestCPP {
     }
 
     TestCase::~TestCase () {
-        if (TestCase::stdoutBuffer != nullptr)
+        if (TestCase::stdoutBuffer.get() != nullptr)
         {
             if (TestCase::stdoutCaptureCasesDestroyed ==
                 TestCase::stdoutCaptureCasesConstructed - 1)
             {
-                cout.rdbuf(TestCase::stdoutOriginal.release());
-                delete TestCase::stdoutBuffer.get();
-                TestCase::stdoutBuffer = nullptr;
+                cout.rdbuf(TestCase::stdoutOriginal.get().release());
+                delete TestCase::stdoutBuffer.get().get();
+                TestCase::stdoutBuffer.get() = nullptr;
             }
 
             TestCase::stdoutCaptureCasesDestroyed += 1;
         }
-        if (TestCase::clogBuffer != nullptr)
+        if (TestCase::clogBuffer.get() != nullptr)
         {
             if (TestCase::logCaptureCasesDestroyed ==
                 TestCase::logCaptureCasesConstructed - 1)
             {
-                clog.rdbuf(TestCase::clogOriginal.release());
-                delete TestCase::clogBuffer.get();
-                TestCase::clogBuffer = nullptr;
+                clog.rdbuf(TestCase::clogOriginal.get().release());
+                delete TestCase::clogBuffer.get().get();
+                TestCase::clogBuffer.get() = nullptr;
             }
 
             TestCase::logCaptureCasesDestroyed += 1;
         }
-        if (TestCase::stderrBuffer != nullptr)
+        if (TestCase::stderrBuffer.get() != nullptr)
         {
             if (TestCase::stderrCaptureCasesDestroyed ==
                 TestCase::stderrCaptureCasesConstructed - 1)
             {
-                cerr.rdbuf(TestCase::stderrOriginal.release());
-                delete TestCase::stderrBuffer.get();
-                TestCase::stderrBuffer = nullptr;
+                cerr.rdbuf(TestCase::stderrOriginal.get().release());
+                delete TestCase::stderrBuffer.get().get();
+                TestCase::stderrBuffer.get() = nullptr;
             }
 
             TestCase::stderrCaptureCasesDestroyed += 1;
@@ -244,7 +258,7 @@ namespace TestCPP {
         return *this;
     }
 
-    TestCase& TestCase::operator= (TestCase&& rhs) {
+    TestCase& TestCase::operator= (TestCase&& rhs) noexcept {
         this->outCompareOption(std::move(rhs.option));
         this->setNotifyPassed(std::move(rhs.notifyTestPassed));
 
@@ -271,7 +285,7 @@ namespace TestCPP {
         return *this;
     }
 
-    long long TestCase::getLastRuntime () {
+    long long TestCase::getLastRuntime () const {
         return this->lastRunTime;
     }
 
@@ -290,9 +304,9 @@ namespace TestCPP {
     void TestCase::logTestFailure (string reason) {
         unique_ptr<ostream> logStream = nullptr;
 
-        if (this->clogOriginal != nullptr) {
+        if (this->clogOriginal.get() != nullptr) {
             logStream = unique_ptr<ostream>(
-                new ostream(this->clogOriginal.get())
+                new ostream(this->clogOriginal.get().get())
             );
         }
         else {
@@ -301,7 +315,7 @@ namespace TestCPP {
 
         logFailure(*logStream, reason);
 
-        if (this->clogOriginal != nullptr) {
+        if (this->clogOriginal.get() != nullptr) {
             logStream->flush();
 
             // If someone is looking for something in the message,
@@ -364,14 +378,18 @@ namespace TestCPP {
         {
             TestCase::stdoutCaptureCasesConstructed += 1;
             TestCase::stdoutBuffer =
-                unique_ptr<stringstream, void(*)(stringstream*)>(
-                    new stringstream(), [](stringstream *) {}
+                no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>(
+                    unique_ptr<stringstream, void(*)(stringstream*)>(
+                        new stringstream(), [](stringstream *) {}
+                    )
                 );
             TestCase::stdoutOriginal =
-                unique_ptr<streambuf, void(*)(streambuf*)>(
-                    cout.rdbuf(), [](streambuf *) {}
+                no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>(
+                    unique_ptr<streambuf, void(*)(streambuf*)>(
+                        cout.rdbuf(), [](streambuf *) {}
+                    )
                 );
-            cout.rdbuf(TestCase::stdoutBuffer->rdbuf());
+            cout.rdbuf(TestCase::stdoutBuffer.get()->rdbuf());
         }
         else {
             TestCase::stdoutCaptureCasesConstructed += 1;
@@ -384,14 +402,18 @@ namespace TestCPP {
         {
             TestCase::logCaptureCasesConstructed += 1;
             TestCase::clogBuffer =
-                unique_ptr<stringstream, void(*)(stringstream*)>(
-                    new stringstream(), [](stringstream *) {}
+                no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>(
+                    unique_ptr<stringstream, void(*)(stringstream*)>(
+                        new stringstream(), [](stringstream *) {}
+                    )
                 );
             TestCase::clogOriginal =
-                unique_ptr<streambuf, void(*)(streambuf*)>(
-                    clog.rdbuf(), [](streambuf *) {}
+                no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>(
+                    unique_ptr<streambuf, void(*)(streambuf*)>(
+                        clog.rdbuf(), [](streambuf *) {}
+                    )
                 );
-            clog.rdbuf(TestCase::clogBuffer->rdbuf());
+            clog.rdbuf(TestCase::clogBuffer.get()->rdbuf());
         }
         else {
             TestCase::logCaptureCasesConstructed += 1;
@@ -404,14 +426,18 @@ namespace TestCPP {
         {
             TestCase::stderrCaptureCasesConstructed += 1;
             TestCase::stderrBuffer =
-                unique_ptr<stringstream, void(*)(stringstream*)>(
-                    new stringstream(), [](stringstream *) {}
+                no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>(
+                    unique_ptr<stringstream, void(*)(stringstream*)>(
+                        new stringstream(), [](stringstream *) {}
+                    )
                 );
             TestCase::stderrOriginal =
-                unique_ptr<streambuf, void(*)(streambuf*)>(
-                    cerr.rdbuf(), [](streambuf *) {}
+                no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>(
+                    unique_ptr<streambuf, void(*)(streambuf*)>(
+                        cerr.rdbuf(), [](streambuf *) {}
+                    )
                 );
-            cerr.rdbuf(TestCase::stderrBuffer->rdbuf());
+            cerr.rdbuf(TestCase::stderrBuffer.get()->rdbuf());
         }
         else {
             TestCase::stderrCaptureCasesConstructed += 1;
@@ -433,35 +459,35 @@ namespace TestCPP {
     }
 
     void TestCase::clearStdoutCapture () {
-        if (TestCase::stdoutBuffer) {
-            TestCase::stdoutBuffer->str(string());
+        if (TestCase::stdoutBuffer.get()) {
+            TestCase::stdoutBuffer.get()->str(string());
         }
     }
 
     void TestCase::clearLogCapture () {
-        if (TestCase::clogBuffer) {
-            TestCase::clogBuffer->str(string());
+        if (TestCase::clogBuffer.get()) {
+            TestCase::clogBuffer.get()->str(string());
         }
     }
 
     void TestCase::clearStderrCapture () {
-        if (TestCase::stderrBuffer) {
-            TestCase::stderrBuffer->str(string());
+        if (TestCase::stderrBuffer.get()) {
+            TestCase::stderrBuffer.get()->str(string());
         }
     }
 
     bool TestCase::checkStdout (string against) {
-        return checkOutput(TestCase::stdoutBuffer->str(),
+        return checkOutput(TestCase::stdoutBuffer.get()->str(),
                            against);
     }
 
     bool TestCase::checkLog (string against) {
-        return checkOutput(TestCase::clogBuffer->str(),
+        return checkOutput(TestCase::clogBuffer.get()->str(),
                            against);
     }
 
     bool TestCase::checkStderr (string against) {
-        return checkOutput(TestCase::stderrBuffer->str(),
+        return checkOutput(TestCase::stderrBuffer.get()->str(),
                            against);
     }
 
@@ -478,8 +504,8 @@ namespace TestCPP {
                 nomatch << TCPPStr::NEQUIV << TCPPStr::APOS;
                 nomatch << against << TCPPStr::APOS;
 
-                if (this->clogOriginal != nullptr) {
-                    ostream tmp(this->clogOriginal.get());
+                if (this->clogOriginal.get() != nullptr) {
+                    ostream tmp(this->clogOriginal.get().get());
                     tmp << nomatch.str() << endl;
                     tmp.flush();
                 }
@@ -500,8 +526,8 @@ namespace TestCPP {
                 nomatch << TCPPStr::NCONTAIN << TCPPStr::APOS;
                 nomatch << against << TCPPStr::APOS;
 
-                if (this->clogOriginal != nullptr) {
-                    ostream tmp(this->clogOriginal.get());
+                if (this->clogOriginal.get() != nullptr) {
+                    ostream tmp(this->clogOriginal.get().get());
                     tmp << nomatch.str() << endl;
                     tmp.flush();
                 }

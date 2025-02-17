@@ -101,6 +101,16 @@ namespace TestCPP {
     namespace Util {
 
         /**
+         * This type is for suppressing exit-time destructors for statics.
+         */
+        template <class T> class no_destroy {
+            alignas(T) unsigned char data[sizeof(T)];
+        public:
+            template <class... Ts> no_destroy(Ts&&... ts) { new (data) T(std::forward<Ts>(ts)...); }
+            T& get() { return *reinterpret_cast<T*>(data); }
+        };
+
+        /**
          * @brief Log a message that will only be output when debug
          *          logging is enabled.
          *
