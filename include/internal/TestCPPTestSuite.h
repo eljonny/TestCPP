@@ -48,7 +48,6 @@ using std::enable_if;
 using std::endl;
 using std::forward;
 using std::function;
-using std::move;
 using std::runtime_error;
 using std::string;
 using std::streambuf;
@@ -82,7 +81,7 @@ namespace TestCPP {
                    typename enable_if<sizeof...(TestType) == 0>::type)
         {
             this->testSuitePassedMessage = true;
-            this->setSuiteName(move(suiteName));
+            this->setSuiteName(std::move(suiteName));
             this->tests = vector<TestCase>();
         }
 
@@ -93,7 +92,7 @@ namespace TestCPP {
         template<typename... TestType>
         TestSuite (TestObjName&& suiteName, TestType ...tests) {
             this->testSuitePassedMessage = true;
-            this->setSuiteName(move(suiteName));
+            this->setSuiteName(std::move(suiteName));
             this->tests = vector<TestCase>();
 
             this->addTests(tests...);
@@ -124,7 +123,7 @@ namespace TestCPP {
          */
         template<typename Test, typename... OtherTests>
         void addTests (Test test, OtherTests ...tests) {
-            addTest(move(test));
+            addTest(std::move(test));
             addTests(tests...);
         }
 
