@@ -150,7 +150,7 @@ namespace TestCPP {
          *          TestCase.
          * @param o Move everything from this TestCase into the new one.
          */
-        TestCase (TestCase&& o);
+        TestCase (TestCase&& o) noexcept;
 
         /**
          * @brief Copy a TestCase into another TestCase.
@@ -166,7 +166,7 @@ namespace TestCPP {
          * @return A reference to the TestCase that everything from the
          *          old TestCase was moved into.
          */
-        TestCase& operator= (TestCase&& rhs);
+        TestCase& operator= (TestCase&& rhs) noexcept;
 
         /**
          * @brief Destroy a TestCase object.
@@ -253,7 +253,7 @@ namespace TestCPP {
          * @return The duration of the last run of this TestCase in
          *          nanoseconds.
          */
-        long long getLastRuntime ();
+        long long getLastRuntime () const;
 
     private:
         bool notifyTestPassed = false;
@@ -321,17 +321,17 @@ namespace TestCPP {
         static atomic_int logCaptureCasesDestroyed;
         static atomic_int stderrCaptureCasesDestroyed;
 
-        static unique_ptr<stringstream, void(*)(stringstream*)>
+        static Util::no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>
             stdoutBuffer;
-        static unique_ptr<stringstream, void(*)(stringstream*)>
+        static Util::no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>
             clogBuffer;
-        static unique_ptr<stringstream, void(*)(stringstream*)>
+        static Util::no_destroy<unique_ptr<stringstream, void(*)(stringstream*)>>
             stderrBuffer;
-        static unique_ptr<streambuf, void(*)(streambuf*)>
+        static Util::no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>
             stdoutOriginal;
-        static unique_ptr<streambuf, void(*)(streambuf*)>
+        static Util::no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>
             clogOriginal;
-        static unique_ptr<streambuf, void(*)(streambuf*)>
+        static Util::no_destroy<unique_ptr<streambuf, void(*)(streambuf*)>>
             stderrOriginal;
 
         /**
