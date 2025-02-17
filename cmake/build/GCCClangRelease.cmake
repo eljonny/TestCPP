@@ -29,7 +29,7 @@ list (
                                 #  capture.
 )
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" or
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
     "${CMAKE_VS_PLATFORM_TOOLSET}" STREQUAL "ClangCL")
 
     # GCC doesn't support -Wno-global-constructors yet, so only add it
