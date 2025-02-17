@@ -22,6 +22,10 @@ list (
     -ftest-coverage             # Enable core code coverage compilation.
 )
 
+# Add -Wno-global-constructors to the GCC build options after it exists
+#  like in GCCClangRelease.cmake and GCCClangDebug.cmake.
+# Ref https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71482
+
 target_compile_options (
     ${PROJECT_NAME}
     PUBLIC
