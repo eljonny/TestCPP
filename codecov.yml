@@ -1,4 +1,4 @@
 ignore:
-  - "include/tests.hpp"
-  - "src/main.cpp"
+  - "demo/**
   - "test/**"
+  - "3rdparty/**
