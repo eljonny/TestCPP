@@ -1,60 +1,43 @@
 list (
     APPEND
     MSVC_RELEASE_BUILD_OPTS
-    /Wall     # Enable all warnings and treat them as errors.
-    /WX       # Treat linker warnings as errors also.
-    /O2       # Do optimizations for the Release build.
-    /wd4668   # There are undefined preprocessor macros in the Windows
-              #  SDK in internal headers.
-              # This is a workaround until these issues are fixed by
-              #  Microsoft.
-    /wd4710   # It's ok if functions are not inlined.
-    /wd4711   # It's also ok if functions are inlined.
-    /wd4820   # Struct/class data member padding is ok, we're concerned
-              #  about speed, not space, and the natural alignment is
-              #  generally fastest.
-              # Let the compiler add the padding.
-    /wd4100   # Unused parameters occur in the Release build in
-              #  debugLog.
-    /wd5045   # Warns about code that can cause the Spectre
-              #  vulnerability to become exploitable, does not go away
-              #  when /Qspectre is specified.
-              # Applied this warning suppression since /Qspectre is
-              #  specified.
-    /Qspectre # Instructs the compiler to apply Spectre vulnerability
-              #  mitigations.
+    /nologo                 # Suppress the compiler version and
+                            #  copyright information.
+    /EHsc                   # Enable C++ exceptions.
+    /Wall                   # Enable all warnings and treat them as
+                            #  errors.
+    /WX                     # Treat linker warnings as errors also.
+    /O2                     # Do optimizations for the Release build.
+    /wd4710                 # It's ok if functions are not inlined.
+    /wd4711                 # It's also ok if functions are inlined.
+    /wd4820                 # Struct/class data member padding is ok,
+                            #  we're concerned about speed, not space,
+                            #  and the natural alignment is generally
+                            #  fastest.
+                            # Let the compiler add the padding.
+    /wd4100                 # Unused parameters occur in the Release
+                            #  build in debugLog.
+    /wd5045                 # Warns about code that can cause the
+                            #  Spectre vulnerability to become
+                            #  exploitable, does not go away when
+                            #  /Qspectre is specified.
+                            # Applied this warning suppression since
+                            #  /Qspectre is specified.
+    /Qspectre               # Instructs the compiler to apply Spectre
+                            #  vulnerability mitigations.
+    /external:anglebrackets # Treat angle-bracket includes as system
+                            #  includes.
+    /external:W0            # Suppress all warnings from external
+                            #  headers.
 )
 
 if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_RELEASE_BUILD_OPTS
-        /wd5039 # There's a function or two in the Windows SDK that is/
-                #  are passed to extern 'C' APIs that are not marked as
-                #  noexcept which causes this warning, which is treated
-                #  as an error.
-                # There's nothing we can do about this so this is added
-                #  as a workaround.
-        /wd4625 # In the Boost.StackTrace code, there are copy
-                #  constructors that are implicitly deleted.
-                # Since this is in an external library, suppress the
-                #  warning to work around this to ensure clean
-                #  compilation.
-        /wd4626 # In the Boost.StackTrace code, there are copy
-                #  assignment operators that are implicitly deleted.
-                # Since this is in an external library, suppress the
-                #  warning to work around this to ensure clean
-                #  compilation.
-        /wd5026 # In the Boost.StackTrace code, there are move
-                #  constructors that are implicitly deleted.
-                # Since this is in an external library, suppress the
-                #  warning to work around this to ensure clean
-                #  compilation.
-        /wd5027 # In the Boost.StackTrace code, there are move
-                #  assignment operators that are implicitly deleted.
-                # Since this is in an external library, suppress the
-                #  warning to work around this to ensure clean
-                #  compilation.
+        "/external:I3rdparty/include" # Include the 3rdparty directory
+                                      #  as an external include
+                                      #  directory.
     )
 endif ()
 
@@ -100,3 +83,13 @@ if (BUILD_TESTING)
         ${MSVC_RELEASE_BUILD_OPTS}
     )
 endif ()
+
+# This section removes the /RTC flags from the CMAKE_CXX_FLAGS_*
+#  variables, because CMake is automatically adding them to the
+#  generated VS MSBuild builds without me specifying them,
+#  specifically because they should not be in a Release build.
+foreach (flag_var
+         CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+         CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+    STRING (REGEX REPLACE "[/\-]RTC[1csu]*" "" ${flag_var} "${${flag_var}}")
+endforeach (flag_var)

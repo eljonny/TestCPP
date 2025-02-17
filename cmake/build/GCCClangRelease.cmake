@@ -29,6 +29,41 @@ list (
                                 #  capture.
 )
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" or
+    "${CMAKE_VS_PLATFORM_TOOLSET}" STREQUAL "ClangCL")
+
+    # GCC doesn't support -Wno-global-constructors yet, so only add it
+    #  if we are building with Clang, either with MSVC as a frontend
+    #  or straight-up LLVM.
+    # Ref https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71482
+
+    list (
+        APPEND
+        GCC_CLANG_RELEASE_BUILD_OPTS
+        -Wno-global-constructors # The performance degradation pointed
+                                 #  out by this warning is non-trivial
+                                 #  but not enough to work through any
+                                 #  issues that might be caused by it;
+                                 #  there were already constructors
+                                 #  from built-in types that were being
+                                 #  called (particularly unique_ptr),
+                                 #  but this points out that the type I
+                                 #  added (no_destroy) adds custom and
+                                 #  additional start-up code that can
+                                 #  change startup performance by
+                                 #  making it slower.
+                                 # How much slower is a matter of
+                                 #  micro-optimization for this library
+                                 #  project in particular, but could
+                                 #  significantly decrease startup
+                                 #  performance if there were n-many of
+                                 #  these objects being created.
+                                 # At this point there are only 6, so
+                                 #  this should not cause a noticeable
+                                 #  hit to startup performance.
+    )
+endif ()
+
 target_compile_options (
     ${PROJECT_NAME}
     PUBLIC

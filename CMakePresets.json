@@ -28,32 +28,6 @@
       }
     },
     {
-      "name": "base-dev-checks",
-      "description": "Base config preset with dev checks enabled, using the Debug build options.",
-      "inherits": "base",
-      "hidden": true,
-      "warnings": {
-        "dev": true,
-        "deprecated": true,
-        "uninitialized": true,
-        "unusedCli": true,
-        "systemVars": true
-      }
-    },
-    {
-      "name": "vs-dev-checks",
-      "displayName": "CMake - Windows - Visual Studio - Dev Checks",
-      "description": "Windows VS config preset with dev checks enabled, using the Debug build options.",
-      "inherits": "base-dev-checks",
-      "binaryDir": "${sourceDir}/out/build/vs-dev-checks",
-      "installDir": "${sourceDir}/out/install/vs-dev-checks",
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
-      }
-    },
-    {
       "name": "export-cc-nost-base",
       "description": "Base configuration ensures Compile Commands are exported, using the Debug build options, with no stacktraces (strict C++11).",
       "inherits": "base",
@@ -72,14 +46,12 @@
       }
     },
     {
-      "name": "vs-base",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - Core Lib",
-      "description": "Configure the base Visual Studio Minimal build with the Win32 toolchain architecture, using the Debug build options.",
+      "name": "windows-msvc",
       "inherits": "export-cc-st-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-base",
-      "installDir": "${sourceDir}/out/install/Debug/vs-base",
-      "generator": "Visual Studio 17 2022",
-      "architecture": "Win32",
+      "hidden": true,
+      "description": "Configure the build for MSVC CL on Windows, with stacktraces enabled.",
+      "generator": "Ninja",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/Windows.MSVC.toolchain.cmake",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -87,25 +59,12 @@
       }
     },
     {
-      "name": "vs-base-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - Core Lib",
-      "description": "Configure the base Visual Studio Minimal build with the Win32 toolchain architecture, using the Release build options.",
-      "inherits": "vs-base",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-base",
-      "installDir": "${sourceDir}/out/install/Release/vs-base",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
-    },
-    {
-      "name": "vs-nost-base",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Configure the base Visual Studio Minimal build with the Win32 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "name": "windows-msvc-nost",
       "inherits": "export-cc-nost-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-nost-base",
-      "installDir": "${sourceDir}/out/install/Debug/vs-nost-base",
-      "generator": "Visual Studio 17 2022",
-      "architecture": "Win32",
+      "hidden": true,
+      "description": "Configure the build for MSVC CL on Windows, with no stacktraces.",
+      "generator": "Ninja",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/Windows.MSVC.toolchain.cmake",
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -113,223 +72,358 @@
       }
     },
     {
-      "name": "vs-nost-base-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Configure the base Visual Studio Minimal build with the Win32 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-base",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-nost-base",
-      "installDir": "${sourceDir}/out/install/Release/vs-nost-base",
+      "name": "windows-clangcl",
+      "inherits": "export-cc-nost-base",
+      "hidden": true,
+      "description": "Configure the build for ClangCL on Windows, only used for running clang-tidy on Windows.",
+      "generator": "Ninja",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/Windows.Clang.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER_FRONTEND_VARIANT": "MSVC",
+        "CMAKE_CXX_COMPILER_FRONTEND_VARIANT": "MSVC"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "base-dev-checks",
+      "displayName": "CMake - Dev Checks",
+      "description": "Base config preset with dev checks enabled, using the Debug build options.",
+      "inherits": "base",
+      "warnings": {
+        "dev": true,
+        "deprecated": true,
+        "uninitialized": true,
+        "unusedCli": true,
+        "systemVars": true
+      }
+    },
+    {
+      "name": "win32-base",
+      "displayName": "Generate - x86 - Debug - Windows - Core Lib",
+      "description": "Configure the base Windows Minimal build with the x86 toolchain architecture, using the Debug build options.",
+      "inherits": "windows-msvc",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-base",
+      "installDir": "${sourceDir}/out/install/Debug/win32-base",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "X86"
+      }
+    },
+    {
+      "name": "win32-base-rel",
+      "displayName": "Generate - x86 - Release - Windows - Core Lib",
+      "description": "Configure the base Windows Minimal build with the x86 toolchain architecture, using the Release build options.",
+      "inherits": "win32-base",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-base",
+      "installDir": "${sourceDir}/out/install/Release/win32-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
-      "name": "vs-msanalysis",
-      "displayName": "Generate - x86 - Windows - Visual Studio - MSVC Analysis",
-      "description": "Configure the base Visual Studio Minimal build to prepare for running the MSVC++ analyzer.",
-      "inherits": "vs-nost-base",
-      "binaryDir": "${sourceDir}/out/build/vs-msanalysis",
-      "installDir": "${sourceDir}/out/install/vs-msanalysis",
+      "name": "win32-nost-base",
+      "displayName": "Generate - x86 - Debug - Windows - Core Lib - No Stacktraces",
+      "description": "Configure the base Windows Minimal build with the x86 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "windows-msvc-nost",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-nost-base",
+      "installDir": "${sourceDir}/out/install/Debug/win32-nost-base",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "X86"
+      }
+    },
+    {
+      "name": "win32-nost-base-rel",
+      "displayName": "Generate - x86 - Release - Windows - Core Lib - No Stacktraces",
+      "description": "Configure the base Windows Minimal build with the x86 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-base",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-nost-base",
+      "installDir": "${sourceDir}/out/install/Release/win32-nost-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "win32-msanalysis",
+      "displayName": "Generate - x86 - Windows - MSVC Analysis",
+      "description": "Configure the base Windows Minimal build to prepare for running the MSVC++ analyzer.",
+      "inherits": "win32-nost-base",
+      "binaryDir": "${sourceDir}/out/build/win32-msanalysis",
+      "installDir": "${sourceDir}/out/install/win32-msanalysis",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset",
+        "CMAKE_CXX_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset"
+      },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
           "intelliSenseMode": "windows-msvc-x86",
-          "enableMicrosoftCodeAnalysis": true
+          "enableMicrosoftCodeAnalysis": true,
+          "disableExternalAnalysis": true,
+          "intelliSenseOptions": {
+            "additionalCompilerArgs": [
+              "/analyze",
+              "/analyze:external-",
+              "/analyze:autolog",
+              "/analyze:ruleset NativeRecommendedRules.ruleset"
+            ]
+          }
         }
       }
     },
     {
-      "name": "vs-with-test",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the Win32 toolchain architecture, using the Debug build options.",
-      "inherits": "vs-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-withtest",
-      "installDir": "${sourceDir}/out/install/Debug/vs-withtest",
+      "name": "win32-msanalysis-sarif",
+      "displayName": "Generate - x86 - Windows - MSVC Analysis - SARIF Output",
+      "description": "Configure the base Windows Minimal build to prepare for running the MSVC++ analyzer, and output the results to a SARIF format.",
+      "inherits": "win32-msanalysis",
+      "binaryDir": "${sourceDir}/out/build/win32-msanalysis-sarif",
+      "installDir": "${sourceDir}/out/install/win32-msanalysis-sarif",
       "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-with-test-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the Win32 toolchain architecture, using the Release build options.",
-      "inherits": "vs-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-withtest",
-      "installDir": "${sourceDir}/out/install/Release/vs-withtest",
-      "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-nost-with-test",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the Win32 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-nost-withtest",
-      "installDir": "${sourceDir}/out/install/Debug/vs-nost-withtest",
-      "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-nost-with-test-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the Win32 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-nost-withtest",
-      "installDir": "${sourceDir}/out/install/Release/vs-nost-withtest",
-      "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-with-demo",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Configure the Visual Studio build with Core and Demo set and the Win32 toolchain architecture, using the Debug build options.",
-      "inherits": "vs-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-withdemo",
-      "installDir": "${sourceDir}/out/install/Debug/vs-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-with-demo-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Configure the Visual Studio build with Core and Demo set and the Win32 toolchain architecture, using the Release build options.",
-      "inherits": "vs-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-withdemo",
-      "installDir": "${sourceDir}/out/install/Release/vs-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-nost-with-demo",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Demo library build set and the Win32 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-nost-withdemo",
-      "installDir": "${sourceDir}/out/install/Debug/vs-nost-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-nost-with-demo-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Demo library build set and the Win32 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-nost-withdemo",
-      "installDir": "${sourceDir}/out/install/Release/vs-nost-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-all",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Configure the Visual Studio build with all Library options set and the Win32 toolchain architecture, using the Debug build options.",
-      "inherits": "vs-with-test",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-all",
-      "installDir": "${sourceDir}/out/install/Debug/vs-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-all-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Configure the Visual Studio build with all Library options set and the Win32 toolchain architecture, using the Release build options.",
-      "inherits": "vs-with-test-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-all",
-      "installDir": "${sourceDir}/out/install/Release/vs-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-nost-all",
-      "displayName": "Generate - x86 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with all Library options set and the Win32 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-with-test",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs-nost-all",
-      "installDir": "${sourceDir}/out/install/Debug/vs-nost-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-nost-all-rel",
-      "displayName": "Generate - x86 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with all Library options set and the Win32 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-with-test-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs-nost-all",
-      "installDir": "${sourceDir}/out/install/Release/vs-nost-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs-ct",
-      "displayName": "Generate - x86 - Windows - Visual Studio - Clang Tidy analysis",
-      "description": "Configure the Visual Studio build with clang-tidy analysis and the x86 toolchain architecture.",
-      "inherits": "vs-nost-base",
-      "binaryDir": "${sourceDir}/out/build/vs-ct",
-      "installDir": "${sourceDir}/out/install/vs-ct",
-      "cacheVariables": {
-        "TESTCPP_ANALYSIS_ENABLED": "1"
+        "CMAKE_C_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:sarif",
+        "CMAKE_CXX_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:sarif"
       },
-      "toolset": "ClangCL",
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
-          "intelliSenseMode": "windows-clang-x86"
+          "intelliSenseOptions": {
+            "additionalCompilerArgs": [
+              "/analyze:log:format:sarif"
+            ]
+          }
         }
       }
     },
     {
-      "name": "vs64-base",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - Core Lib",
-      "description": "Configure the base Visual Studio build with the x64 toolchain architecture, using the Debug build options.",
-      "inherits": "vs-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-base",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-base",
-      "architecture": "x64"
+      "name": "win32-msanalysis-xml",
+      "displayName": "Generate - x86 - Windows - MSVC Analysis - XML Output",
+      "description": "Configure the base Windows Minimal build to prepare for running the MSVC++ analyzer, and output the results to a XML format.",
+      "inherits": "win32-msanalysis",
+      "binaryDir": "${sourceDir}/out/build/win32-msanalysis-xml",
+      "installDir": "${sourceDir}/out/install/win32-msanalysis-xml",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:xml",
+        "CMAKE_CXX_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:xml"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseOptions": {
+            "additionalCompilerArgs": [
+              "/analyze:log:format:xml"
+            ]
+          }
+        }
+      }
     },
     {
-      "name": "vs64-base-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - Core Lib",
-      "description": "Configure the base Visual Studio build with the x64 toolchain architecture, using the Release build options.",
-      "inherits": "vs-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-base",
-      "installDir": "${sourceDir}/out/install/Release/vs64-base",
-      "architecture": "x64"
+      "name": "win32-with-test",
+      "displayName": "Generate - x86 - Debug - Windows - Core Lib With Tests",
+      "description": "Configure the Windows build with Core and Test Library build set and the x86 toolchain architecture, using the Debug build options.",
+      "inherits": "win32-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-withtest",
+      "installDir": "${sourceDir}/out/install/Debug/win32-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
     },
     {
-      "name": "vs64-nost-base",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Configure the base Visual Studio build with the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-nost-base",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-nost-base",
-      "architecture": "x64"
+      "name": "win32-with-test-rel",
+      "displayName": "Generate - x86 - Release - Windows - Core Lib With Tests",
+      "description": "Configure the Windows build with Core and Test Library build set and the x86 toolchain architecture, using the Release build options.",
+      "inherits": "win32-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-withtest",
+      "installDir": "${sourceDir}/out/install/Release/win32-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
     },
     {
-      "name": "vs64-nost-base-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Configure the base Visual Studio build with the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs-nost-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-nost-base",
-      "installDir": "${sourceDir}/out/install/Release/vs64-nost-base",
-      "architecture": "x64"
+      "name": "win32-nost-with-test",
+      "displayName": "Generate - x86 - Debug - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Configure the Windows build with Core and Test Library build set and the x86 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-nost-withtest",
+      "installDir": "${sourceDir}/out/install/Debug/win32-nost-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
     },
     {
-      "name": "vs64-msanalysis",
-      "displayName": "Generate - x64 - Windows - Visual Studio - MSVC Analysis",
-      "description": "Configure the base Visual Studio Minimal build with the x64 toolchain architecture, then run the MSVC++ analyzer.",
-      "inherits": "vs-msanalysis",
-      "binaryDir": "${sourceDir}/out/build/vs64-msanalysis",
-      "installDir": "${sourceDir}/out/install/vs64-msanalysis",
-      "architecture": "x64",
+      "name": "win32-nost-with-test-rel",
+      "displayName": "Generate - x86 - Release - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Configure the Windows build with Core and Test Library build set and the x86 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-nost-withtest",
+      "installDir": "${sourceDir}/out/install/Release/win32-nost-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-with-demo",
+      "displayName": "Generate - x86 - Debug - Windows - Core Lib With Demo",
+      "description": "Configure the Windows build with Core and Demo set and the x86 toolchain architecture, using the Debug build options.",
+      "inherits": "win32-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-withdemo",
+      "installDir": "${sourceDir}/out/install/Debug/win32-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-with-demo-rel",
+      "displayName": "Generate - x86 - Release - Windows - Core Lib With Demo",
+      "description": "Configure the Windows build with Core and Demo set and the x86 toolchain architecture, using the Release build options.",
+      "inherits": "win32-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-withdemo",
+      "installDir": "${sourceDir}/out/install/Release/win32-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-nost-with-demo",
+      "displayName": "Generate - x86 - Debug - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Configure the Windows build with Core and Demo library build set and the x86 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-nost-withdemo",
+      "installDir": "${sourceDir}/out/install/Debug/win32-nost-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-nost-with-demo-rel",
+      "displayName": "Generate - x86 - Release - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Configure the Windows build with Core and Demo library build set and the x86 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-nost-withdemo",
+      "installDir": "${sourceDir}/out/install/Release/win32-nost-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-all",
+      "displayName": "Generate - x86 - Debug - Windows - All Components - Core, Tests, and Demo",
+      "description": "Configure the Windows build with all Library options set and the x86 toolchain architecture, using the Debug build options.",
+      "inherits": "win32-with-test",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-all",
+      "installDir": "${sourceDir}/out/install/Debug/win32-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-all-rel",
+      "displayName": "Generate - x86 - Release - Windows - All Components - Core, Tests, and Demo",
+      "description": "Configure the Windows build with all Library options set and the x86 toolchain architecture, using the Release build options.",
+      "inherits": "win32-with-test-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-all",
+      "installDir": "${sourceDir}/out/install/Release/win32-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-nost-all",
+      "displayName": "Generate - x86 - Debug - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Configure the Windows build with all Library options set and the x86 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-with-test",
+      "binaryDir": "${sourceDir}/out/build/Debug/win32-nost-all",
+      "installDir": "${sourceDir}/out/install/Debug/win32-nost-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-nost-all-rel",
+      "displayName": "Generate - x86 - Release - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Configure the Windows build with all Library options set and the x86 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-with-test-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win32-nost-all",
+      "installDir": "${sourceDir}/out/install/Release/win32-nost-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win32-ct",
+      "displayName": "Generate - x86 - Windows - Clang Tidy analysis",
+      "description": "Configure the Windows build with clang-tidy analysis and the x86 toolchain architecture.",
+      "inherits": "windows-clangcl",
+      "binaryDir": "${sourceDir}/out/build/win32-ct",
+      "installDir": "${sourceDir}/out/install/win32-ct",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "-v -m32",
+        "CMAKE_CXX_FLAGS": "-v -m32",
+        "CMAKE_EXE_LINKER_FLAGS": "/machine:x86",
+        "CMAKE_SYSTEM_PROCESSOR": "X86",
+        "TESTCPP_ANALYSIS_ENABLED": "1"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "windows-clangcl-x86",
+          "clangTidyChecks": "-*,bugprone-*,cert-*,clang-analyzer-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-nullptr,-hicpp-use-nullptr",
+          "enableClangTidyCodeAnalysis": true
+        }
+      }
+    },
+    {
+      "name": "win64-base",
+      "displayName": "Generate - x64 - Debug - Windows - Core Lib",
+      "description": "Configure the base Windows build with the x64 toolchain architecture, using the Debug build options.",
+      "inherits": "win32-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-base",
+      "installDir": "${sourceDir}/out/install/Debug/win64-base",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      }
+    },
+    {
+      "name": "win64-base-rel",
+      "displayName": "Generate - x64 - Release - Windows - Core Lib",
+      "description": "Configure the base Windows build with the x64 toolchain architecture, using the Release build options.",
+      "inherits": "win32-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-base",
+      "installDir": "${sourceDir}/out/install/Release/win64-base",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      }
+    },
+    {
+      "name": "win64-nost-base",
+      "displayName": "Generate - x64 - Debug - Windows - Core Lib - No Stacktraces",
+      "description": "Configure the base Windows build with the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-nost-base",
+      "installDir": "${sourceDir}/out/install/Debug/win64-nost-base",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      }
+    },
+    {
+      "name": "win64-nost-base-rel",
+      "displayName": "Generate - x64 - Release - Windows - Core Lib - No Stacktraces",
+      "description": "Configure the base Windows build with the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win32-nost-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-nost-base",
+      "installDir": "${sourceDir}/out/install/Release/win64-nost-base",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      }
+    },
+    {
+      "name": "win64-msanalysis",
+      "displayName": "Generate - x64 - Windows - MSVC Analysis",
+      "description": "Configure the base Windows Minimal build with the x64 toolchain architecture, then run the MSVC++ analyzer.",
+      "inherits": "win32-msanalysis",
+      "binaryDir": "${sourceDir}/out/build/win64-msanalysis",
+      "installDir": "${sourceDir}/out/install/win64-msanalysis",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset",
+        "CMAKE_CXX_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset",
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
           "intelliSenseMode": "windows-msvc-x64"
@@ -337,164 +431,202 @@
       }
     },
     {
-      "name": "vs64-with-test",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the x64 toolchain architecture, using the Debug build options.",
-      "inherits": "vs64-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-withtest",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-withtest",
+      "name": "win64-msanalysis-sarif",
+      "displayName": "Generate - x64 - Windows - MSVC Analysis - SARIF Output",
+      "description": "Configure the base Windows Minimal build with the x64 toolchain architecture, then run the MSVC++ analyzer, and output the results to a SARIF format.",
+      "inherits": "win32-msanalysis-sarif",
+      "binaryDir": "${sourceDir}/out/build/win64-msanalysis-sarif",
+      "installDir": "${sourceDir}/out/install/win64-msanalysis-sarif",
       "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-with-test-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the x64 toolchain architecture, using the Release build options.",
-      "inherits": "vs64-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-withtest",
-      "installDir": "${sourceDir}/out/install/Release/vs64-withtest",
-      "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-nost-with-test",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs64-nost-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-nost-withtest",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-nost-withtest",
-      "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-nost-with-test-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Test Library build set and the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs64-nost-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-nost-withtest",
-      "installDir": "${sourceDir}/out/install/Release/vs64-nost-withtest",
-      "cacheVariables": {
-        "TESTCPP_TEST_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-with-demo",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Configure the Visual Studio build with Core and Demo set and the x64 toolchain architecture, using the Debug build options.",
-      "inherits": "vs64-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-withdemo",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-with-demo-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Configure the Visual Studio build with Core and Demo set and the x64 toolchain architecture, using the Release build options.",
-      "inherits": "vs64-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-withdemo",
-      "installDir": "${sourceDir}/out/install/Release/vs64-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-nost-with-demo",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Demo library build set and the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs64-nost-base",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-nost-withdemo",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-nost-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-nost-with-demo-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with Core and Demo library build set and the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs64-nost-base-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-nost-withdemo",
-      "installDir": "${sourceDir}/out/install/Release/vs64-nost-withdemo",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-all",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Configure the Visual Studio build with all Library options set and the x64 toolchain architecture, using the Debug build options.",
-      "inherits": "vs64-with-test",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-all",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-all-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Configure the Visual Studio build with all Library options set and the x64 toolchain architecture, using the Release build options.",
-      "inherits": "vs64-with-test-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-all",
-      "installDir": "${sourceDir}/out/install/Release/vs64-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-nost-all",
-      "displayName": "Generate - x64 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with all Library options set and the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs64-nost-with-test",
-      "binaryDir": "${sourceDir}/out/build/Debug/vs64-nost-all",
-      "installDir": "${sourceDir}/out/install/Debug/vs64-nost-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-nost-all-rel",
-      "displayName": "Generate - x64 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Configure the Visual Studio build with all Library options set and the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
-      "inherits": "vs64-nost-with-test-rel",
-      "binaryDir": "${sourceDir}/out/build/Release/vs64-nost-all",
-      "installDir": "${sourceDir}/out/install/Release/vs64-nost-all",
-      "cacheVariables": {
-        "TESTCPP_DEMO_ENABLED": "1"
-      }
-    },
-    {
-      "name": "vs64-ct",
-      "displayName": "Generate - x64 - Windows - Visual Studio - Clang Tidy analysis",
-      "description": "Configure the Visual Studio build with clang-tidy analysis and the x64 toolchain architecture.",
-      "inherits": "vs-ct",
-      "binaryDir": "${sourceDir}/out/build/vs64-ct",
-      "installDir": "${sourceDir}/out/install/vs64-ct",
-      "architecture": "x64",
+        "CMAKE_C_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:sarif",
+        "CMAKE_CXX_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:sarif",
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
-          "intelliSenseMode": "windows-clang-x64"
+          "intelliSenseMode": "windows-msvc-x64"
+        }
+      }
+    },
+    {
+      "name": "win64-msanalysis-xml",
+      "displayName": "Generate - x64 - Windows - MSVC Analysis - XML Output",
+      "description": "Configure the base Windows Minimal build with the x64 toolchain architecture, then run the MSVC++ analyzer, and output the results to a XML format.",
+      "inherits": "win32-msanalysis-xml",
+      "binaryDir": "${sourceDir}/out/build/win64-msanalysis-xml",
+      "installDir": "${sourceDir}/out/install/win64-msanalysis-xml",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:xml",
+        "CMAKE_CXX_FLAGS": "/analyze /analyze:external- /analyze:autolog /analyze:ruleset NativeRecommendedRules.ruleset /analyze:log:format:xml",
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "windows-msvc-x64"
+        }
+      }
+    },
+    {
+      "name": "win64-with-test",
+      "displayName": "Generate - x64 - Debug - Windows - Core Lib With Tests",
+      "description": "Configure the Windows build with Core and Test Library build set and the x64 toolchain architecture, using the Debug build options.",
+      "inherits": "win64-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-withtest",
+      "installDir": "${sourceDir}/out/install/Debug/win64-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-with-test-rel",
+      "displayName": "Generate - x64 - Release - Windows - Core Lib With Tests",
+      "description": "Configure the Windows build with Core and Test Library build set and the x64 toolchain architecture, using the Release build options.",
+      "inherits": "win64-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-withtest",
+      "installDir": "${sourceDir}/out/install/Release/win64-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-nost-with-test",
+      "displayName": "Generate - x64 - Debug - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Configure the Windows build with Core and Test Library build set and the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "win64-nost-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-nost-withtest",
+      "installDir": "${sourceDir}/out/install/Debug/win64-nost-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-nost-with-test-rel",
+      "displayName": "Generate - x64 - Release - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Configure the Windows build with Core and Test Library build set and the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win64-nost-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-nost-withtest",
+      "installDir": "${sourceDir}/out/install/Release/win64-nost-withtest",
+      "cacheVariables": {
+        "TESTCPP_TEST_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-with-demo",
+      "displayName": "Generate - x64 - Debug - Windows - Core Lib With Demo",
+      "description": "Configure the Windows build with Core and Demo set and the x64 toolchain architecture, using the Debug build options.",
+      "inherits": "win64-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-withdemo",
+      "installDir": "${sourceDir}/out/install/Debug/win64-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-with-demo-rel",
+      "displayName": "Generate - x64 - Release - Windows - Core Lib With Demo",
+      "description": "Configure the Windows build with Core and Demo set and the x64 toolchain architecture, using the Release build options.",
+      "inherits": "win64-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-withdemo",
+      "installDir": "${sourceDir}/out/install/Release/win64-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-nost-with-demo",
+      "displayName": "Generate - x64 - Debug - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Configure the Windows build with Core and Demo library build set and the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "win64-nost-base",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-nost-withdemo",
+      "installDir": "${sourceDir}/out/install/Debug/win64-nost-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-nost-with-demo-rel",
+      "displayName": "Generate - x64 - Release - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Configure the Windows build with Core and Demo library build set and the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win64-nost-base-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-nost-withdemo",
+      "installDir": "${sourceDir}/out/install/Release/win64-nost-withdemo",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-all",
+      "displayName": "Generate - x64 - Debug - Windows - All Components - Core, Tests, and Demo",
+      "description": "Configure the Windows build with all Library options set and the x64 toolchain architecture, using the Debug build options.",
+      "inherits": "win64-with-test",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-all",
+      "installDir": "${sourceDir}/out/install/Debug/win64-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-all-rel",
+      "displayName": "Generate - x64 - Release - Windows - All Components - Core, Tests, and Demo",
+      "description": "Configure the Windows build with all Library options set and the x64 toolchain architecture, using the Release build options.",
+      "inherits": "win64-with-test-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-all",
+      "installDir": "${sourceDir}/out/install/Release/win64-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-nost-all",
+      "displayName": "Generate - x64 - Debug - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Configure the Windows build with all Library options set and the x64 toolchain architecture, using the Debug build options, but with no stacktraces (strict C++11).",
+      "inherits": "win64-nost-with-test",
+      "binaryDir": "${sourceDir}/out/build/Debug/win64-nost-all",
+      "installDir": "${sourceDir}/out/install/Debug/win64-nost-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-nost-all-rel",
+      "displayName": "Generate - x64 - Release - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Configure the Windows build with all Library options set and the x64 toolchain architecture, using the Release build options, but with no stacktraces (strict C++11).",
+      "inherits": "win64-nost-with-test-rel",
+      "binaryDir": "${sourceDir}/out/build/Release/win64-nost-all",
+      "installDir": "${sourceDir}/out/install/Release/win64-nost-all",
+      "cacheVariables": {
+        "TESTCPP_DEMO_ENABLED": "1"
+      }
+    },
+    {
+      "name": "win64-ct",
+      "displayName": "Generate - x64 - Windows - Clang Tidy analysis",
+      "description": "Configure the Windows build with clang-tidy analysis and the x64 toolchain architecture.",
+      "inherits": "win32-ct",
+      "binaryDir": "${sourceDir}/out/build/win64-ct",
+      "installDir": "${sourceDir}/out/install/win64-ct",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "-v",
+        "CMAKE_CXX_FLAGS": "-v",
+        "CMAKE_EXE_LINKER_FLAGS": "/machine:x64",
+        "CMAKE_SYSTEM_PROCESSOR": "AMD64"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "windows-clangcl-x64"
         }
       }
     }
   ],
   "buildPresets": [
     {
-      "name": "vs-base-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs-base",
+      "name": "win32-base-build",
+      "displayName": "Build - x86 - Debug - Windows - Core Lib",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win32-base",
       "resolvePackageReferences": "on",
       "nativeToolOptions": [
-        "/ds",
-        "/m:4",
-        "/nologo",
-        "/warnAsError"
+        "-v"
       ],
       "condition": {
         "type": "equals",
@@ -503,512 +635,515 @@
       }
     },
     {
-      "name": "vs-base-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib - Clean First",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs-base-build",
+      "name": "win32-base-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - Core Lib",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win32-base-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-base-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs-base-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-base-build-rel",
+      "displayName": "Build - x86 - Release - Windows - Core Lib",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win32-base-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-base-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib - Clean First",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs-base-build-rel",
+      "name": "win32-base-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - Core Lib",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win32-base-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-base-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-base",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-base-build",
+      "displayName": "Build - x86 - Debug - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-base",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-base-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib - No Stacktraces - Clean First",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-base-build",
+      "name": "win32-nost-base-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-base-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-base-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-base-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-base-build-rel",
+      "displayName": "Build - x86 - Release - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-base-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-base-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib - No Stacktraces - Clean First",
-      "description": "Build only the Core Lib with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-base-build-rel",
+      "name": "win32-nost-base-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-base-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-with-test-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs-with-test",
-      "inherits": "vs-base-build"
+      "name": "win32-with-test-build",
+      "displayName": "Build - x86 - Debug - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win32-with-test",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-with-test-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Tests - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs-with-test-build",
+      "name": "win32-with-test-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win32-with-test-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-with-test-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs-with-test-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-with-test-build-rel",
+      "displayName": "Build - x86 - Release - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win32-with-test-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-with-test-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Tests - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs-with-test-build-rel",
+      "name": "win32-with-test-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win32-with-test-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-with-test-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-with-test",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-with-test-build",
+      "displayName": "Build - x86 - Debug - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-with-test",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-with-test-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Tests - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-with-test-build",
+      "name": "win32-nost-with-test-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-with-test-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-with-test-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-with-test-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-with-test-build-rel",
+      "displayName": "Build - x86 - Release - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-with-test-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-with-test-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Tests - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-with-test-build-rel",
+      "name": "win32-nost-with-test-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-with-test-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-with-demo-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs-with-demo",
-      "inherits": "vs-base-build"
+      "name": "win32-with-demo-build",
+      "displayName": "Build - x86 - Debug - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win32-with-demo",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-with-demo-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Demo - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs-with-demo-build",
+      "name": "win32-with-demo-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win32-with-demo-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-with-demo-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs-with-demo-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-with-demo-build-rel",
+      "displayName": "Build - x86 - Release - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win32-with-demo-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-with-demo-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Demo - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs-with-demo-build-rel",
+      "name": "win32-with-demo-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win32-with-demo-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-with-demo-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-with-demo",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-with-demo-build",
+      "displayName": "Build - x86 - Debug - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-with-demo",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-with-demo-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - Core Lib With Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-with-demo-build",
+      "name": "win32-nost-with-demo-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-with-demo-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-with-demo-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-with-demo-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-with-demo-build-rel",
+      "displayName": "Build - x86 - Release - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-with-demo-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-with-demo-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - Core Lib With Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-with-demo-build-rel",
+      "name": "win32-nost-with-demo-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-with-demo-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-all-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs-all",
-      "inherits": "vs-base-build"
+      "name": "win32-all-build",
+      "displayName": "Build - x86 - Debug - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win32-all",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-all-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs-all-build",
+      "name": "win32-all-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win32-all-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-all-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs-all-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-all-build-rel",
+      "displayName": "Build - x86 - Release - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win32-all-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-all-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs-all-build-rel",
+      "name": "win32-all-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win32-all-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-all-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-all",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-all-build",
+      "displayName": "Build - x86 - Debug - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-all",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-all-clean-build",
-      "displayName": "Build - x86 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-all-build",
+      "name": "win32-nost-all-clean-build",
+      "displayName": "Clean Build - x86 - Debug - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-all-build",
       "cleanFirst": true
     },
     {
-      "name": "vs-nost-all-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-all-rel",
-      "inherits": "vs-base-build"
+      "name": "win32-nost-all-build-rel",
+      "displayName": "Build - x86 - Release - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-all-rel",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-nost-all-clean-build-rel",
-      "displayName": "Build - x86 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs-nost-all-build-rel",
+      "name": "win32-nost-all-clean-build-rel",
+      "displayName": "Clean Build - x86 - Release - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win32-nost-all-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs-msanalysis-build",
-      "displayName": "Analyze - x86 - Windows - Visual Studio",
-      "description": "Analyze the code with MSBuild using the Win32 toolchain architecture.",
-      "inherits": "vs-base-clean-build",
+      "name": "win32-msanalysis-build",
+      "displayName": "Analyze - x86 - Windows",
+      "description": "Analyze the code with MSVC CL using the x86 toolchain architecture.",
+      "inherits": "win32-base-clean-build",
+      "configurePreset": "win32-msanalysis",
+      "cleanFirst": true
+    },
+    {
+      "name": "win32-msanalysis-xml-build",
+      "displayName": "Analyze - x86 - Windows - XML output",
+      "description": "Analyze the code with MSVC CL using the x86 toolchain architecture, then output the analysis results in XML format.",
+      "inherits": "win32-msanalysis-build",
+      "configurePreset": "win32-msanalysis-xml"
+    },
+    {
+      "name": "win32-msanalysis-sarif-build",
+      "displayName": "Analyze - x86 - Windows - SARIF output",
+      "description": "Analyze the code with MSVC CL using the x86 toolchain architecture, then output the analysis results in SARIF format.",
+      "inherits": "win32-msanalysis-build",
+      "configurePreset": "win32-msanalysis-sarif"
+    },
+    {
+      "name": "win32-ct-build",
+      "displayName": "Analyze - x86 - Windows - Clang Tidy",
+      "description": "Analyze the code with Clang Tidy using the x86 toolchain architecture.",
+      "configurePreset": "win32-ct",
       "cleanFirst": true,
-      "configurePreset": "vs-msanalysis",
-      "nativeToolOptions": [
-        "/external:anglebrackets",
-        "/external:I${sourceDir}/3rdparty",
-        "/analyze",
-        "/analyze:external-",
-        "/analyze:autolog",
-        "/analyze:ruleset NativeRecommendedRules.ruleset"
-      ]
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
     },
     {
-      "name": "vs-msanalysis-xml",
-      "displayName": "Analyze - x86 - Windows - Visual Studio - XML output",
-      "description": "Analyze the code with MSBuild using the Win32 toolchain architecture, then output the analysis results in XML format.",
-      "inherits": "vs-msanalysis-build",
-      "nativeToolOptions": [
-        "/analyze:log:format:xml"
-      ]
+      "name": "win64-base-build",
+      "displayName": "Build - x64 - Debug - Windows - Core Lib",
+      "description": "Build with MSVC-x64 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win64-base",
+      "inherits": "win32-base-build"
     },
     {
-      "name": "vs-msanalysis-sarif",
-      "displayName": "Analyze - x86 - Windows - Visual Studio - SARIF output",
-      "description": "Analyze the code with MSBuild using the Win32 toolchain architecture, then output the analysis results in SARIF format.",
-      "inherits": "vs-msanalysis-build",
-      "nativeToolOptions": [
-        "/analyze:log:format:sarif"
-      ]
-    },
-    {
-      "name": "vs64-base-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib",
-      "description": "Build with VS-x64 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs64-base",
-      "inherits": "vs-base-build"
-    },
-    {
-      "name": "vs64-base-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib - Clean First",
-      "description": "Build with VS-x64 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs64-base-build",
+      "name": "win64-base-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - Core Lib",
+      "description": "Build with MSVC-x64 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win64-base-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-base-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib",
-      "description": "Build with VS-x64 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs64-base-rel",
-      "inherits": "vs-base-build-rel"
+      "name": "win64-base-build-rel",
+      "displayName": "Build - x64 - Release - Windows - Core Lib",
+      "description": "Build with MSVC-x64 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win64-base-rel",
+      "inherits": "win32-base-build-rel"
     },
     {
-      "name": "vs64-base-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib - Clean First",
-      "description": "Build with VS-x64 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs64-base-build-rel",
+      "name": "win64-base-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - Core Lib",
+      "description": "Build with MSVC-x64 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win64-base-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-base-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Build only the Core Lib with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-base",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-base-build",
+      "displayName": "Build - x64 - Debug - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-base",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-base-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib - No Stacktraces - Clean First",
-      "description": "Build only the Core Lib with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-base-build",
+      "name": "win64-nost-base-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-base-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-base-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib - No Stacktraces",
-      "description": "Build only the Core Lib with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-base-rel",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-base-build-rel",
+      "displayName": "Build - x64 - Release - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-base-rel",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-base-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib - No Stacktraces - Clean First",
-      "description": "Build only the Core Lib with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-base-build-rel",
+      "name": "win64-nost-base-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - Core Lib - No Stacktraces",
+      "description": "Build only the Core Lib with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-base-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-with-test-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs64-with-test",
-      "inherits": "vs64-base-build"
+      "name": "win64-with-test-build",
+      "displayName": "Build - x64 - Debug - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win64-with-test",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-with-test-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Tests - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs64-with-test-build",
+      "name": "win64-with-test-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win64-with-test-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-with-test-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Tests",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs64-with-test-rel",
-      "inherits": "vs64-base-build"
+      "name": "win64-with-test-build-rel",
+      "displayName": "Build - x64 - Release - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win64-with-test-rel",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-with-test-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Tests - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs64-with-test-build-rel",
+      "name": "win64-with-test-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - Core Lib With Tests",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win64-with-test-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-with-test-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-with-test",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-with-test-build",
+      "displayName": "Build - x64 - Debug - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-with-test",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-with-test-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Tests - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-with-test-build",
+      "name": "win64-nost-with-test-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-with-test-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-with-test-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Tests - No Stacktraces",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-with-test-rel",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-with-test-build-rel",
+      "displayName": "Build - x64 - Release - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-with-test-rel",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-with-test-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Tests - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Tests, with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-with-test-build-rel",
+      "name": "win64-nost-with-test-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - Core Lib With Tests - No Stacktraces",
+      "description": "Build the Core Lib, and Tests, with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-with-test-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-with-demo-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs64-with-demo",
-      "inherits": "vs64-base-build"
+      "name": "win64-with-demo-build",
+      "displayName": "Build - x64 - Debug - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win64-with-demo",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-with-demo-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Demo - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs64-with-demo-build",
+      "name": "win64-with-demo-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win64-with-demo-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-with-demo-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Demo",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs64-with-demo-rel",
-      "inherits": "vs64-base-build"
+      "name": "win64-with-demo-build-rel",
+      "displayName": "Build - x64 - Release - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win64-with-demo-rel",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-with-demo-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Demo - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs64-with-demo-build-rel",
+      "name": "win64-with-demo-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - Core Lib With Demo",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win64-with-demo-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-with-demo-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-with-demo",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-with-demo-build",
+      "displayName": "Build - x64 - Debug - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-with-demo",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-with-demo-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - Core Lib With Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-with-demo-build",
+      "name": "win64-nost-with-demo-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-with-demo-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-with-demo-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Demo - No Stacktraces",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-with-demo-rel",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-with-demo-build-rel",
+      "displayName": "Build - x64 - Release - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-with-demo-rel",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-with-demo-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - Core Lib With Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-with-demo-build-rel",
+      "name": "win64-nost-with-demo-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - Core Lib With Demo - No Stacktraces",
+      "description": "Build the Core Lib, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-with-demo-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-all-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs64-all",
-      "inherits": "vs64-base-build"
+      "name": "win64-all-build",
+      "displayName": "Build - x64 - Debug - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win64-all",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-all-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode, and clean up the previous build first.",
-      "inherits": "vs64-all-build",
+      "name": "win64-all-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode, and clean up the previous build first.",
+      "inherits": "win64-all-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-all-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs64-all-rel",
-      "inherits": "vs64-base-build"
+      "name": "win64-all-build-rel",
+      "displayName": "Build - x64 - Release - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win64-all-rel",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-all-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode, and clean up the previous build first.",
-      "inherits": "vs64-all-build-rel",
+      "name": "win64-all-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - All Components - Core, Tests, and Demo",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode, and clean up the previous build first.",
+      "inherits": "win64-all-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-all-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-all",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-all-build",
+      "displayName": "Build - x64 - Debug - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-all",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-all-clean-build",
-      "displayName": "Build - x64 - Debug - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-all-build",
+      "name": "win64-nost-all-clean-build",
+      "displayName": "Clean Build - x64 - Debug - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-all-build",
       "cleanFirst": true
     },
     {
-      "name": "vs64-nost-all-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-all-rel",
-      "inherits": "vs64-base-build"
+      "name": "win64-nost-all-build-rel",
+      "displayName": "Build - x64 - Release - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-all-rel",
+      "inherits": "win64-base-build"
     },
     {
-      "name": "vs64-nost-all-clean-build-rel",
-      "displayName": "Build - x64 - Release - Windows - Visual Studio - All Components - Core, Tests, and Demo - No Stacktraces - Clean First",
-      "description": "Build the Core Lib, Tests, and Demo, with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
-      "inherits": "vs64-nost-all-build-rel",
+      "name": "win64-nost-all-clean-build-rel",
+      "displayName": "Clean Build - x64 - Release - Windows - All Components - Core, Tests, and Demo - No Stacktraces",
+      "description": "Build the Core Lib, Tests, and Demo, with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11), and clean up the previous build first.",
+      "inherits": "win64-nost-all-build-rel",
       "cleanFirst": true
     },
     {
-      "name": "vs64-msanalysis-build",
-      "displayName": "Analyze - x64 - Windows - Visual Studio",
-      "description": "Analyze the code with MSBuild using the x64 toolchain architecture.",
-      "inherits": "vs-msanalysis-build",
-      "configurePreset": "vs64-msanalysis"
+      "name": "win64-msanalysis-build",
+      "displayName": "Analyze - x64 - Windows",
+      "description": "Analyze the code with MSVC CL using the x64 toolchain architecture.",
+      "inherits": "win32-msanalysis-build",
+      "configurePreset": "win64-msanalysis"
     },
     {
-      "name": "vs64-msanalysis-xml",
-      "displayName": "Analyze - x64 - Windows - Visual Studio - XML output",
-      "description": "Analyze the code with MSBuild using the x64 toolchain architecture, then output the analysis results in XML format.",
-      "inherits": "vs64-msanalysis-build",
-      "nativeToolOptions": [
-        "/analyze:log:format:xml"
-      ]
+      "name": "win64-msanalysis-xml-build",
+      "displayName": "Analyze - x64 - Windows - XML output",
+      "description": "Analyze the code with MSVC CL using the x64 toolchain architecture, then output the analysis results in XML format.",
+      "inherits": "win64-msanalysis-build",
+      "configurePreset": "win64-msanalysis-xml"
     },
     {
-      "name": "vs64-msanalysis-sarif",
-      "displayName": "Analyze - x64 - Windows - Visual Studio - SARIF output",
-      "description": "Analyze the code with MSBuild using the x64 toolchain architecture, then output the analysis results in SARIF format.",
-      "inherits": "vs64-msanalysis-build",
-      "nativeToolOptions": [
-        "/analyze:log:format:sarif"
-      ]
+      "name": "win64-msanalysis-sarif-build",
+      "displayName": "Analyze - x64 - Windows - SARIF output",
+      "description": "Analyze the code with MSVC CL using the x64 toolchain architecture, then output the analysis results in SARIF format.",
+      "inherits": "win64-msanalysis-build",
+      "configurePreset": "win64-msanalysis-sarif"
+    },
+    {
+      "name": "win64-ct-build",
+      "displayName": "Analyze - x64 - Windows - Clang Tidy",
+      "description": "Analyze the code with Clang Tidy using the x64 toolchain architecture.",
+      "inherits": "win32-ct-build",
+      "configurePreset": "win64-ct"
     }
   ],
   "testPresets": [
     {
-      "name": "vs-test",
-      "displayName": "Test - x86 - Debug - Windows - Visual Studio",
-      "description": "Test with VS-Win32 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs-with-test",
+      "name": "win32-test",
+      "displayName": "Test - x86 - Debug - Windows",
+      "description": "Test with MSVC-x86 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win32-with-test",
       "output": {
         "shortProgress": true,
         "verbosity": "verbose",
@@ -1029,53 +1164,53 @@
       }
     },
     {
-      "name": "vs-test-rel",
-      "displayName": "Test - x86 - Release - Windows - Visual Studio",
-      "description": "Test with VS-Win32 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs-with-test-rel",
-      "inherits": "vs-test"
+      "name": "win32-test-rel",
+      "displayName": "Test - x86 - Release - Windows",
+      "description": "Test with MSVC-x86 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win32-with-test-rel",
+      "inherits": "win32-test"
     },
     {
-      "name": "vs-nost-test",
-      "displayName": "Test - x86 - Debug - Windows - Visual Studio - No Stacktraces",
-      "description": "Test with VS-Win32 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-with-test",
-      "inherits": "vs-test"
+      "name": "win32-nost-test",
+      "displayName": "Test - x86 - Debug - Windows - No Stacktraces",
+      "description": "Test with MSVC-x86 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-with-test",
+      "inherits": "win32-test"
     },
     {
-      "name": "vs-nost-test-rel",
-      "displayName": "Test - x86 - Release - Windows - Visual Studio - No Stacktraces",
-      "description": "Test with VS-Win32 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs-nost-with-test-rel",
-      "inherits": "vs-test"
+      "name": "win32-nost-test-rel",
+      "displayName": "Test - x86 - Release - Windows - No Stacktraces",
+      "description": "Test with MSVC-x86 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win32-nost-with-test-rel",
+      "inherits": "win32-test"
     },
     {
-      "name": "vs64-test",
-      "displayName": "Test - x64 - Debug - Windows - Visual Studio",
-      "description": "Test with VS-x64 with the necessary base MSBuild options in Debug mode.",
-      "configurePreset": "vs64-with-test",
-      "inherits": "vs-test"
+      "name": "win64-test",
+      "displayName": "Test - x64 - Debug - Windows",
+      "description": "Test with MSVC-x64 with the necessary Ninja options in Debug mode.",
+      "configurePreset": "win64-with-test",
+      "inherits": "win32-test"
     },
     {
-      "name": "vs64-test-rel",
-      "displayName": "Test - x64 - Release - Windows - Visual Studio",
-      "description": "Test with VS-x64 with the necessary base MSBuild options in Release mode.",
-      "configurePreset": "vs64-with-test-rel",
-      "inherits": "vs-test"
+      "name": "win64-test-rel",
+      "displayName": "Test - x64 - Release - Windows",
+      "description": "Test with MSVC-x64 with the necessary Ninja options in Release mode.",
+      "configurePreset": "win64-with-test-rel",
+      "inherits": "win32-test"
     },
     {
-      "name": "vs64-nost-test",
-      "displayName": "Test - x64 - Debug - Windows - Visual Studio - No Stacktraces",
-      "description": "Test with VS-x64 with the necessary base MSBuild options in Debug mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-with-test",
-      "inherits": "vs-nost-test"
+      "name": "win64-nost-test",
+      "displayName": "Test - x64 - Debug - Windows - No Stacktraces",
+      "description": "Test with MSVC-x64 with the necessary Ninja options in Debug mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-with-test",
+      "inherits": "win32-nost-test"
     },
     {
-      "name": "vs64-nost-test-rel",
-      "displayName": "Test - x64 - Release - Windows - Visual Studio - No Stacktraces",
-      "description": "Test with VS-x64 with the necessary base MSBuild options in Release mode, but with no stacktraces (strict C++11).",
-      "configurePreset": "vs64-nost-with-test-rel",
-      "inherits": "vs-nost-test"
+      "name": "win64-nost-test-rel",
+      "displayName": "Test - x64 - Release - Windows - No Stacktraces",
+      "description": "Test with MSVC-x64 with the necessary Ninja options in Release mode, but with no stacktraces (strict C++11).",
+      "configurePreset": "win64-nost-with-test-rel",
+      "inherits": "win32-nost-test"
     }
   ]
 }
