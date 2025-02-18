@@ -18,9 +18,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Run static analysis
-      uses: JacobDomagala/StaticAnalysis@master
+    - name: Static analysis for C++(Clang-19)/Python project
+      uses: eljonny/StaticAnalysis@clang-19
       with:
         language: c++
 
