@@ -74,6 +74,7 @@ jobs:
       run: |
         cpack --config CPackConfig.cmake -C ${{ matrix.build_type }}
         cpack --config CPackConfig.cmake -C ${{ matrix.build_type }} -G ZIP
+        cpack --config CPackConfig.cmake -C ${{ matrix.build_type }} -G 7Z
 
     - name: 'Artifact Storage'
       uses: actions/upload-artifact@v4

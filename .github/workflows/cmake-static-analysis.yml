@@ -24,10 +24,10 @@ jobs:
       with:
         language: c++
 
-        # Exclude any issues found in ${Project_root_dir}/lib
-        exclude_dir: lib
+        # Exclude any issues found in ${Project_root_dir}/3rdparty
+        exclude_dir: 3rdparty
 
         use_cmake: true
         cmake_args: -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -Wno-dev
 
-        cppcheck_args: --enable=all --suppress=missingIncludeSystem --suppress=unusedFunction --std=c++11 --inline-suppr
+        cppcheck_args: --quiet --enable=all --inconclusive --suppress=missingIncludeSystem --suppress=unusedFunction --suppress=checkersReport --suppress='*:3rdparty/*' --std=c++11 --inline-suppr --force --check-level=exhaustive
