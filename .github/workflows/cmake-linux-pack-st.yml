@@ -60,6 +60,7 @@ jobs:
     - name: Pack
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: |
+        cpack -G TXZ
         cpack -G DEB
         cpack -G RPM
 
