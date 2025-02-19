@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Static analysis for C++(Clang-19)/Python project
-      uses: eljonny/StaticAnalysis@clang-19
+      uses: eljonny/StaticAnalysis@clang-19-beta1
       with:
         language: c++
 
