@@ -1,4 +1,9 @@
 ignore:
-  - "demo/**
+  - "demo/**"
   - "test/**"
-  - "3rdparty/**
+  - "3rdparty/**"
+  - ".github/**"
+  - "cmake/**"
+  - "custom-overlay/**"
+  - "res/**"
+  - "test_package/**"
