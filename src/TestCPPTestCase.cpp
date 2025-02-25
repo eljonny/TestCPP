@@ -476,22 +476,22 @@ namespace TestCPP {
         }
     }
 
-    bool TestCase::checkStdout (string against) {
+    bool TestCase::checkStdout (const string& against) {
         return checkOutput(TestCase::stdoutBuffer.get()->str(),
                            against);
     }
 
-    bool TestCase::checkLog (string against) {
+    bool TestCase::checkLog (const string& against) {
         return checkOutput(TestCase::clogBuffer.get()->str(),
                            against);
     }
 
-    bool TestCase::checkStderr (string against) {
+    bool TestCase::checkStderr (const string& against) {
         return checkOutput(TestCase::stderrBuffer.get()->str(),
                            against);
     }
 
-    bool TestCase::checkOutput (string source, string against)
+    bool TestCase::checkOutput (const string& source, const string& against)
     {
         switch (this->option) {
         case EXACT:

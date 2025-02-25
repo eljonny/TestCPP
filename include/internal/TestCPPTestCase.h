@@ -221,7 +221,7 @@ namespace TestCPP {
          * @return True if the argument results in a successful check
          *          using the configured comparison mode.
          */
-        bool checkStdout (string against);
+        bool checkStdout (const string& against);
 
         /**
          * @brief Check the argument against what is captured from
@@ -230,7 +230,7 @@ namespace TestCPP {
          * @return True if the argument results in a successful check
          *          using the configured comparison mode.
          */
-        bool checkLog (string against);
+        bool checkLog (const string& against);
 
         /**
          * @brief Check the argument against what is captured from
@@ -240,7 +240,7 @@ namespace TestCPP {
          *          using the configured comparison mode, false
          *          otherwise.
          */
-        bool checkStderr (string against);
+        bool checkStderr (const string& against);
 
         /**
          * @brief Run the test case.
@@ -312,7 +312,7 @@ namespace TestCPP {
          *          using the configured comparison mode, false
          *          otherwise.
          */
-        bool checkOutput (string source, string against);
+        bool checkOutput (const string& source, const string& against);
 
         static atomic_int stdoutCaptureCasesConstructed;
         static atomic_int logCaptureCasesConstructed;
