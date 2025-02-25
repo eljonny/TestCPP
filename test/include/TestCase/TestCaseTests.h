@@ -10,6 +10,8 @@ namespace TestCPP {
             void TestTestCaseGoThrowChr ();
             void TestTestCaseGoThrowInt ();
             void TestTestCaseSetNotifyPassed ();
+            void TestTestCaseCheckStdout ();
+            void TestTestCaseCheckStderr ();
         }
     }
 }

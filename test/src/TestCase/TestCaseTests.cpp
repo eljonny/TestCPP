@@ -3,6 +3,10 @@
 
 using TestCPP::Util::debugLog;
 
+using std::cerr;
+using std::cout;
+using std::endl;
+
 using TCPPStr = TestCPP::TestCPPCommon::Strings;
 
 namespace TestCPP {
@@ -174,6 +178,48 @@ namespace TestCPP {
                 Assertions::assertTrue(
                     !test->checkLog(string("s)")),
                     "TestSetNotifyPassed checkLog() 6"
+                );
+            }
+
+            void TestTestCaseCheckStdout() {
+                auto test = unique_ptr<TestCase>(new TestCase(
+                    "TestCaseCheckStdout case Test",
+                    function<void()>([]() {
+                        cout << "Test output to stdout!" << endl;
+                    }),
+                    false, true, false, false,
+                    TestCase::TestCaseOutCompareOptions::EXACT
+                ));
+                
+                Assertions::assertTrue(
+                    test->go(),
+                    "TestCheckStdout go() 1"
+                );
+                
+                Assertions::assertTrue(
+                    test->checkStdout("Test output to stdout!\n"),
+                    "TestCheckStdout checkStdout() 1"
+                );
+            }
+
+            void TestTestCaseCheckStderr() {
+                auto test = unique_ptr<TestCase>(new TestCase(
+                    "TestCaseCheckStderr case Test",
+                    function<void()>([]() {
+                        cerr << "Test output to stderr!" << endl;
+                    }),
+                    false, false, false, true,
+                    TestCase::TestCaseOutCompareOptions::EXACT
+                ));
+
+                Assertions::assertTrue(
+                    test->go(),
+                    "TestCheckStderr go() 1"
+                );
+
+                Assertions::assertTrue(
+                    test->checkStderr("Test output to stderr!\n"),
+                    "TestCheckStderr checkStderr() 1"
                 );
             }
         }
