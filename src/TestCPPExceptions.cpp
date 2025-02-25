@@ -31,9 +31,9 @@ For more information, please refer to <http://unlicense.org/>
 
 #ifdef TESTCPP_STACKTRACE_ENABLED
 #include <boost/stacktrace.hpp>
-#endif
 
 using std::clog;
+#endif
 using std::string;
 using std::runtime_error;
 
@@ -46,8 +46,8 @@ namespace TestCPP {
         clog << boost::stacktrace::stacktrace();
 #endif
     }
-    TestCPPException::TestCPPException (string&& msg) :
-        runtime_error(std::move(msg))
+    TestCPPException::TestCPPException (const string&& msg) :
+        runtime_error(msg)
     {
 #ifdef TESTCPP_STACKTRACE_ENABLED
         clog << boost::stacktrace::stacktrace();
@@ -62,7 +62,7 @@ namespace TestCPP {
 #endif
     }
 
-    TestFailedException::TestFailedException (string&& msg) :
+    TestFailedException::TestFailedException (const string&& msg) :
         TestCPPException(std::move(msg))
     {
 #ifdef TESTCPP_STACKTRACE_ENABLED

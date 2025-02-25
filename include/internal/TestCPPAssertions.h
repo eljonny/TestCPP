@@ -75,7 +75,7 @@ namespace TestCPP {
         template<typename T1, typename T2>
         static void assertEquals (
                 T1 expected, T2 actual,
-                string failureMessage = "Arguments are not equivalent!"
+                const string& failureMessage = "Arguments are not equivalent!"
             )
         {
             if (expected != actual) {
@@ -106,7 +106,7 @@ namespace TestCPP {
         template<typename T1, typename T2>
         static void assertNotEquals (
                 T1 expected, T2 actual,
-                string failureMessage = "Arguments are equivalent!"
+                const string& failureMessage = "Arguments are equivalent!"
             )
         {
             if (expected == actual) {
@@ -133,7 +133,7 @@ namespace TestCPP {
         template<typename T>
         static void assertNull (
                 T ptr,
-                string failureMessage = "Object is not null!"
+                const string& failureMessage = "Object is not null!"
             )
         {
             bool null = ptr == nullptr;
@@ -160,7 +160,7 @@ namespace TestCPP {
         template<typename T>
         static void assertNotNull (
                 T ptr,
-                string failureMessage = "Object is null!"
+                const string& failureMessage = "Object is null!"
             )
         {
             bool notNull = ptr != nullptr;
@@ -187,7 +187,7 @@ namespace TestCPP {
          */
         static void assertThrows (
             function<void()> shouldThrow,
-            string failureMessage =
+            const string& failureMessage =
                 "Should have thrown something!"
         );
 
@@ -203,7 +203,7 @@ namespace TestCPP {
          */
         static void assertNoThrows (
             function<void()> shouldNotThrow,
-            string failureMessage =
+            const string& failureMessage =
                 "Should not have thrown anything!"
         );
 
@@ -219,7 +219,7 @@ namespace TestCPP {
          */
         static void assertTrue (
             bool condition,
-            string failureMessage = "Condition is false!"
+            const string& failureMessage = "Condition is false!"
         );
 
         /**
@@ -234,7 +234,7 @@ namespace TestCPP {
          */
         static void assertFalse (
             bool condition,
-            string failureMessage = "Condition is true!"
+            const string& failureMessage = "Condition is true!"
         );
 
         /**

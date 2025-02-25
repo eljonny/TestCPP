@@ -41,7 +41,7 @@ namespace TestCPP {
 
     void Assertions::assertThrows (
             function<void()> shouldThrow,
-            string failureMessage
+            const string& failureMessage
         )
     {
         try {
@@ -76,7 +76,7 @@ namespace TestCPP {
 
     void Assertions::assertNoThrows (
             function<void()> shouldNotThrow,
-            string failureMessage
+            const string& failureMessage
         )
     {
         try {
@@ -89,7 +89,7 @@ namespace TestCPP {
 
     void Assertions::assertTrue (
             bool condition,
-            string failureMessage
+            const string& failureMessage
         )
     {
         if (!condition) {
@@ -104,7 +104,7 @@ namespace TestCPP {
 
     void Assertions::assertFalse (
             bool condition,
-            string failureMessage
+            const string& failureMessage
         )
     {
         if (condition) {
