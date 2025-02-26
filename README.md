@@ -32,6 +32,13 @@ The Release builds are optimized for speed over size, so the
 
 # Features
 
+See the various Milestones in GitHub to get a feel for where the
+ project is headed and what features are planned for the future.
+
+Here are the lists of current and planned features.
+
+## Current Features
+
 Features of the test framework are very minimal and include:
  - Test case definition
  - Test suite definition
@@ -48,6 +55,72 @@ Features of the test framework are very minimal and include:
  - fail function, for marking incomplete or skeleton tests,
    or failing in certain cases in a managed way that reduces
    boilerplate.
+
+## Planned Features
+
+There is no plan for advanced features like mocking or death tests.
+The goal is to keep the library simple and easy to use, and to delegate
+ more complex testing to more advanced libraries like GoogleTest, and
+ more advanced features like mocking/faking to external libraries;
+ maybe this will change in the future, since this is a project of
+ exploration with no real constraints other than to maintain
+ simplicity (complex things can be simple).
+
+The following features are currently planned:
+ - Test result output to files or stdout/stderr in a variety of formats
+   - JUnit XML
+   - xUnit XML
+   - CRTF JSON
+   - TAP (Become a TAP Producer)
+   - Maven Surefire XML
+ - Additional assertions, mostly convenient extensions of the current
+   assertions
+   - Numerical Analysis Assertions
+     - assertLessThan
+     - assertGreaterThan
+     - assertLessThanOrEqual
+     - assertGreaterThanOrEqual
+     - assertIsEven
+     - assertIsOdd
+     - assertIsPrime
+     - assertIsNotPrime
+     - assertIsComposite
+     - assertIsNotComposite
+     - assertIsPerfect
+     - assertIsNotPerfect
+     - assertIsPowerOf
+     - assertIsNotPowerOf
+     - assertIsDivisorOf
+     - assertIsNotDivisorOf
+     - assertIsMultipleOf
+     - assertIsNotMultipleOf
+     - assertIsFactorOf
+     - assertIsNotFactorOf
+     - assertIsDivisibleBy
+     - assertIsNotDivisibleBy
+   - Range Assertions - Dates, Times, Durations, Numbers, strings,
+     custom-defined ranges of varying types
+     - assertWithinRange
+     - assertNotWithinRange
+   - Container/string Assertions
+     - assertEmpty
+     - assertNotEmpty
+     - assertContains
+     - assertNotContains
+     - assertStartsWith
+     - assertEndsWith
+     - assertSizeIs
+   - String-only Assertions
+     - assertMatches
+     - assertNotMatches
+   - Miscellaneous Assertions
+     - assertIsOneOf
+     - assertIsNotOneOf
+     - Will apply lexicographically or numerically depending on the
+       type of the arguments, with parameters to control what "close"
+       means
+       - assertIsCloseTo
+       - assertIsNotCloseTo
 
 # Getting Started
 
@@ -74,28 +147,26 @@ Then add it to your test executable target through
 
 ### vcpkg
 
-*In process, not working yet*
+*Will be available for 1.5 release*
 
-As of 0.1.0-beta.1, you might soon be able to also include it
- in your `vcpkg` project by running the following in the root of
- your project (pending vcpkg PR approval that I have in right
- now https://github.com/microsoft/vcpkg/pull/37471):
+You be able to include TestCPP in your `vcpkg` project by running the
+ following in the root of your project (pending vcpkg PR approval that
+ I have in right now https://github.com/microsoft/vcpkg/pull/37471):
 ```
- vcpkg add port testcpp
+ vcpkg add port eljonny-testcpp
 ```
 
 ### Conan
 
-*In process, not working yet*
+*Will be available for 2.0 release*
 
-As of 0.1.1-beta.2, you might soon be able to also include it
- in your `conan` project (pending approval from the Conan
- community).
+You will be able to include it in your `conan` project (pending
+ approval from the Conan community).
 First add it as a dependency to your project in conanfile.txt:
 ```
 [requires]
 ...
-testcpp/0.1.1-beta.2
+testcpp/2.0
 ```
 
 Then installing TestCPP into your project by running the
@@ -224,7 +295,7 @@ There are a number of CMake Presets defined in CMakePresets.json that
  align with different build configurations and analysis profiles,
  including all build feature variations (with/without the Demo project,
  with/without the tests, and subsequently with/without stacktrace
- support via Boost.StackTrace).
+ support via Boost.StackTrace, and finally Debug and Release).
 
 To get started, open the root project folder in Visual Studio 2022 and
  select the desired CMake Preset from the Build Configurations dropdown
@@ -403,8 +474,10 @@ Both Release and Debug configurations support building with stack trace
 
 # Static Analysis of TestCPP
 
-You can run cppcheck and clang-tidy on the generated
+You can run cppcheck, infer, and clang-tidy on the generated
  compile_commands.json.
+
+Another tool that is helpful to run is flawfinder.
 
 For clang-tidy, you can also use the CMake flag to have CMake run
  clang-tidy during the build.
@@ -451,6 +524,19 @@ My suggested options for cppcheck are:
 
 I would recommend against using the -j parameter with cppcheck because
  it disables certain checks that are used in the project.
+
+For infer, you can run the following command after configuring the
+ build:
+```
+infer run --compilation-database path/to/compile_commands.json
+```
+
+For flawfinder, you can run the following command to analyze src and
+ then include and generate HTML reports about the results in the:
+```
+flawfinder --minlevel=0 --html --columns src > out/report/flawfinder/src-flaws.html
+flawfinder --minlevel=0 --html --columns include > out/report/flawfinder/i-flaws.html
+```
 
 # Testing and Code Coverage
 
@@ -582,8 +668,8 @@ The workflows are as follows:
   - Builds and tests the library on Linux with stack traces enabled and
     generates code coverage reports that are then pushed to CodeCov for
     helpful visualizations and reporting.
-- codeql.yml
-  - Runs the CodeQL static analysis tool on the library code.
 - cmake-static-analysis.yml
   - Runs clang-tidy and cppcheck on the library code using
     JacobDomagala/StaticAnalysis@master
+- codeql.yml
+  - Runs the CodeQL static analysis tool on the library code.
