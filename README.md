@@ -25,7 +25,7 @@ The library is most useful for educational projects or small
 For testing more complex projects I would recommend using
  [GoogleTest](https://github.com/google/googletest).
  
-The code is ~2k lines.
+The code is ~1.2k lines.
 The Release builds are optimized for speed over size, so the
  build could probably be tweaked to get a smaller binary if
  desired.
