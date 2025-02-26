@@ -28,4 +28,9 @@ if (BUILD_TESTING)
         PUBLIC
         DEBUG_LOG
     )
+    target_compile_definitions (
+        ${PROJECT_NAME}_Exceptions_test
+        PUBLIC
+        DEBUG_LOG
+    )
 endif ()

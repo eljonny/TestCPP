@@ -92,4 +92,10 @@ if (BUILD_TESTING)
         PUBLIC
         ${MSVC_DEBUG_BUILD_OPTS}
     )
+
+    target_compile_options (
+        ${PROJECT_NAME}_Exceptions_test
+        PUBLIC
+        ${MSVC_DEBUG_BUILD_OPTS}
+    )
 endif ()

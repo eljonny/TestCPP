@@ -40,4 +40,10 @@ if (BUILD_TESTING)
         test/src/Assertions/AssertionsTests.cpp
         test/src/TestCPPAssertionsMain.cpp
     )
+
+    add_executable (
+        ${PROJECT_NAME}_Exceptions_test
+        test/src/Exceptions/ExceptionsTests.cpp
+        test/src/TestCPPExceptionsMain.cpp
+    )
 endif ()

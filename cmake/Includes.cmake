@@ -38,4 +38,10 @@ if (BUILD_TESTING)
         test/include
         include
     )
+
+    target_include_directories (
+        ${PROJECT_NAME}_Exceptions_test PRIVATE
+        test/include
+        include
+    )
 endif ()

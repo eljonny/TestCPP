@@ -49,3 +49,9 @@ target_compile_options (
     PUBLIC
     ${COVERAGE_BUILD_OPTS}
 )
+
+target_compile_options (
+    ${PROJECT_NAME}_Exceptions_test
+    PUBLIC
+    ${COVERAGE_BUILD_OPTS}
+)

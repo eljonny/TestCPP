@@ -20,6 +20,13 @@ if (${TESTCPP_STACKTRACE_ENABLED} AND MSVC)
         ole32
         dbgeng
     )
+    target_link_libraries (
+        ${PROJECT_NAME}_Exceptions_test
+        ${PROJECT_NAME}
+        gcov
+        ole32
+        dbgeng
+    )
 
 elseif (${TESTCPP_STACKTRACE_ENABLED})
     target_link_libraries (
@@ -40,6 +47,12 @@ elseif (${TESTCPP_STACKTRACE_ENABLED})
         gcov
         dl
     )
+    target_link_libraries (
+        ${PROJECT_NAME}_Exceptions_test
+        ${PROJECT_NAME}
+        gcov
+        dl
+    )
 
 else ()
     target_link_libraries (
@@ -54,6 +67,11 @@ else ()
     )
     target_link_libraries (
         ${PROJECT_NAME}_Assertions_test
+        ${PROJECT_NAME}
+        gcov
+    )
+    target_link_libraries (
+        ${PROJECT_NAME}_Exceptions_test
         ${PROJECT_NAME}
         gcov
     )

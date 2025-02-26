@@ -28,6 +28,7 @@ For more information, please refer to <http://unlicense.org/>
 #ifndef TESTCPP_ASSERTIONS_
 #define TESTCPP_ASSERTIONS_
 
+#include <cstring>
 #include <functional>
 #include <iostream>
 #include <sstream>
@@ -37,6 +38,7 @@ For more information, please refer to <http://unlicense.org/>
 
 using std::endl;
 using std::function;
+using std::strcmp;
 using std::string;
 using std::stringstream;
 
@@ -79,6 +81,35 @@ namespace TestCPP {
             )
         {
             if (expected != actual) {
+                stringstream err;
+
+                err << "Equivalence assertion failed!" << endl;
+                err << failureMessage << endl;
+                err << "Expected: <" << expected << ">" << endl;
+                err << "Actual: <" << actual << ">" << endl;
+
+                throw TestFailedException(err.str());
+            }
+        }
+
+        /**
+         * @brief Check that char*'s are equal using strcmp.
+         * @param expected The value that the actual value should be
+         *                  equivalent to.
+         * @param actual The actual value that will be checked against
+         *                  the expected value.
+         * @param failureMessage Failure message that should be logged
+         *                          if the assertion fails. This
+         *                          defaults to a generic failure
+         *                          message related to the assertion
+         *                          type.
+         */
+        static void assertEquals(
+            const char* expected, const char* actual,
+            const string& failureMessage = "Arguments are not equivalent!"
+        )
+        {
+            if (strcmp(expected, actual)) {
                 stringstream err;
 
                 err << "Equivalence assertion failed!" << endl;
