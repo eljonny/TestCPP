@@ -103,5 +103,11 @@ else ()
             PUBLIC
             ${GCC_CLANG_DEBUG_BUILD_OPTS}
         )
+
+        target_compile_options (
+            ${PROJECT_NAME}_Exceptions_test
+            PUBLIC
+            ${GCC_CLANG_DEBUG_BUILD_OPTS}
+        )
     endif ()
 endif ()

@@ -82,6 +82,12 @@ if (BUILD_TESTING)
         PUBLIC
         ${MSVC_RELEASE_BUILD_OPTS}
     )
+
+    target_compile_options (
+        ${PROJECT_NAME}_Exceptions_test
+        PUBLIC
+        ${MSVC_RELEASE_BUILD_OPTS}
+    )
 endif ()
 
 # This section removes the /RTC flags from the CMAKE_CXX_FLAGS_*

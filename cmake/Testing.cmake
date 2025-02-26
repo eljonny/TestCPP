@@ -13,4 +13,9 @@ if (BUILD_TESTING)
         NAME ${PROJECT_NAME}AssertionsTests
         COMMAND ${PROJECT_NAME}_Assertions_test
     )
+
+    add_test (
+        NAME ${PROJECT_NAME}ExceptionsTests
+        COMMAND ${PROJECT_NAME}_Exceptions_test
+    )
 endif ()
