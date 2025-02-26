@@ -93,12 +93,18 @@ namespace TestCPP {
         )
     {
         if (!condition) {
-            stringstream err;
+            static constexpr const char* atMsg = "Boolean Truth assertion failed!";
 
-            err << "Boolean Truth assertion failed!" << endl;
-            err << failureMessage << endl;
+            const string& err = logTestFailure(
+                nullptr, nullptr,
+                atMsg,
+                failureMessage,
+                false
+            );
 
-            throw TestFailedException(err.str());
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
+            }
         }
     }
 
@@ -108,12 +114,18 @@ namespace TestCPP {
         )
     {
         if (condition) {
-            stringstream err;
+            static constexpr const char* atMsg = "Boolean False assertion failed!";
 
-            err << "Boolean False assertion failed!" << endl;
-            err << failureMessage << endl;
+            const string& err = logTestFailure(
+                nullptr, nullptr,
+                atMsg,
+                failureMessage,
+                false
+            );
 
-            throw TestFailedException(err.str());
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
+            }
         }
     }
 

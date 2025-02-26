@@ -80,15 +80,9 @@ namespace TestCPP {
                 const string& failureMessage = "Arguments are not equivalent!"
             )
         {
-            if (expected != actual) {
-                stringstream err;
-
-                err << "Equivalence assertion failed!" << endl;
-                err << failureMessage << endl;
-                err << "Expected: <" << expected << ">" << endl;
-                err << "Actual: <" << actual << ">" << endl;
-
-                throw TestFailedException(err.str());
+            const string& err = checkEquals(expected, actual, failureMessage);
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
             }
         }
 
@@ -109,25 +103,19 @@ namespace TestCPP {
             const string& failureMessage = "Arguments are not equivalent!"
         )
         {
-            if (strcmp(expected, actual)) {
-                stringstream err;
-
-                err << "Equivalence assertion failed!" << endl;
-                err << failureMessage << endl;
-                err << "Expected: <" << expected << ">" << endl;
-                err << "Actual: <" << actual << ">" << endl;
-
-                throw TestFailedException(err.str());
+            const string& err = checkEquals(expected, actual, failureMessage);
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
             }
         }
 
         /**
          * @brief Check that something is not equivalent to something
          *          else using the built-in operator== for each type.
-         * @param expected The value that the actual value should not be
-         *                  equivalent to.
+         * @param shouldNotBe The value that the actual value should
+         *                     not be equivalent to.
          * @param actual The actual value that will be checked against
-         *                  the expected value.
+         *                  the expectation value.
          * @param failureMessage Failure message that should be logged
          *                          if the assertion fails. This
          *                          defaults to a generic failure
@@ -136,19 +124,36 @@ namespace TestCPP {
          */
         template<typename T1, typename T2>
         static void assertNotEquals (
-                T1 expected, T2 actual,
+                T1 shouldNotBe, T2 actual,
                 const string& failureMessage = "Arguments are equivalent!"
             )
         {
-            if (expected == actual) {
-                stringstream err;
+            const string& err = checkNotEquals(shouldNotBe, actual, failureMessage);
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
+            }
+        }
 
-                err << "Non-Equivalence assertion failed!" << endl;
-                err << failureMessage << endl;
-                err << "Expected: <" << expected << ">" << endl;
-                err << "Actual: <" << actual << ">" << endl;
-
-                throw TestFailedException(err.str());
+        /**
+         * @brief Check that char*'s are not equal using strcmp.
+         * @param expected The value that the actual value should not
+         *                  be equivalent to.
+         * @param actual The actual value that will be checked against
+         *                  the expected value.
+         * @param failureMessage Failure message that should be logged
+         *                          if the assertion fails. This
+         *                          defaults to a generic failure
+         *                          message related to the assertion
+         *                          type.
+         */
+        static void assertNotEquals(
+            const char* shouldNotBe, const char* actual,
+            const string& failureMessage = "Arguments are equivalent!"
+        )
+        {
+            const string& err = checkNotEquals(shouldNotBe, actual, failureMessage);
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
             }
         }
 
@@ -167,15 +172,9 @@ namespace TestCPP {
                 const string& failureMessage = "Object is not null!"
             )
         {
-            bool null = ptr == nullptr;
-
-            if (!null) {
-                stringstream err;
-
-                err << "Null assertion failed!" << endl;
-                err << failureMessage << endl;
-
-                throw TestFailedException(err.str());
+            const string& err = checkNull(ptr, failureMessage);
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
             }
         }
 
@@ -194,15 +193,9 @@ namespace TestCPP {
                 const string& failureMessage = "Object is null!"
             )
         {
-            bool notNull = ptr != nullptr;
-
-            if (!notNull) {
-                stringstream err;
-
-                err << "Not Null assertion failed!" << endl;
-                err << failureMessage << endl;
-
-                throw TestFailedException(err.str());
+            const string& err = checkNotNull(ptr, failureMessage);
+            if (err.size()) {
+                throw TestFailedException(std::move(err));
             }
         }
 
@@ -285,6 +278,139 @@ namespace TestCPP {
         static void fail [[noreturn]] (
             string failureMessage = "Forced test failure!"
         );
+
+    private:
+
+        static constexpr const char* equivalenceAssertionMessage = "Equivalence assertion failed!";
+        static constexpr const char* nonequivalenceAssertionMessage = "Non-Equivalence assertion failed!";
+
+        template<typename T1, typename T2>
+        static const string&& logTestFailure(
+            T1 expectationValue, T2 actual,
+            const string& assertionTypeMessage,
+            const string& failureMessage,
+            const bool logValues
+        )
+        {
+            stringstream err;
+
+            err << assertionTypeMessage << endl;
+            err << failureMessage << endl;
+
+            if (logValues) {
+                err << "Expectation value: <" << expectationValue << ">"
+                    << endl;
+                err << "Actual: <" << actual << ">" << endl;
+            }
+
+            return std::move(err.str());
+        }
+
+        template<typename T1, typename T2>
+        static const string& checkEquals(
+            T1 expected, T2 actual,
+            const string& failureMessage
+        )
+        {
+            if (expected != actual) {
+                return logTestFailure(
+                    expected, actual,
+                    equivalenceAssertionMessage,
+                    failureMessage,
+                    true
+                );
+            }
+            return "";
+        }
+
+        static const string& checkEquals(
+            const char* expected, const char* actual,
+            const string& failureMessage
+        )
+        {
+            if (strcmp(expected, actual)) {
+                return logTestFailure(
+                    expected, actual,
+                    equivalenceAssertionMessage,
+                    failureMessage,
+                    true
+                );
+            }
+            return "";
+        }
+
+        template<typename T1, typename T2>
+        static const string& checkNotEquals(
+            T1 shouldNotBe, T2 actual,
+            const string& failureMessage
+        )
+        {
+            if (shouldNotBe == actual) {
+                return logTestFailure(
+                    shouldNotBe, actual,
+                    nonequivalenceAssertionMessage,
+                    failureMessage,
+                    true
+                );
+            }
+            return "";
+        }
+
+        static const string& checkNotEquals(
+            const char* shouldNotBe, const char* actual,
+            const string& failureMessage
+        )
+        {
+            if (!strcmp(shouldNotBe, actual)) {
+                return logTestFailure(
+                    shouldNotBe, actual,
+                    nonequivalenceAssertionMessage,
+                    failureMessage,
+                    true
+                );
+            }
+            return "";
+        }
+
+        template<typename T>
+        static const string& checkNull(
+            T ptr,
+            const string& failureMessage
+        )
+        {
+            static constexpr const char* nullAssertionMessage = "Null assertion failed!";
+
+            bool null = ptr == nullptr;
+            if (!null) {
+                return logTestFailure(
+                    nullptr, nullptr,
+                    nullAssertionMessage,
+                    failureMessage,
+                    false
+                );
+            }
+            return "";
+        }
+
+        template<typename T>
+        static const string& assertNotNull(
+            T ptr,
+            const string& failureMessage
+        )
+        {
+            static constexpr const char* notNullAssertionMessage = "Not Null assertion failed!";
+
+            bool notNull = ptr != nullptr;
+            if (!notNull) {
+                return logTestFailure(
+                    nullptr, nullptr,
+                    notNullAssertionMessage,
+                    failureMessage,
+                    false
+                );
+            }
+            return "";
+        }
     };
 }
 
