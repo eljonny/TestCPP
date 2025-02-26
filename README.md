@@ -534,9 +534,21 @@ infer run --compilation-database path/to/compile_commands.json
 For flawfinder, you can run the following command to analyze src and
  then include and generate HTML reports about the results in the:
 ```
-flawfinder --minlevel=0 --html --columns src > out/report/flawfinder/src-flaws.html
-flawfinder --minlevel=0 --html --columns include > out/report/flawfinder/i-flaws.html
+flawfinder --minlevel=0 --html --context --columns src > out/report/flawfinder/src-flaws.html
+flawfinder --minlevel=0 --html --context --columns include > out/report/flawfinder/i-flaws.html
 ```
+
+For a concise report on the command line, you can run the following
+ commands:
+```
+flawfinder --minlevel=0 --dataonly --quiet --columns src
+flawfinder --minlevel=0 --dataonly --quiet --columns include
+```
+
+I would also recommend using the following flawfinder arguments:
+- --error-level=0
+  - Sets the error level to 0, which is the lowest level of error
+    reporting; this is essentially all-warnings-as-errors.
 
 # Testing and Code Coverage
 
