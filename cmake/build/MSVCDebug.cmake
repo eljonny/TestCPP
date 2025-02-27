@@ -51,15 +51,6 @@ if ("${CMAKE_CXX_FLAGS}" MATCHES "/analyze:ruleset")
     )
 endif ()
 
-if (BUILD_TESTING)
-    list (
-        APPEND
-        MSVC_DEBUG_BUILD_OPTS
-        /wd4514 # It's ok if the compiler removes unreferenced inline
-                #  functions.
-    )
-endif ()
-
 target_compile_options (
     ${PROJECT_NAME}
     PUBLIC
