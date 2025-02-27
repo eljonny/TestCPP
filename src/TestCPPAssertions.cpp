@@ -96,7 +96,7 @@ namespace TestCPP {
             static constexpr const char* atMsg = "Boolean Truth assertion failed!";
 
             const string& err = logTestFailure(
-                nullptr, nullptr,
+                "", "",
                 atMsg,
                 failureMessage,
                 false
@@ -117,7 +117,7 @@ namespace TestCPP {
             static constexpr const char* atMsg = "Boolean False assertion failed!";
 
             const string& err = logTestFailure(
-                nullptr, nullptr,
+                "", "",
                 atMsg,
                 failureMessage,
                 false

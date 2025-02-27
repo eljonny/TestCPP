@@ -285,7 +285,7 @@ namespace TestCPP {
         static constexpr const char* nonequivalenceAssertionMessage = "Non-Equivalence assertion failed!";
 
         template<typename T1, typename T2>
-        static const string&& logTestFailure(
+        static const string logTestFailure(
             T1 expectationValue, T2 actual,
             const string& assertionTypeMessage,
             const string& failureMessage,
@@ -303,11 +303,11 @@ namespace TestCPP {
                 err << "Actual: <" << actual << ">" << endl;
             }
 
-            return std::move(err.str());
+            return err.str();
         }
 
         template<typename T1, typename T2>
-        static const string& checkEquals(
+        static const string checkEquals(
             T1 expected, T2 actual,
             const string& failureMessage
         )
@@ -320,10 +320,10 @@ namespace TestCPP {
                     true
                 );
             }
-            return "";
+            return {};
         }
 
-        static const string& checkEquals(
+        static const string checkEquals(
             const char* expected, const char* actual,
             const string& failureMessage
         )
@@ -336,11 +336,11 @@ namespace TestCPP {
                     true
                 );
             }
-            return "";
+            return {};
         }
 
         template<typename T1, typename T2>
-        static const string& checkNotEquals(
+        static const string checkNotEquals(
             T1 shouldNotBe, T2 actual,
             const string& failureMessage
         )
@@ -353,10 +353,10 @@ namespace TestCPP {
                     true
                 );
             }
-            return "";
+            return {};
         }
 
-        static const string& checkNotEquals(
+        static const string checkNotEquals(
             const char* shouldNotBe, const char* actual,
             const string& failureMessage
         )
@@ -369,11 +369,11 @@ namespace TestCPP {
                     true
                 );
             }
-            return "";
+            return {};
         }
 
         template<typename T>
-        static const string& checkNull(
+        static const string checkNull(
             T ptr,
             const string& failureMessage
         )
@@ -383,17 +383,17 @@ namespace TestCPP {
             bool null = ptr == nullptr;
             if (!null) {
                 return logTestFailure(
-                    nullptr, nullptr,
+                    "", "",
                     nullAssertionMessage,
                     failureMessage,
                     false
                 );
             }
-            return "";
+            return {};
         }
 
         template<typename T>
-        static const string& assertNotNull(
+        static const string checkNotNull(
             T ptr,
             const string& failureMessage
         )
@@ -403,13 +403,13 @@ namespace TestCPP {
             bool notNull = ptr != nullptr;
             if (!notNull) {
                 return logTestFailure(
-                    nullptr, nullptr,
+                    "", "",
                     notNullAssertionMessage,
                     failureMessage,
                     false
                 );
             }
-            return "";
+            return {};
         }
     };
 }
