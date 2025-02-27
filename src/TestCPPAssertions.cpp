@@ -39,6 +39,65 @@ using std::stringstream;
 
 namespace TestCPP {
 
+    template<>
+    const string Assertions::checkEquals<const char*, const char*>(
+        const char* expected, const char* actual,
+        const string& failureMessage
+    )
+    {
+        if (strcmp(expected, actual)) {
+            return logTestFailure(
+                expected, actual,
+                equivalenceAssertionMessage,
+                failureMessage,
+                true
+            );
+        }
+        return {};
+    }
+
+    template<>
+    const string Assertions::checkNotEquals<const char*, const char*>(
+        const char* shouldNotBe, const char* actual,
+        const string& failureMessage
+    )
+    {
+        if (!strcmp(shouldNotBe, actual)) {
+            return logTestFailure(
+                shouldNotBe, actual,
+                nonequivalenceAssertionMessage,
+                failureMessage,
+                true
+            );
+        }
+        return {};
+    }
+
+    template<>
+    void Assertions::assertEquals<const char*, const char*>(
+        const char* expected, const char* actual,
+        const string& failureMessage
+    )
+    {
+        const string err = checkEquals(expected, actual, failureMessage);
+        if (err.size()) {
+            throw TestFailedException(std::move(err));
+        }
+    }
+
+    template<>
+    void Assertions::assertNotEquals<const char*, const char*>(
+        const char* shouldNotBe, const char* actual,
+        const string& failureMessage
+    )
+    {
+        const string err = checkNotEquals(shouldNotBe, actual,
+            failureMessage);
+        if (err.size()) {
+            throw TestFailedException(std::move(err));
+        }
+    }
+
     void Assertions::assertThrows (
             function<void()> shouldThrow,
             const string& failureMessage
@@ -95,7 +154,7 @@ namespace TestCPP {
         if (!condition) {
             static constexpr const char* atMsg = "Boolean Truth assertion failed!";
 
-            const string& err = logTestFailure(
+            const string err = logTestFailure(
                 "", "",
                 atMsg,
                 failureMessage,
@@ -116,7 +175,7 @@ namespace TestCPP {
         if (condition) {
             static constexpr const char* atMsg = "Boolean False assertion failed!";
 
-            const string& err = logTestFailure(
+            const string err = logTestFailure(
                 "", "",
                 atMsg,
                 failureMessage,

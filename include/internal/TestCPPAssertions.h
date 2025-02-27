@@ -80,30 +80,7 @@ namespace TestCPP {
                 const string& failureMessage = "Arguments are not equivalent!"
             )
         {
-            const string& err = checkEquals(expected, actual, failureMessage);
-            if (err.size()) {
-                throw TestFailedException(std::move(err));
-            }
-        }
-
-        /**
-         * @brief Check that char*'s are equal using strcmp.
-         * @param expected The value that the actual value should be
-         *                  equivalent to.
-         * @param actual The actual value that will be checked against
-         *                  the expected value.
-         * @param failureMessage Failure message that should be logged
-         *                          if the assertion fails. This
-         *                          defaults to a generic failure
-         *                          message related to the assertion
-         *                          type.
-         */
-        static void assertEquals(
-            const char* expected, const char* actual,
-            const string& failureMessage = "Arguments are not equivalent!"
-        )
-        {
-            const string& err = checkEquals(expected, actual, failureMessage);
+            const string err = checkEquals(expected, actual, failureMessage);
             if (err.size()) {
                 throw TestFailedException(std::move(err));
             }
@@ -128,30 +105,8 @@ namespace TestCPP {
                 const string& failureMessage = "Arguments are equivalent!"
             )
         {
-            const string& err = checkNotEquals(shouldNotBe, actual, failureMessage);
-            if (err.size()) {
-                throw TestFailedException(std::move(err));
-            }
-        }
-
-        /**
-         * @brief Check that char*'s are not equal using strcmp.
-         * @param expected The value that the actual value should not
-         *                  be equivalent to.
-         * @param actual The actual value that will be checked against
-         *                  the expected value.
-         * @param failureMessage Failure message that should be logged
-         *                          if the assertion fails. This
-         *                          defaults to a generic failure
-         *                          message related to the assertion
-         *                          type.
-         */
-        static void assertNotEquals(
-            const char* shouldNotBe, const char* actual,
-            const string& failureMessage = "Arguments are equivalent!"
-        )
-        {
-            const string& err = checkNotEquals(shouldNotBe, actual, failureMessage);
+            const string err = checkNotEquals(shouldNotBe, actual,
+                                        failureMessage);
             if (err.size()) {
                 throw TestFailedException(std::move(err));
             }
@@ -172,7 +127,7 @@ namespace TestCPP {
                 const string& failureMessage = "Object is not null!"
             )
         {
-            const string& err = checkNull(ptr, failureMessage);
+            const string err = checkNull(ptr, failureMessage);
             if (err.size()) {
                 throw TestFailedException(std::move(err));
             }
@@ -193,7 +148,7 @@ namespace TestCPP {
                 const string& failureMessage = "Object is null!"
             )
         {
-            const string& err = checkNotNull(ptr, failureMessage);
+            const string err = checkNotNull(ptr, failureMessage);
             if (err.size()) {
                 throw TestFailedException(std::move(err));
             }
@@ -323,22 +278,6 @@ namespace TestCPP {
             return {};
         }
 
-        static const string checkEquals(
-            const char* expected, const char* actual,
-            const string& failureMessage
-        )
-        {
-            if (strcmp(expected, actual)) {
-                return logTestFailure(
-                    expected, actual,
-                    equivalenceAssertionMessage,
-                    failureMessage,
-                    true
-                );
-            }
-            return {};
-        }
-
         template<typename T1, typename T2>
         static const string checkNotEquals(
             T1 shouldNotBe, T2 actual,
@@ -346,22 +285,6 @@ namespace TestCPP {
         )
         {
             if (shouldNotBe == actual) {
-                return logTestFailure(
-                    shouldNotBe, actual,
-                    nonequivalenceAssertionMessage,
-                    failureMessage,
-                    true
-                );
-            }
-            return {};
-        }
-
-        static const string checkNotEquals(
-            const char* shouldNotBe, const char* actual,
-            const string& failureMessage
-        )
-        {
-            if (!strcmp(shouldNotBe, actual)) {
                 return logTestFailure(
                     shouldNotBe, actual,
                     nonequivalenceAssertionMessage,
@@ -413,5 +336,65 @@ namespace TestCPP {
         }
     };
 }
+
+/**
+ * @brief Check that char*'s are equal using strcmp.
+ * @param expected The value that the actual value should be
+ *                  equivalent to.
+ * @param actual The actual value that will be checked against
+ *                  the expected value.
+ * @param failureMessage Failure message that should be logged
+ *                          if the assertion fails. This
+ *                          defaults to a generic failure
+ *                          message related to the assertion
+ *                          type.
+ */
+template<>
+void TestCPP::Assertions::assertEquals<const char*, const char*>(
+    const char* expected, const char* actual,
+    const string& failureMessage
+);
+
+extern template
+void TestCPP::Assertions::assertEquals<const char*, const char*>(
+    const char* expected, const char* actual,
+    const string& failureMessage
+);
+
+/**
+ * @brief Check that char*'s are not equal using strcmp.
+ * @param expected The value that the actual value should not
+ *                  be equivalent to.
+ * @param actual The actual value that will be checked against
+ *                  the expected value.
+ * @param failureMessage Failure message that should be logged
+ *                          if the assertion fails. This
+ *                          defaults to a generic failure
+ *                          message related to the assertion
+ *                          type.
+ */
+template<>
+void TestCPP::Assertions::assertNotEquals<const char*, const char*>(
+    const char* shouldNotBe, const char* actual,
+    const string& failureMessage
+);
+
+extern template
+void TestCPP::Assertions::assertNotEquals<const char*, const char*>(
+    const char* shouldNotBe, const char* actual,
+    const string& failureMessage
+);
+
+template<>
+const string TestCPP::Assertions::checkEquals<const char*, const char*>(
+    const char* expected, const char* actual,
+    const string& failureMessage
+);
+
+template<>
+const string TestCPP::Assertions::checkNotEquals<const char*, const char*>(
+    const char* shouldNotBe, const char* actual,
+    const string& failureMessage
+);
 
 #endif
