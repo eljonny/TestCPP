@@ -1,5 +1,5 @@
 {
-  "Checks": "-*,bugprone-*,cert-*,clang-analyzer-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-nullptr,-hicpp-use-nullptr",
+  "Checks": "-*,bugprone-*,cert-*,clang-analyzer-*,clang-diagnostic-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-nullptr,-hicpp-use-nullptr",
   "HeaderFilterRegex": ".*",
   "ExcludeHeaderFilterRegex": "boost/.*",
   "WarningsAsErrors": "*",

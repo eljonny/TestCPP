@@ -363,7 +363,7 @@
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
           "intelliSenseMode": "windows-clangcl-x86",
-          "clangTidyChecks": "-*,bugprone-*,cert-*,clang-analyzer-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-nullptr,-hicpp-use-nullptr",
+          "clangTidyChecks": "-*,bugprone-*,cert-*,clang-analyzer-*,clang-diagnostic-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-nullptr,-hicpp-use-nullptr",
           "enableClangTidyCodeAnalysis": true
         }
       }
