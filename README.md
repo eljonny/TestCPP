@@ -235,7 +235,7 @@ Both of these custom exceptions are based on the STL runtime_error.
 
 # Building
 
-The project can be built in a couple ways.
+The project can be built in a few ways.
 Whether you prefer an IDE or a terminal, you're covered here.
 
 ## Building in CodeLite
