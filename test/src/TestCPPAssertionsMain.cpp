@@ -6,16 +6,21 @@ using std::string;
 using std::make_tuple;
 using std::function;
 
-#include "Assertions/AssertionsSuite.h"
+#include "Assertions/AssertionsSuites.h"
 
 int main(void)
 {
     try {
-        TestCPP::Testing::AssertionsSuite::suite.run();
-        return TestCPP::Util::unsignedToSigned(
-            TestCPP::Testing::AssertionsSuite::suite.
+        TestCPP::Testing::AssertionsSuites::basicSuite.run();
+        int basicSuiteFailCount = TestCPP::Util::unsignedToSigned(
+            TestCPP::Testing::AssertionsSuites::basicSuite.
                 getLastRunFailCount()
         );
+
+        int allSuitesFailCount = 0;
+        allSuitesFailCount += basicSuiteFailCount;
+
+        return allSuitesFailCount;
     }
     catch (std::exception& e) {
         std::cerr << "Test suite run failed with an exception: "
