@@ -37,7 +37,7 @@ if (BUILD_TESTING)
 
     add_executable (
         ${PROJECT_NAME}_Assertions_test
-        test/src/Assertions/AssertionsTests.cpp
+        test/src/Assertions/BasicAssertionsTests.cpp
         test/src/TestCPPAssertionsMain.cpp
     )
 
