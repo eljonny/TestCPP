@@ -73,13 +73,23 @@ if (BUILD_TESTING)
     )
 
     target_compile_options (
-        ${PROJECT_NAME}_TestSuite_test
+        ${PROJECT_NAME}_TestSuite_ctor_test
+        PUBLIC
+        ${MSVC_DEBUG_BUILD_OPTS}
+    )
+    target_compile_options (
+        ${PROJECT_NAME}_TestSuite_running_test
+        PUBLIC
+        ${MSVC_DEBUG_BUILD_OPTS}
+    )
+    target_compile_options (
+        ${PROJECT_NAME}_TestSuite_tpm_test
         PUBLIC
         ${MSVC_DEBUG_BUILD_OPTS}
     )
 
     target_compile_options (
-        ${PROJECT_NAME}_Assertions_test
+        ${PROJECT_NAME}_Assertions_basic_test
         PUBLIC
         ${MSVC_DEBUG_BUILD_OPTS}
     )

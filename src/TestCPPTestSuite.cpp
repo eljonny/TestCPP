@@ -74,6 +74,10 @@ namespace TestCPP {
         return this->lastRunFailCount;
     }
 
+    unsigned TestSuite::getLastRunSuccessCount() {
+        return this->lastRunSuccessCount;
+    }
+
     void TestSuite::run () {
         if (this->tests.size() == 0) {
             clog << TCPPStr::NTR << endl;
@@ -82,8 +86,8 @@ namespace TestCPP {
 
         if (!this->firstRun) {
             this->lastRunSucceeded = true;
-            this->lastRunFailCount = 0;
-            this->lastRunSuccessCount = 0;
+            this->lastRunFailCount = zeroInit;
+            this->lastRunSuccessCount = zeroInit;
             this->totalRuntime = 0;
         }
         else {

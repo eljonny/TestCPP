@@ -30,15 +30,27 @@ if (BUILD_TESTING)
     )
 
     add_executable (
-        ${PROJECT_NAME}_TestSuite_test
-        test/src/TestSuite/TestSuiteTests.cpp
-        test/src/TestCPPTestSuiteMain.cpp
+        ${PROJECT_NAME}_TestSuite_ctor_test
+        test/src/TestSuite/TestSuiteConstructionTests.cpp
+        test/src/TestCPPTestSuiteConstructionMain.cpp
     )
 
     add_executable (
-        ${PROJECT_NAME}_Assertions_test
-        test/src/Assertions/BasicAssertionsTests.cpp
-        test/src/TestCPPAssertionsMain.cpp
+        ${PROJECT_NAME}_TestSuite_running_test
+        test/src/TestSuite/TestSuiteRunningTests.cpp
+        test/src/TestCPPTestSuiteRunningMain.cpp
+    )
+
+    add_executable (
+        ${PROJECT_NAME}_TestSuite_tpm_test
+        test/src/TestSuite/TestSuiteTestPassedMessageTests.cpp
+        test/src/TestCPPTestSuiteTestPassedMessageMain.cpp
+    )
+
+    add_executable (
+        ${PROJECT_NAME}_Assertions_basic_test
+        test/src/Assertions/AssertionsBasicTests.cpp
+        test/src/TestCPPAssertionsBasicMain.cpp
     )
 
     add_executable (

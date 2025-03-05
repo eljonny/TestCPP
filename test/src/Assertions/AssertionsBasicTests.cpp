@@ -1,5 +1,5 @@
 #include "TestCPP.h"
-#include "Assertions/BasicAssertionsTests.h"
+#include "Assertions/AssertionsBasicTests.h"
 
 namespace TestCPP {
     namespace Testing {

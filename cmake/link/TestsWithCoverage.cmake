@@ -7,14 +7,28 @@ if (${TESTCPP_STACKTRACE_ENABLED} AND MSVC)
         dbgeng
     )
     target_link_libraries (
-        ${PROJECT_NAME}_TestSuite_test
+        ${PROJECT_NAME}_TestSuite_ctor_test
         ${PROJECT_NAME}
         gcov
         ole32
         dbgeng
     )
     target_link_libraries (
-        ${PROJECT_NAME}_Assertions_test
+        ${PROJECT_NAME}_TestSuite_running_test
+        ${PROJECT_NAME}
+        gcov
+        ole32
+        dbgeng
+    )
+    target_link_libraries (
+        ${PROJECT_NAME}_TestSuite_tpm_test
+        ${PROJECT_NAME}
+        gcov
+        ole32
+        dbgeng
+    )
+    target_link_libraries (
+        ${PROJECT_NAME}_Assertions_basic_test
         ${PROJECT_NAME}
         gcov
         ole32
@@ -36,13 +50,25 @@ elseif (${TESTCPP_STACKTRACE_ENABLED})
         dl
     )
     target_link_libraries (
-        ${PROJECT_NAME}_TestSuite_test
+        ${PROJECT_NAME}_TestSuite_ctor_test
         ${PROJECT_NAME}
         gcov
         dl
     )
     target_link_libraries (
-        ${PROJECT_NAME}_Assertions_test
+        ${PROJECT_NAME}_TestSuite_running_test
+        ${PROJECT_NAME}
+        gcov
+        dl
+    )
+    target_link_libraries (
+        ${PROJECT_NAME}_TestSuite_tpm_test
+        ${PROJECT_NAME}
+        gcov
+        dl
+    )
+    target_link_libraries (
+        ${PROJECT_NAME}_Assertions_basic_test
         ${PROJECT_NAME}
         gcov
         dl
@@ -61,12 +87,22 @@ else ()
         gcov
     )
     target_link_libraries (
-        ${PROJECT_NAME}_TestSuite_test
+        ${PROJECT_NAME}_TestSuite_ctor_test
         ${PROJECT_NAME}
         gcov
     )
     target_link_libraries (
-        ${PROJECT_NAME}_Assertions_test
+        ${PROJECT_NAME}_TestSuite_running_test
+        ${PROJECT_NAME}
+        gcov
+    )
+    target_link_libraries (
+        ${PROJECT_NAME}_TestSuite_tpm_test
+        ${PROJECT_NAME}
+        gcov
+    )
+    target_link_libraries (
+        ${PROJECT_NAME}_Assertions_basic_test
         ${PROJECT_NAME}
         gcov
     )

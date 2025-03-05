@@ -8,6 +8,12 @@ namespace TestCPP {
             void TestConstructSuiteTestCases ();
             void TestConstructSuiteTuples ();
             void TestConstructSuiteMixed ();
+            void TestSuiteRunNoTests ();
+            void TestSuiteRunOneTest ();
+            void TestSuiteRunManyTests ();
+            void TestSuiteRunNoTestsTwice ();
+            void TestSuiteRunOneTestTwice ();
+            void TestSuiteRunManyTestsTwice ();
             void TestEnableTestPassedMessageNoTests ();
             void TestEnableTestPassedMessageOneTest ();
             void TestEnableTestPassedMessageManyTests ();

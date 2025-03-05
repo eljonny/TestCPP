@@ -6,14 +6,14 @@ using std::string;
 using std::make_tuple;
 using std::function;
 
-#include "TestSuite/TestSuiteSuite.h"
+#include "TestSuite/TestSuiteConstructionSuite.h"
 
 int main(void)
 {
     try {
-        TestCPP::Testing::TestSuiteSuite::suite.run();
+        TestCPP::Testing::TestSuiteSuites::ctorSuite.run();
         return TestCPP::Util::unsignedToSigned(
-            TestCPP::Testing::TestSuiteSuite::suite.
+            TestCPP::Testing::TestSuiteSuites::ctorSuite.
                 getLastRunFailCount()
         );
     }
