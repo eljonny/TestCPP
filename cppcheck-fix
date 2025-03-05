@@ -1,3 +1,0 @@
-src/TestCPPTestCase.cpp:304:43: performance: Function parameter 'reason' should be passed by const reference. [passedByValue]
-    void TestCase::logTestFailure (string reason) {
-                                          ^
