@@ -143,7 +143,7 @@ namespace TestCPP {
          *          TestCase.
          * @param o The test case from which to make a copy.
          */
-        TestCase (TestCase& o);
+        TestCase (const TestCase& o);
 
         /**
          * @brief Construct a TestCase by moving all data from another
@@ -157,7 +157,7 @@ namespace TestCPP {
          * @param rhs The test case to copy from.
          * @return A reference to the new TestCase copy.
          */
-        TestCase& operator= (TestCase& rhs);
+        TestCase& operator= (const TestCase& rhs);
         
         /**
          * @brief Move a TestCase into another TestCase.
@@ -289,7 +289,7 @@ namespace TestCPP {
          * @param out The stream to write the test failure reason to.
          * @param reason The test failure reason to write.
          */
-        void logFailure (ostream& out, string& reason);
+        void logFailure (ostream& out, const string& reason);
         /**
          * @brief If a test encounters an error while running, this
          *          function will be called to log the test error.

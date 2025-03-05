@@ -142,7 +142,7 @@ namespace TestCPP {
         this->option = opt;
     }
 
-    TestCase::TestCase (TestCase& o) {
+    TestCase::TestCase (const TestCase& o) {
         this->outCompareOption(o.option);
         this->setNotifyPassed(o.notifyTestPassed);
 
@@ -231,7 +231,7 @@ namespace TestCPP {
         }
     }
 
-    TestCase& TestCase::operator= (TestCase& rhs) {
+    TestCase& TestCase::operator= (const TestCase& rhs) {
         this->outCompareOption(rhs.option);
         this->setNotifyPassed(rhs.notifyTestPassed);
 
@@ -289,7 +289,7 @@ namespace TestCPP {
         return this->lastRunTime;
     }
 
-    void TestCase::logFailure(ostream& out, string& reason) {
+    void TestCase::logFailure(ostream& out, const string& reason) {
         out << fixed;
         out << setprecision(TCPPNum::TIME_PRECISION);
         out << TCPPStr::TEST << this->testName << TCPPStr::FAIL
