@@ -296,7 +296,7 @@ namespace TestCPP {
          * @param failureMessage The error message from the test that
          *          should be logged.
          */
-        void logTestFailure (string failureMessage);
+        void logTestFailure (const string& failureMessage);
         /**
          * @brief Internal test run controller.
          */
