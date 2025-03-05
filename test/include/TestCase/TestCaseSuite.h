@@ -14,6 +14,14 @@ namespace TestCPP {
                     function<void()>(TestCaseTests::TestConstructCase)
                 ),
                 make_tuple(
+                    "Case assignment Test",
+                    function<void()>(TestCaseTests::TestAssignTestCase)
+                ),
+                make_tuple(
+                    "Case move assignment Test",
+                    function<void()>(TestCaseTests::TestMoveAssignTestCase)
+                ),
+                make_tuple(
                     "Case runner Test",
                     function<void()>(TestCaseTests::TestTestCaseGo)
                 ),
