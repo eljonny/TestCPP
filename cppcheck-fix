@@ -1,0 +1,6 @@
+src/TestCPPTestCase.cpp:171:15: error: Exception thrown in function declared not to throw exceptions. [throwInNoexceptFunction]
+        this->outCompareOption(std::move(o.option));
+              ^
+src/TestCPPTestCase.cpp:262:15: error: Exception thrown in function declared not to throw exceptions. [throwInNoexceptFunction]
+        this->outCompareOption(std::move(rhs.option));
+              ^
