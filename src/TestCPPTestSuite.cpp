@@ -80,10 +80,15 @@ namespace TestCPP {
             return;
         }
 
-        this->lastRunSucceeded = true;
-        this->lastRunFailCount = 0;
-        this->lastRunSuccessCount = 0;
-        this->totalRuntime = 0;
+        if (!this->firstRun) {
+            this->lastRunSucceeded = true;
+            this->lastRunFailCount = 0;
+            this->lastRunSuccessCount = 0;
+            this->totalRuntime = 0;
+        }
+        else {
+            this->firstRun = false;
+        }
 
         clog << endl
              << TCPPStr::START_RUN << TCPPStr::SUITE
@@ -160,8 +165,9 @@ namespace TestCPP {
      *  element is the test function that defines the test.
      */
     template<>
-    void TestSuite::addTest (tuple<const char *,
-                             function<void()>>&& test) {
+    void TestSuite::addTest (tuple<const char *, function<void()>>&&
+                             test)
+    {
         this->tests.emplace_back(
             std::get<0>(test),
             std::get<1>(test),
