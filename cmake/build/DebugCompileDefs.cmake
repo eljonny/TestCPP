@@ -19,12 +19,22 @@ if (BUILD_TESTING)
         DEBUG_LOG
     )
     target_compile_definitions (
-        ${PROJECT_NAME}_TestSuite_test
+        ${PROJECT_NAME}_TestSuite_ctor_test
         PUBLIC
         DEBUG_LOG
     )
     target_compile_definitions (
-        ${PROJECT_NAME}_Assertions_test
+        ${PROJECT_NAME}_TestSuite_running_test
+        PUBLIC
+        DEBUG_LOG
+    )
+    target_compile_definitions (
+        ${PROJECT_NAME}_TestSuite_tpm_test
+        PUBLIC
+        DEBUG_LOG
+    )
+    target_compile_definitions (
+        ${PROJECT_NAME}_Assertions_basic_test
         PUBLIC
         DEBUG_LOG
     )

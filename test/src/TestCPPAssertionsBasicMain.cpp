@@ -6,7 +6,7 @@ using std::string;
 using std::make_tuple;
 using std::function;
 
-#include "Assertions/AssertionsSuites.h"
+#include "Assertions/AssertionsBasicSuite.h"
 
 int main(void)
 {
@@ -17,10 +17,7 @@ int main(void)
                 getLastRunFailCount()
         );
 
-        int allSuitesFailCount = 0;
-        allSuitesFailCount += basicSuiteFailCount;
-
-        return allSuitesFailCount;
+        return basicSuiteFailCount;
     }
     catch (std::exception& e) {
         std::cerr << "Test suite run failed with an exception: "

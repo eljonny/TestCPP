@@ -1,7 +1,7 @@
 #ifndef TESTCPP_ASSERTIONS_SUITE_
 #define TESTCPP_ASSERTIONS_SUITE_
 
-#include "BasicAssertionsTests.h"
+#include "AssertionsBasicTests.h"
 
 namespace TestCPP {
     namespace Testing {

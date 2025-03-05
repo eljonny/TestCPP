@@ -28,13 +28,23 @@ if (BUILD_TESTING)
     )
 
     target_include_directories (
-        ${PROJECT_NAME}_TestSuite_test PRIVATE
+        ${PROJECT_NAME}_TestSuite_ctor_test PRIVATE
+        test/include
+        include
+    )
+    target_include_directories (
+        ${PROJECT_NAME}_TestSuite_running_test PRIVATE
+        test/include
+        include
+    )
+    target_include_directories (
+        ${PROJECT_NAME}_TestSuite_tpm_test PRIVATE
         test/include
         include
     )
 
     target_include_directories (
-        ${PROJECT_NAME}_Assertions_test PRIVATE
+        ${PROJECT_NAME}_Assertions_basic_test PRIVATE
         test/include
         include
     )

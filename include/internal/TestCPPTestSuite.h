@@ -140,12 +140,20 @@ namespace TestCPP {
         void disableTestPassedMessage ();
 
         /**
-         * @brief Calculate the total number of tests in the suite that
-         *          failed after the last suite run.
+         * @brief Retrieve the total number of tests in the suite that
+         *          failed during the last suite run.
          * @return The total number of tests that failed in the last
          *          suite run.
          */
         unsigned getLastRunFailCount ();
+
+        /**
+         * @brief Retrieve the total number of tests in the suite that
+         *          succeeded (passed) during the last suite run.
+         * @return The total number of tests that passed in the last
+         *          suite run.
+         */
+        unsigned getLastRunSuccessCount();
 
         /**
          * @brief Run all tests in the test suite.
@@ -153,6 +161,8 @@ namespace TestCPP {
         void run ();
 
     private:
+        unsigned zeroInit = 0;
+
         bool firstRun;
         bool testSuitePassedMessage;
         bool lastRunSucceeded;
@@ -173,8 +183,8 @@ namespace TestCPP {
             this->firstRun = true;
             this->testSuitePassedMessage = true;
             this->lastRunSucceeded = true;
-            this->lastRunFailCount = 0;
-            this->lastRunSuccessCount = 0;
+            this->lastRunFailCount = zeroInit;
+            this->lastRunSuccessCount = zeroInit;
             this->totalRuntime = 0;
 
             this->setSuiteName(std::forward<TestObjName>(newSuiteName));
