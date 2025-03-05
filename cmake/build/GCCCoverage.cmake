@@ -17,6 +17,10 @@ list (
                                 #  it's not necessary to maintain
                                 #  compatibility with C++98.
     -Wno-covered-switch-default # -Wswitch-default is more important.
+    -Wno-unknown-pragmas        # Ignore unknown pragmas, since we are
+                                #  building for Clang, GCC, and MSVC,
+                                #  and MSVC has different pragmas than
+                                #  GCC/Clang.
     -fprofile-arcs              # Enable profile points that help with
                                 #  code coverage.
     -ftest-coverage             # Enable core code coverage compilation.

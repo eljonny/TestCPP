@@ -17,6 +17,10 @@ list (
                                 #  it's not necessary to maintain
                                 #  compatibility with C++98.
     -Wno-covered-switch-default # -Wswitch-default is more important.
+    -Wno-unknown-pragmas        # Ignore unknown pragmas, since we are
+                                #  building for Clang, GCC, and MSVC,
+                                #  and MSVC has different pragmas than
+                                #  GCC/Clang.
     -Wno-unused-lambda-capture  # Avoid MSVC error C3493 - There is
                                 #  implementation divergence here and
                                 #  since we're not using >=C++14 there
