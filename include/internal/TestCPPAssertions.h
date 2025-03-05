@@ -301,10 +301,9 @@ namespace TestCPP {
             const string& failureMessage
         )
         {
-            static constexpr const char* nullAssertionMessage = "Null assertion failed!";
-
             bool null = ptr == nullptr;
             if (!null) {
+                static constexpr const char* nullAssertionMessage = "Null assertion failed!";
                 return logTestFailure(
                     "", "",
                     nullAssertionMessage,
@@ -321,10 +320,9 @@ namespace TestCPP {
             const string& failureMessage
         )
         {
-            static constexpr const char* notNullAssertionMessage = "Not Null assertion failed!";
-
             bool notNull = ptr != nullptr;
             if (!notNull) {
+                static constexpr const char* notNullAssertionMessage = "Not Null assertion failed!";
                 return logTestFailure(
                     "", "",
                     notNullAssertionMessage,
