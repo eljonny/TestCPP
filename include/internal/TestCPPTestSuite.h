@@ -46,7 +46,6 @@ using std::chrono::system_clock;
 using std::chrono::duration_cast;
 using std::enable_if;
 using std::endl;
-using std::forward;
 using std::function;
 using std::runtime_error;
 using std::string;
@@ -77,12 +76,10 @@ namespace TestCPP {
          *          tests.
          */
         template<typename... TestType>
-        TestSuite (TestObjName&& suiteName,
+        TestSuite (TestObjName&& newSuiteName,
                    typename enable_if<sizeof...(TestType) == 0>::type)
         {
-            this->testSuitePassedMessage = true;
-            this->setSuiteName(std::move(suiteName));
-            this->tests = vector<TestCase>();
+            commonInit(std::forward<TestObjName>(newSuiteName));
         }
 
         /**
@@ -90,11 +87,9 @@ namespace TestCPP {
          *          tests.
          */
         template<typename... TestType>
-        TestSuite (TestObjName&& suiteName, TestType ...tests) {
-            this->testSuitePassedMessage = true;
-            this->setSuiteName(std::move(suiteName));
-            this->tests = vector<TestCase>();
-
+        TestSuite (TestObjName&& newSuiteName, TestType ...tests)
+        {
+            commonInit(std::forward<TestObjName>(newSuiteName));
             this->addTests(tests...);
         }
 
@@ -158,6 +153,7 @@ namespace TestCPP {
         void run ();
 
     private:
+        bool firstRun;
         bool testSuitePassedMessage;
         bool lastRunSucceeded;
         unsigned lastRunSuccessCount;
@@ -166,6 +162,24 @@ namespace TestCPP {
 
         TestObjName suiteName;
         vector<TestCase> tests;
+
+        // It's ok that this function is removed, because it's private
+        //  and inlined and is not externally visible or used
+        //  externally.
+        // It's appropriate to suppress this instance of C4514.
+#pragma warning(suppress: 4514)
+        void commonInit(TestObjName&& newSuiteName) {
+
+            this->firstRun = true;
+            this->testSuitePassedMessage = true;
+            this->lastRunSucceeded = true;
+            this->lastRunFailCount = 0;
+            this->lastRunSuccessCount = 0;
+            this->totalRuntime = 0;
+
+            this->setSuiteName(std::forward<TestObjName>(newSuiteName));
+            this->tests = vector<TestCase>();
+        }
     };
 }
 
