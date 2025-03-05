@@ -1,6 +1,0 @@
-include/internal/TestCPPAssertions.h:304:42: style: The scope of the variable 'nullAssertionMessage' can be reduced. [variableScope]
-            static constexpr const char* nullAssertionMessage = "Null assertion failed!";
-                                         ^
-include/internal/TestCPPAssertions.h:324:42: style: The scope of the variable 'notNullAssertionMessage' can be reduced. [variableScope]
-            static constexpr const char* notNullAssertionMessage = "Not Null assertion failed!";
-                                         ^
