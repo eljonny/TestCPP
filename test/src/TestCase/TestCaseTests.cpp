@@ -39,20 +39,30 @@ namespace TestCPP {
                 parameterVariationTestChunks();
             }
 
+            /**
+             * Targets various types of non-move assignments.
+             */
             void TestAssignTestCase() {
                 const auto test = unique_ptr<TestCase>(new TestCase(
                     "Assignment case Test - const TestCase",
                     function<void()>([]() {})
                 ));
-
-                TestCase testCopy = *test;
+                const auto test2 = unique_ptr<TestCase>(new TestCase(
+                    "Assignment case Test 2 - const TestCase",
+                    function<void()>([]() {})
+                ));
 
                 Assertions::assertTrue(
                     test->go(),
                     "Should have succeeded basic no-op test!"
                 );
+
+                const TestCase& testCopy = *test;
+                TestCase testCopy2 = *test2;
+                testCopy2 = testCopy;
+
                 Assertions::assertTrue(
-                    testCopy.go(),
+                    testCopy2.go(),
                     "Should have succeeded basic no-op test!"
                 );
             }
@@ -62,20 +72,19 @@ namespace TestCPP {
                     "Move Assignment case Test - const TestCase",
                     function<void()>([]() {})
                 ));
+                auto test2 = unique_ptr<TestCase>(new TestCase(
+                    "Move Assignment case Test 2 - const TestCase",
+                    function<void()>([]() {})
+                ));
 
                 Assertions::assertTrue(
                     test->go(),
                     "Should have succeeded basic no-op test!"
                 );
 
-                TestCase movedTest = std::move(*test);
-
-                Assertions::assertTrue(
-                    movedTest.go(),
-                    "Should have succeeded basic no-op test!"
-                );
-
-                *test = std::move(movedTest);
+                TestCase tempCpy = *test;
+                *test = std::move(*test2);
+                *test2 = std::move(tempCpy);
 
                 Assertions::assertTrue(
                     test->go(),
