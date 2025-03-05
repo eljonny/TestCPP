@@ -301,7 +301,7 @@ namespace TestCPP {
         out << TCPPStr::REASON_ << reason << endl;
     }
 
-    void TestCase::logTestFailure (string reason) {
+    void TestCase::logTestFailure (const string& reason) {
         unique_ptr<ostream> logStream = nullptr;
 
         if (this->clogOriginal.get() != nullptr) {
