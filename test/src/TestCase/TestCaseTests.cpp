@@ -39,6 +39,50 @@ namespace TestCPP {
                 parameterVariationTestChunks();
             }
 
+            void TestAssignTestCase() {
+                const auto test = unique_ptr<TestCase>(new TestCase(
+                    "Assignment case Test - const TestCase",
+                    function<void()>([]() {})
+                ));
+
+                TestCase testCopy = *test;
+
+                Assertions::assertTrue(
+                    test->go(),
+                    "Should have succeeded basic no-op test!"
+                );
+                Assertions::assertTrue(
+                    testCopy.go(),
+                    "Should have succeeded basic no-op test!"
+                );
+            }
+
+            void TestMoveAssignTestCase() {
+                auto test = unique_ptr<TestCase>(new TestCase(
+                    "Move Assignment case Test - const TestCase",
+                    function<void()>([]() {})
+                ));
+
+                Assertions::assertTrue(
+                    test->go(),
+                    "Should have succeeded basic no-op test!"
+                );
+
+                TestCase movedTest = std::move(*test);
+
+                Assertions::assertTrue(
+                    movedTest.go(),
+                    "Should have succeeded basic no-op test!"
+                );
+
+                *test = std::move(movedTest);
+
+                Assertions::assertTrue(
+                    test->go(),
+                    "Should have succeeded basic no-op test!"
+                );
+            }
+
             void TestTestCaseGo () {
                 auto test = unique_ptr<TestCase>(new TestCase(
                     "SUB-TEST TestCaseGo case Test",

@@ -5,6 +5,8 @@ namespace TestCPP {
     namespace Testing {
         namespace TestCaseTests {
             void TestConstructCase ();
+            void TestAssignTestCase ();
+            void TestMoveAssignTestCase ();
             void TestTestCaseGo ();
             void TestTestCaseGoThrowStr ();
             void TestTestCaseGoThrowChr ();
