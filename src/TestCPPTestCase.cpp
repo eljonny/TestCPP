@@ -113,12 +113,12 @@ namespace TestCPP {
 
     TestCase::TestCase (TestObjName&& name,
                         function<void()> testFn,
-                        bool msg,
+                        bool testPassedMessage,
                         bool captureOut, bool captureLog,
                         bool captureErr,
                         TestCase::TestCaseOutCompareOptions opt)
     {
-        this->notifyTestPassed = msg;
+        this->notifyTestPassed = testPassedMessage;
         this->test = testFn;
 
         this->testName = name;
@@ -291,7 +291,7 @@ namespace TestCPP {
         return this->lastRunTime;
     }
 
-    void TestCase::logFailure(ostream& out, const string& reason) const {
+    void TestCase::logFailure(ostream& out, const string& failureReason) const {
         out << fixed;
         out << setprecision(TCPPNum::TIME_PRECISION);
         out << TCPPStr::TEST << this->testName << TCPPStr::FAIL
@@ -300,10 +300,10 @@ namespace TestCPP {
                TCPPNum::NANOS_IN_SEC
             << TCPPStr::SEC << TCPPStr::PARENR
             << endl;
-        out << TCPPStr::REASON_ << reason << endl;
+        out << TCPPStr::REASON_ << failureReason << endl;
     }
 
-    void TestCase::logTestFailure (const string& reason) {
+    void TestCase::logTestFailure (const string& failureReason) {
         unique_ptr<ostream> logStream = nullptr;
 
         if (this->clogOriginal.get() != nullptr) {
@@ -315,14 +315,14 @@ namespace TestCPP {
             logStream = unique_ptr<ostream>(&clog);
         }
 
-        logFailure(*logStream, reason);
+        logFailure(*logStream, failureReason);
 
         if (this->clogOriginal.get() != nullptr) {
             logStream->flush();
 
             // If someone is looking for something in the message,
             //  and it's captured, make sure it's there.
-            logFailure(clog, reason);
+            logFailure(clog, failureReason);
         }
 
         logStream.release();
@@ -370,8 +370,8 @@ namespace TestCPP {
         return false;
     }
 
-    void TestCase::setNotifyPassed (bool notify) {
-        this->notifyTestPassed = notify;
+    void TestCase::setNotifyPassed (bool shouldNotify) {
+        this->notifyTestPassed = shouldNotify;
     }
 
     void TestCase::captureStdout () {
