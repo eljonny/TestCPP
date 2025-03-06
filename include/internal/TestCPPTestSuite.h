@@ -145,7 +145,7 @@ namespace TestCPP {
          * @return The total number of tests that failed in the last
          *          suite run.
          */
-        unsigned getLastRunFailCount ();
+        unsigned getLastRunFailCount () const;
 
         /**
          * @brief Retrieve the total number of tests in the suite that
@@ -153,7 +153,7 @@ namespace TestCPP {
          * @return The total number of tests that passed in the last
          *          suite run.
          */
-        unsigned getLastRunSuccessCount();
+        unsigned getLastRunSuccessCount() const;
 
         /**
          * @brief Run all tests in the test suite.
