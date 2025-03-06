@@ -1,0 +1,30 @@
+include/internal/TestCPPTestCase.h:199:14: performance: inconclusive: Technically the member function 'TestCPP::TestCase::clearStdoutCapture' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+        void clearStdoutCapture ();
+             ^
+src/TestCPPTestCase.cpp:461:20: note: Technically the member function 'TestCPP::TestCase::clearStdoutCapture' can be static (but you may consider moving to unnamed namespace).
+    void TestCase::clearStdoutCapture () {
+                   ^
+include/internal/TestCPPTestCase.h:199:14: note: Technically the member function 'TestCPP::TestCase::clearStdoutCapture' can be static (but you may consider moving to unnamed namespace).
+        void clearStdoutCapture ();
+             ^
+include/internal/TestCPPTestCase.h:207:14: performance: inconclusive: Technically the member function 'TestCPP::TestCase::clearLogCapture' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+        void clearLogCapture ();
+             ^
+src/TestCPPTestCase.cpp:467:20: note: Technically the member function 'TestCPP::TestCase::clearLogCapture' can be static (but you may consider moving to unnamed namespace).
+    void TestCase::clearLogCapture () {
+                   ^
+include/internal/TestCPPTestCase.h:207:14: note: Technically the member function 'TestCPP::TestCase::clearLogCapture' can be static (but you may consider moving to unnamed namespace).
+        void clearLogCapture ();
+             ^
+include/internal/TestCPPTestCase.h:215:14: performance: inconclusive: Technically the member function 'TestCPP::TestCase::clearStderrCapture' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+        void clearStderrCapture ();
+             ^
+src/TestCPPTestCase.cpp:473:20: note: Technically the member function 'TestCPP::TestCase::clearStderrCapture' can be static (but you may consider moving to unnamed namespace).
+    void TestCase::clearStderrCapture () {
+                   ^
+include/internal/TestCPPTestCase.h:215:14: note: Technically the member function 'TestCPP::TestCase::clearStderrCapture' can be static (but you may consider moving to unnamed namespace).
+        void clearStderrCapture ();
+             ^
+include/internal/TestCPPTestSuite.h:117:16: performance: inconclusive: Technically the member function 'TestCPP::TestSuite::addTests' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+        inline addTests () { }
+               ^
