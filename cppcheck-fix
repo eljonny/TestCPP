@@ -1,0 +1,45 @@
+src/TestCPPTestCase.cpp:114:39: style: inconclusive: Function 'TestCase' argument 1 names different: declaration 'testName' definition 'name'. [funcArgNamesDifferent]
+    TestCase::TestCase (TestObjName&& name,
+                                      ^
+include/internal/TestCPPTestCase.h:132:27: note: Function 'TestCase' argument 1 names different: declaration 'testName' definition 'name'.
+            TestObjName&& testName,
+                          ^
+src/TestCPPTestCase.cpp:114:39: note: Function 'TestCase' argument 1 names different: declaration 'testName' definition 'name'.
+    TestCase::TestCase (TestObjName&& name,
+                                      ^
+src/TestCPPTestCase.cpp:115:42: style: inconclusive: Function 'TestCase' argument 2 names different: declaration 'test' definition 'testFn'. [funcArgNamesDifferent]
+                        function<void()> testFn,
+                                         ^
+include/internal/TestCPPTestCase.h:133:30: note: Function 'TestCase' argument 2 names different: declaration 'test' definition 'testFn'.
+            function<void()> test,
+                             ^
+src/TestCPPTestCase.cpp:115:42: note: Function 'TestCase' argument 2 names different: declaration 'test' definition 'testFn'.
+                        function<void()> testFn,
+                                         ^
+src/TestCPPTestCase.cpp:116:30: style: inconclusive: Function 'TestCase' argument 3 names different: declaration 'testPassedMessage' definition 'msg'. [funcArgNamesDifferent]
+                        bool msg,
+                             ^
+include/internal/TestCPPTestCase.h:134:18: note: Function 'TestCase' argument 3 names different: declaration 'testPassedMessage' definition 'msg'.
+            bool testPassedMessage = true,
+                 ^
+src/TestCPPTestCase.cpp:116:30: note: Function 'TestCase' argument 3 names different: declaration 'testPassedMessage' definition 'msg'.
+                        bool msg,
+                             ^
+src/TestCPPTestCase.cpp:304:43: style: inconclusive: Function 'logTestFailure' argument 1 names different: declaration 'failureMessage' definition 'reason'. [funcArgNamesDifferent]
+    void TestCase::logTestFailure (string reason) {
+                                          ^
+include/internal/TestCPPTestCase.h:299:37: note: Function 'logTestFailure' argument 1 names different: declaration 'failureMessage' definition 'reason'.
+        void logTestFailure (string failureMessage);
+                                    ^
+src/TestCPPTestCase.cpp:304:43: note: Function 'logTestFailure' argument 1 names different: declaration 'failureMessage' definition 'reason'.
+    void TestCase::logTestFailure (string reason) {
+                                          ^
+src/TestCPPTestCase.cpp:371:42: style: inconclusive: Function 'setNotifyPassed' argument 1 names different: declaration 'shouldNotify' definition 'notify'. [funcArgNamesDifferent]
+    void TestCase::setNotifyPassed (bool notify) {
+                                         ^
+include/internal/TestCPPTestCase.h:180:36: note: Function 'setNotifyPassed' argument 1 names different: declaration 'shouldNotify' definition 'notify'.
+        void setNotifyPassed (bool shouldNotify);
+                                   ^
+src/TestCPPTestCase.cpp:371:42: note: Function 'setNotifyPassed' argument 1 names different: declaration 'shouldNotify' definition 'notify'.
+    void TestCase::setNotifyPassed (bool notify) {
+                                         ^
