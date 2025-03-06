@@ -129,8 +129,8 @@ namespace TestCPP {
          *      string.
          */
         TestCase (
-            TestObjName&& testName,
-            function<void()> test,
+            TestObjName&& name,
+            function<void()> testFn,
             bool testPassedMessage = true,
             bool captureOut = false,
             bool captureLog = false,
@@ -289,14 +289,14 @@ namespace TestCPP {
          * @param out The stream to write the test failure reason to.
          * @param reason The test failure reason to write.
          */
-        void logFailure (ostream& out, const string& reason) const;
+        void logFailure (ostream& out, const string& failureReason) const;
         /**
          * @brief If a test encounters an error while running, this
          *          function will be called to log the test error.
          * @param failureMessage The error message from the test that
          *          should be logged.
          */
-        void logTestFailure (const string& failureMessage);
+        void logTestFailure (const string& failureReason);
         /**
          * @brief Internal test run controller.
          */
