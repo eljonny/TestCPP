@@ -196,7 +196,7 @@ namespace TestCPP {
          * This can be used for checking sections of output based on
          *  test configuration.
          */
-        void clearStdoutCapture ();
+        static void clearStdoutCapture ();
 
         /**
          * @brief Clears the captured output from std::clog.
@@ -204,7 +204,7 @@ namespace TestCPP {
          * This can be used for checking sections of output based on
          *  test configuration.
          */
-        void clearLogCapture ();
+        static void clearLogCapture ();
 
         /**
          * @brief Clears the captured output from stderr.
@@ -212,7 +212,7 @@ namespace TestCPP {
          * This can be used for checking sections of output based on
          *  test configuration.
          */
-        void clearStderrCapture ();
+        static void clearStderrCapture ();
 
         /**
          * @brief Check the argument against what is captured from

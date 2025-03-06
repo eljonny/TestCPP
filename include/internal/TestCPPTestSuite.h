@@ -109,7 +109,7 @@ namespace TestCPP {
          */
         template<typename... OtherTests>
         typename enable_if<sizeof...(OtherTests) == 0>::type
-        inline addTests () { }
+        static inline addTests () { }
 
         /**
          * @brief Add one or more tests at once to the test suite.
