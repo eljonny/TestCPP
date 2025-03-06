@@ -56,13 +56,13 @@ namespace TestCPP {
         }
     }
 
-    const string& TestObjName::getName () {
+    const string& TestObjName::getName () const {
         return this->testCaseName;
     }
 
     std::ostream& operator<< (
         std::ostream& s,
-        TestObjName& tcName
+        const TestObjName& tcName
     )
     {
         s << tcName.getName();

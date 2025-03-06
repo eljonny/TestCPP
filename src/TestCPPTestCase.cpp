@@ -291,7 +291,7 @@ namespace TestCPP {
         return this->lastRunTime;
     }
 
-    void TestCase::logFailure(ostream& out, const string& reason) {
+    void TestCase::logFailure(ostream& out, const string& reason) const {
         out << fixed;
         out << setprecision(TCPPNum::TIME_PRECISION);
         out << TCPPStr::TEST << this->testName << TCPPStr::FAIL

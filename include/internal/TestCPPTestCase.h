@@ -289,7 +289,7 @@ namespace TestCPP {
          * @param out The stream to write the test failure reason to.
          * @param reason The test failure reason to write.
          */
-        void logFailure (ostream& out, const string& reason);
+        void logFailure (ostream& out, const string& reason) const;
         /**
          * @brief If a test encounters an error while running, this
          *          function will be called to log the test error.
