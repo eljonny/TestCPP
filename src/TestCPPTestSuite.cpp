@@ -70,11 +70,11 @@ namespace TestCPP {
         this->suiteName = std::move(testSuiteName);
     }
 
-    unsigned TestSuite::getLastRunFailCount () {
+    unsigned TestSuite::getLastRunFailCount () const {
         return this->lastRunFailCount;
     }
 
-    unsigned TestSuite::getLastRunSuccessCount() {
+    unsigned TestSuite::getLastRunSuccessCount() const {
         return this->lastRunSuccessCount;
     }
 
