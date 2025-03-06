@@ -78,7 +78,7 @@ namespace TestCPP {
          * @return The name of the TestCPP object that this object
          *          names.
          */
-        const string& getName ();
+        const string& getName () const;
 
         /**
          * @brief Output the test object name to the specified stream.
@@ -88,7 +88,7 @@ namespace TestCPP {
          */
         friend std::ostream& operator<< (
             std::ostream& s,
-            TestObjName& tcName
+            const TestObjName& tcName
         );
 
     private:
