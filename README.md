@@ -25,7 +25,7 @@ The library is most useful for educational projects or small
 For testing more complex projects I would recommend using
  [GoogleTest](https://github.com/google/googletest).
  
-The code is ~1.2k lines.
+The code is ~1.3k lines.
 The Release builds are optimized for speed over size, so the
  build could probably be tweaked to get a smaller binary if
  desired.
@@ -149,9 +149,9 @@ Then add it to your test executable target through
 
 *Will be available for 1.5 release*
 
-You be able to include TestCPP in your `vcpkg` project by running the
- following in the root of your project (pending vcpkg PR approval that
- I have in right now https://github.com/microsoft/vcpkg/pull/37471):
+You will be able to include TestCPP in your `vcpkg` project by running
+ the following in the root of your project (pending vcpkg PR approval
+ that I have in right now https://github.com/microsoft/vcpkg/pull/37471):
 ```
  vcpkg add port eljonny-testcpp
 ```

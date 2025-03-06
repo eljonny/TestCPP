@@ -104,6 +104,7 @@ namespace TestCPP {
          * This type is for suppressing exit-time destructors for statics.
          */
         template <class T> class no_destroy {
+            // Flawfinder: ignore
             alignas(T) unsigned char data[sizeof(T)];
         public:
             template <class... Ts> no_destroy(Ts&&... ts) { new (data) T(std::forward<Ts>(ts)...); }
