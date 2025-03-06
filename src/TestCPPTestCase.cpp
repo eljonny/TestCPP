@@ -168,7 +168,8 @@ namespace TestCPP {
     }
 
     TestCase::TestCase (TestCase&& o) noexcept {
-        this->outCompareOption(std::move(o.option));
+        this->option = std::move(o.option);
+
         this->setNotifyPassed(std::move(o.notifyTestPassed));
 
         this->pass = std::move(o.pass);
@@ -259,7 +260,8 @@ namespace TestCPP {
     }
 
     TestCase& TestCase::operator= (TestCase&& rhs) noexcept {
-        this->outCompareOption(std::move(rhs.option));
+        this->option = std::move(rhs.option);
+
         this->setNotifyPassed(std::move(rhs.notifyTestPassed));
 
         this->pass = std::move(rhs.pass);
