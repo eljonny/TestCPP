@@ -1,8 +1,0 @@
-src/TestCPPTestCase.cpp:122: error: Unnecessary Copy Assignment
-  `testFn` is copy assigned into field `test` but is not modified afterwards. Rather than copying into the field, move into it instead.
-  120.     {
-  121.         this->notifyTestPassed = msg;
-  122.         this->test = testFn;
-               ^
-  123.
-  124.         this->testName = name;
