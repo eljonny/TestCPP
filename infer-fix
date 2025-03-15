@@ -1,0 +1,8 @@
+src/TestCPPTestCase.cpp:203: error: Use After Delete
+  call to `std::unique_ptr::operator=()` eventually accesses `TestCPP::Util::no_destroy::get().__infer_backing_pointer` that was invalidated by `delete` on line 202.
+  201.                 cout.rdbuf(TestCase::stdoutOriginal.get().release());
+  202.                 delete TestCase::stdoutBuffer.get().get();
+  203.                 TestCase::stdoutBuffer.get() = nullptr;
+                       ^
+  204.             }
+  205.
