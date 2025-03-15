@@ -119,7 +119,7 @@ namespace TestCPP {
                         TestCase::TestCaseOutCompareOptions opt)
     {
         this->notifyTestPassed = testPassedMessage;
-        this->test = testFn;
+        this->test = std::move(testFn);
 
         this->testName = name;
 
