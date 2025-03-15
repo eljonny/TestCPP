@@ -1,8 +1,0 @@
-src/TestCPPTestCase.cpp:124: error: Unnecessary Copy Assignment Movable
-  `name` is copy assigned into field `testName` but is not modified afterwards. Rather than copying into the field, move into it instead.
-  122.         this->test = testFn;
-  123.
-  124.         this->testName = name;
-               ^
-  125.
-  126.         if (captureOut) {
