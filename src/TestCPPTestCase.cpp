@@ -200,7 +200,6 @@ namespace TestCPP {
                 TestCase::stdoutCaptureCasesConstructed - 1)
             {
                 cout.rdbuf(TestCase::stdoutOriginal.get().release());
-                delete TestCase::stdoutBuffer.get().get();
                 TestCase::stdoutBuffer.get() = nullptr;
             }
 
@@ -212,7 +211,6 @@ namespace TestCPP {
                 TestCase::logCaptureCasesConstructed - 1)
             {
                 clog.rdbuf(TestCase::clogOriginal.get().release());
-                delete TestCase::clogBuffer.get().get();
                 TestCase::clogBuffer.get() = nullptr;
             }
 
@@ -224,7 +222,6 @@ namespace TestCPP {
                 TestCase::stderrCaptureCasesConstructed - 1)
             {
                 cerr.rdbuf(TestCase::stderrOriginal.get().release());
-                delete TestCase::stderrBuffer.get().get();
                 TestCase::stderrBuffer.get() = nullptr;
             }
 
