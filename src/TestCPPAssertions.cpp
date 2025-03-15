@@ -134,7 +134,7 @@ namespace TestCPP {
     }
 
     void Assertions::assertNoThrows (
-            function<void()> shouldNotThrow,
+            const function<void()>& shouldNotThrow,
             const string& failureMessage
         )
     {

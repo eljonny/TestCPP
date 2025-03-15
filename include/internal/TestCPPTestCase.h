@@ -342,7 +342,7 @@ namespace TestCPP {
          * @return The duration of the function run, in nanoseconds.
          */
         template<typename F, typename ...Args>
-        static nanoseconds duration (F func, Args&&... args)
+        static nanoseconds duration (const F& func, Args&&... args)
         {
             auto start = system_clock::now();
             func(forward<Args>(args)...);

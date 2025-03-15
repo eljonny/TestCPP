@@ -181,7 +181,7 @@ namespace TestCPP {
          *                          type.
          */
         static void assertNoThrows (
-            function<void()> shouldNotThrow,
+            const function<void()>& shouldNotThrow,
             const string& failureMessage =
                 "Should not have thrown anything!"
         );
