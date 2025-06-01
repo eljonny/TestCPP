@@ -11,7 +11,6 @@ http://www.boost.org/LICENSE_1_0.txt)
 /* Other compilers that emulate this one need to be detected first. */
 
 #include <boost/predef/compiler/clang.h>
-#include <boost/predef/compiler/tcc.h>
 
 #include <boost/predef/version_number.h>
 #include <boost/predef/make.h>
