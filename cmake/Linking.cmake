@@ -1,5 +1,9 @@
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/link")
 
+if (${TESTCPP_STACKTRACE_ENABLED})
+    include (Boost.Stacktrace)
+endif ()
+
 if (${TESTCPP_DEMO_ENABLED})
     include (Demo)
 endif ()
