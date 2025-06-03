@@ -67,8 +67,8 @@ if (MSVC)
 # Use the most powerful choices first for Linux, and if not available fall back to others.
 # First try Backtrace for Linux, then addr2line, and finally the default Boost.Stacktrace.
 else ()
-    FindBacktrace()
-    if (Backtrace_FOUND)
+    find_package (Backtrace)
+    if (DEFINED Backtrace_FOUND)
         list (
             APPEND
             BOOST_STACKTRACE_EXPORTS_LIST
@@ -82,7 +82,6 @@ else ()
             Boost::stacktrace_backtrace
         )
     else ()
-        FindBinUtils()
         # See https://github.com/Kitware/CMake/blob/v3.30.2/Modules/CMakeFindBinUtils.cmake
         # Also see https://cmake.org/cmake/help/v3.30/command/find_program.html
         if (DEFINED CMAKE_ADDR2LINE AND NOT (${CMAKE_ADDR2LINE} STREQUAL "CMAKE_ADDR2LINE-NOTFOUND"))
