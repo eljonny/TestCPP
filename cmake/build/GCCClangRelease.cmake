@@ -1,6 +1,7 @@
 list (
     APPEND
     GCC_CLANG_RELEASE_BUILD_OPTS
+
     -O3                         # Optimize the Release build.
     -Wall                       # Enable most warnings.
     -Wextra                     # Enable even more warnings.
@@ -44,6 +45,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
     list (
         APPEND
         GCC_CLANG_RELEASE_BUILD_OPTS
+
         -Wno-global-constructors # The performance degradation pointed
                                  #  out by this warning is non-trivial
                                  #  but not enough to work through any

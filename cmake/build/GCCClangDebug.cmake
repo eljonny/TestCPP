@@ -1,6 +1,7 @@
 list (
     APPEND
     GCC_CLANG_DEBUG_BUILD_OPTS
+
     -g                          # Enable all debugging information.
     -Og                         # Ensure the compiler doesn't use
                                 #  optimizations that would harm
@@ -44,6 +45,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
 
     list (
         APPEND
+
         GCC_CLANG_DEBUG_BUILD_OPTS
         -Wno-global-constructors # The performance degradation pointed
                                  #  out by this warning is non-trivial

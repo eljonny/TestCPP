@@ -50,7 +50,7 @@ list (
     boost_stacktrace
 )
 
-# Use WinDbg for Windows MSVC
+# Use WinDbg for Windows
 if (MSVC)
     list (
         APPEND
@@ -85,7 +85,7 @@ else ()
         FindBinUtils()
         # See https://github.com/Kitware/CMake/blob/v3.30.2/Modules/CMakeFindBinUtils.cmake
         # Also see https://cmake.org/cmake/help/v3.30/command/find_program.html
-        if (DEFINED CMAKE_ADDR2LINE AND NOT ${CMAKE_ADDR2LINE} STREQUAL "CMAKE_ADDR2LINE-NOTFOUND")
+        if (DEFINED CMAKE_ADDR2LINE AND NOT (${CMAKE_ADDR2LINE} STREQUAL "CMAKE_ADDR2LINE-NOTFOUND"))
             list (
                 APPEND
                 BOOST_STACKTRACE_EXPORTS_LIST
@@ -100,7 +100,7 @@ else ()
         else ()
             target_link_libraries(
                 ${PROJECT_NAME}
-                Boost::stacktrace
+                Boost::stacktrace_basic
             )
         endif ()
     endif ()

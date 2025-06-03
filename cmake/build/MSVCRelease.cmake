@@ -1,6 +1,7 @@
 list (
     APPEND
     MSVC_RELEASE_BUILD_OPTS
+
     /nologo                 # Suppress the compiler version and
                             #  copyright information.
     /EHsc                   # Enable C++ exceptions.
@@ -35,6 +36,7 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_RELEASE_BUILD_OPTS
+
         "/external:I3rdparty/include" # Include the 3rdparty directory
                                       #  as an external include
                                       #  directory.
