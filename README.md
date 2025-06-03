@@ -8,8 +8,8 @@
 [![WIX-Packaging-NoStacktraces](https://github.com/eljonny/TestCPP/actions/workflows/cmake-windows-pack-nost.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-windows-pack-nost.yml)
 [![Coverage](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov-st.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov-st.yml)
 [![Security](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml)
-[![StaticAnalysis](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml)
 [![Shellcheck](https://github.com/eljonny/TestCPP/actions/workflows/shellcheck.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/shellcheck.yml)
+[![StaticAnalysis](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml)
 [![codecov](https://codecov.io/gh/eljonny/TestCPP/graph/badge.svg?token=WFG41QY4BB)](https://codecov.io/gh/eljonny/TestCPP)
 
 # Introduction
@@ -318,7 +318,7 @@ The CMake build is split into components that get included into the
 The top-level components are as follows:
 - CMake Build File:
   The main build file that includes all the other components
-   (CMakeLists.txt).
+   (CMakeLists.txt). All other components are in cmake/.
 - Code Analysis:
   Configuring code analysis tools (Analysis.cmake).
   Currently, this includes clang-tidy in the build process.
@@ -341,6 +341,10 @@ The top-level components are as follows:
 - Packaging:
   Configuring library packaging parameters, enable CPack
    (Packing.cmake).
+- Dependency Handling:
+  Handling dependencies for the library, including Boost.Stacktrace,
+  that are managed through CMake Git submodules that are included
+   in the project via add_subdirectory (SubmodulesInit.cmake).
 - Build Targets Configuration:
   Setting up the build targets (Targets.cmake).
   Lists each translation unit that applies to each target.
@@ -391,9 +395,9 @@ The top-level components are as follows:
      - Non-Windows
        - libdl
 
-There are a number of CMake modules in the cmake directory, including
+There are a number of CMake modules in cmake/ subdirectories, including
  the following:
-- Build definitions:
+- Build definitions (cmake/build/):
   - CompileDefs.cmake
     Defines compile definitions for all configurations of the project.
   - DebugCompileDefs.cmake
@@ -414,7 +418,15 @@ There are a number of CMake modules in the cmake directory, including
   - MSVCRelease.cmake
     Defines compiler flags specific to the Release configuration of the
     project when building with MSVC.
-- Linking definitions:
+- Linking definitions (cmake/link/):
+  - Boost.Stacktrace.cmake
+    Defines linking for the Boost.Stacktrace library, which is used
+    for stack traces for test failures when TESTCPP_STACKTRACE_ENABLED
+    is set to 1 (or true) into the primary library target.
+    This builds a list of installation targets for Boost.Stacktrace
+    that are required for the library to work properly when
+    Boost.Stacktrace is enabled, used in Installing.cmake when the
+    aforementioned cache variable is set.
   - Demo.cmake
     Defines the linking for the demo targets.
   - TestCPPWithCoverage.cmake
@@ -425,7 +437,7 @@ There are a number of CMake modules in the cmake directory, including
   - TestsWithCoverage.cmake
     Defines the linking for the test targets when code coverage is
     enabled.
-- Toolchain files:
+- Toolchain files (cmake/toolchains/):
   - Windows
     - Windows.Clang.toolchain.cmake
       Toolchain file for Visual Studio-installed Clang on Windows.
@@ -449,8 +461,8 @@ make
 ```
 The Debug configuration supports testing and code coverage. To enable
  those in the build, add one or both of the following flags to `cmake`:
- - For testing: `-DCMAKE_TEST_ENABLED=1`
- - For code coverage: `-DCMAKE_COVERAGE_ENABLED=1`
+ - For testing: `-DTESTCPP_TEST_ENABLED=1`
+ - For code coverage: `-DTESTCPP_COVERAGE_ENABLED=1`
 
 For the release build:
 ```
@@ -462,17 +474,17 @@ make
 ```
 The Release configuration supports testing. To enable generation of the
  test target in the build, add the following flag to `cmake`:
- - `-DCMAKE_TEST_ENABLED=1`
+ - `-DTESTCPP_TEST_ENABLED=1`
 
 The Release configuration does not support code coverage because of the
  compiler optimizations used.
 
 Both Release and Debug configurations support building the demo app,
  which you can enable by adding the following flag to `cmake`:
- - `-DCMAKE_DEMO_ENABLED=1`
+ - `-DTESTCPP_DEMO_ENABLED=1`
 
 Both Release and Debug configurations support building with stack trace
- functionality with the folloeing flag:
+ functionality with the following flag:
  - `-DTESTCPP_STACKTRACE_ENABLED`
 
 # Static Analysis of TestCPP
@@ -688,3 +700,6 @@ The workflows are as follows:
     JacobDomagala/StaticAnalysis@master
 - codeql.yml
   - Runs the CodeQL static analysis tool on the library code.
+- shellcheck.yml
+  - Runs shellcheck on the shell scripts in the project to ensure they
+    are valid and follow best practices.
