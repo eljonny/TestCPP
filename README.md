@@ -9,6 +9,7 @@
 [![Coverage](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov-st.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov-st.yml)
 [![Security](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml)
 [![StaticAnalysis](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml)
+[![Shellcheck](https://github.com/eljonny/TestCPP/actions/workflows/shellcheck.yml/badge.svg?event=push)](https://github.com/eljonny/TestCPP/actions/workflows/shellcheck.yml)
 [![codecov](https://codecov.io/gh/eljonny/TestCPP/graph/badge.svg?token=WFG41QY4BB)](https://codecov.io/gh/eljonny/TestCPP)
 
 # Introduction
