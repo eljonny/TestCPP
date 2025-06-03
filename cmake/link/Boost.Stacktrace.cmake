@@ -60,11 +60,12 @@ if (MSVC)
 # First try Backtrace for Linux, then addr2line, and finally the default Boost.Stacktrace.
 else ()
     find_package (Backtrace)
-    if (DEFINED Backtrace_FOUND)
+    if (${BOOST_STACKTRACE_HAS_BACKTRACE} AND DEFINED Backtrace_FOUND)
         list (
             APPEND
             BOOST_STACKTRACE_EXPORTS_LIST
 
+            Backtrace::Backtrace
             boost_stacktrace_backtrace
         )
         target_link_libraries(
