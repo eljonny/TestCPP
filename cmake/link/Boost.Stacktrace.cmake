@@ -65,7 +65,6 @@ else ()
             APPEND
             BOOST_STACKTRACE_EXPORTS_LIST
 
-            Backtrace::Backtrace
             boost_stacktrace_backtrace
         )
         target_link_libraries(
