@@ -19,16 +19,8 @@ list(
     describe
     mp11
     predef
+    winapi
 )
-
-if (MSVC)
-    list(
-        APPEND
-        BOOST_STACKTRACE_DEPS
-
-        winapi
-    )
-endif ()
 
 foreach(B_ST_DEP IN LISTS BOOST_STACKTRACE_DEPS)
     list (
