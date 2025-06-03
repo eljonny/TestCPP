@@ -1,16 +1,7 @@
-if (${TESTCPP_STACKTRACE_ENABLED})
-    target_include_directories (
-        ${PROJECT_NAME} PRIVATE
-        3rdparty/include
-        include
-    )
-
-else ()
-    target_include_directories (
-        ${PROJECT_NAME} PRIVATE
-        include
-    )
-endif ()
+target_include_directories (
+    ${PROJECT_NAME} PRIVATE
+    include
+)
 
 if (${TESTCPP_DEMO_ENABLED})
     target_include_directories (
