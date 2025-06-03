@@ -1,6 +1,7 @@
 list (
     APPEND
     COVERAGE_BUILD_OPTS
+
     -g                          # Enable all debugging information.
     -Og                         # Ensure the compiler doesn't use
                                 #  optimizations that would harm

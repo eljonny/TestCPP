@@ -1,6 +1,7 @@
 list (
     APPEND
     MSVC_DEBUG_BUILD_OPTS
+
     /nologo                 # Suppress the compiler version and
                             #  copyright information.
     /Zi                     # Generate complete debugging information.
@@ -37,6 +38,7 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     list (
         APPEND
         MSVC_DEBUG_BUILD_OPTS
+
         "/external:I3rdparty/include" # Include the 3rdparty directory
                                       #  as an external include
                                       #  directory.
@@ -47,6 +49,7 @@ if ("${CMAKE_CXX_FLAGS}" MATCHES "/analyze:ruleset")
     list (
         APPEND
         MSVC_DEBUG_BUILD_OPTS
+
         /analyze:rulesetdirectory "${VS_INSTALLATION_PATH}/Team Tools/Static Analysis Tools/Rule Sets"
     )
 endif ()
