@@ -17,7 +17,9 @@ This is an implementation of a very simple test framework.
 It can be built with no dependencies (other than the C++ standard
  library) and can rely on only C++11 features.
 It supports stack traces on test failures as of 0.2.1-beta.3, which
- uses Boost.StackTrace, but this is not required to use the framework.
+ uses Boost.Stacktrace and requires C++14 (because Boost.Stacktrace
+ depends on Boost.Describe, which requires C++14), but this is not
+ required to use the framework.
 
 The library is most useful for educational projects or small
  personal/internal projects, as many features required for
@@ -280,7 +282,7 @@ In the Custom Targets... context menu option there are also, depending
    In this way, the build omits the demo, lib tests, and dependencies
    to provide a pure C++11 library.
  - Configures the build in the same way as cmake-nost-rls but
-   includes stack trace functionality via Boost.StackTrace, which
+   includes stack trace functionality via Boost.Stacktrace, which
    causes the library to have link-time dependencies as explained in
    other elements of this README.
 
@@ -295,7 +297,7 @@ There are a number of CMake Presets defined in CMakePresets.json that
  align with different build configurations and analysis profiles,
  including all build feature variations (with/without the Demo project,
  with/without the tests, and subsequently with/without stacktrace
- support via Boost.StackTrace, and finally Debug and Release).
+ support via Boost.Stacktrace, and finally Debug and Release).
 
 To get started, open the root project folder in Visual Studio 2022 and
  select the desired CMake Preset from the Build Configurations dropdown
@@ -368,7 +370,7 @@ The top-level components are as follows:
      root).
     If undefined or set to 0, clang-tidy will not be run.
   - TESTCPP_STACKTRACE_ENABLED
-    If set to 1, enables compilation with Boost.StackTrace, which
+    If set to 1, enables compilation with Boost.Stacktrace, which
      adds dependencies on that library (header-only, included in
      the project in the 3rdparty directory) and also the following:
      - Boost.Config
