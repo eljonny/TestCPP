@@ -376,24 +376,39 @@ The top-level components are as follows:
     If undefined or set to 0, clang-tidy will not be run.
   - TESTCPP_STACKTRACE_ENABLED
     If set to 1, enables compilation with Boost.Stacktrace, which
-     adds dependencies on that library (header-only, included in
-     the project in the 3rdparty directory) and also the following:
+     adds dependencies on that library and also the following:
+     - Boost.Assert
      - Boost.Config
      - Boost.ContainerHash
      - Boost.Core
-     - Boost.Functional
+     - Boost.Describe
+     - Boost.mp11
      - Boost.Predef
-     - Boost.Utility
-     - Boost.Winapi on Windows
-    Note that none of these require binaries, they are all header-
-     only, so they are not required in downstream builds.
+     - Boost.StaticAssert
+     - Boost.ThrowException
+     - Boost.Winapi
+    Note that none of these Boost.Stacktrace dependencies require
+     binaries, they are all header-only, so they are not required in
+     downstream builds.
+    Boost.Stacktrace, when used with a platform implementation, is
+     built in binary mode so that it can properly link with the
+     required platform libraries to provide backtrace information.
+    Only the most basic implementation is header-only, and that is
+     not used in this project.
     This also adds dependencies on platform-specific libraries at
      link-time for address resolution in the stacktraces:
      - Windows
+       - WinDbg
        - ole32
        - dbgeng
      - Non-Windows
-       - libdl
+       - libdl for boost_stacktrace_basic
+       - And optionally, depending on what is available, in addition to
+         libdl (these depend on libdl):
+         - libbacktrace
+         - addr2line
+         - If nothing is available, only libdl will be used and
+           backtrace information will be limited.
 
 There are a number of CMake modules in cmake/ subdirectories, including
  the following:
