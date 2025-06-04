@@ -387,28 +387,32 @@ The top-level components are as follows:
      - Boost.StaticAssert
      - Boost.ThrowException
      - Boost.Winapi
-    Note that none of these Boost.Stacktrace dependencies require
-     binaries, they are all header-only, so they are not required in
-     downstream builds.
+
+     Note that none of these Boost.Stacktrace dependencies require
+      binaries, they are all header-only, so they are not required in
+      downstream builds.
+
     Boost.Stacktrace, when used with a platform implementation, is
      built in binary mode so that it can properly link with the
      required platform libraries to provide backtrace information.
+
     Only the most basic implementation is header-only, and that is
      not used in this project.
+
     This also adds dependencies on platform-specific libraries at
      link-time for address resolution in the stacktraces:
-     - Windows
-       - WinDbg
-       - ole32
-       - dbgeng
-     - Non-Windows
-       - libdl for boost_stacktrace_basic
-       - And optionally, depending on what is available, in addition to
-         libdl (these depend on libdl):
-         - libbacktrace
-         - addr2line
-         - If nothing is available, only libdl will be used and
-           backtrace information will be limited.
+    - Windows
+      - WinDbg
+      - ole32
+      - dbgeng
+    - Non-Windows
+      - libdl for boost_stacktrace_basic
+      - And optionally, depending on what is available, in addition to
+        libdl (these depend on libdl):
+        - libbacktrace
+        - addr2line
+        - If nothing is available, only libdl will be used and
+          backtrace information will be limited.
 
 There are a number of CMake modules in cmake/ subdirectories, including
  the following:
