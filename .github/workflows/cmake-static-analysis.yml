@@ -1,7 +1,6 @@
 name: TestCPP Static analysis - cppcheck/clang-tidy
 
 on:
-  # Will run on push when merging to 'branches'. The output will be shown in the console
   push:
     branches:
       - main
