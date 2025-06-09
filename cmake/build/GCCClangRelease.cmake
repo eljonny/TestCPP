@@ -34,9 +34,7 @@ list (
                                 #  capture.
 )
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
-    "${CMAKE_VS_PLATFORM_TOOLSET}" STREQUAL "ClangCL")
-
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # GCC doesn't support -Wno-global-constructors yet, so only add it
     #  if we are building with Clang, either with MSVC as a frontend
     #  or straight-up LLVM.
@@ -86,35 +84,35 @@ endif ()
 
 if (BUILD_TESTING)
     target_compile_options (
-        ${PROJECT_NAME}_TestCase_test
+        ${PROJECT_NAME}_test_TestCase
         PUBLIC
         ${GCC_CLANG_RELEASE_BUILD_OPTS}
     )
 
     target_compile_options (
-        ${PROJECT_NAME}_TestSuite_ctor_test
+        ${PROJECT_NAME}_test_TestSuite_ctor
         PUBLIC
         ${GCC_CLANG_RELEASE_BUILD_OPTS}
     )
     target_compile_options (
-        ${PROJECT_NAME}_TestSuite_running_test
+        ${PROJECT_NAME}_test_TestSuite_running
         PUBLIC
         ${GCC_CLANG_RELEASE_BUILD_OPTS}
     )
     target_compile_options (
-        ${PROJECT_NAME}_TestSuite_tpm_test
-        PUBLIC
-        ${GCC_CLANG_RELEASE_BUILD_OPTS}
-    )
-
-    target_compile_options (
-        ${PROJECT_NAME}_Assertions_basic_test
+        ${PROJECT_NAME}_test_TestSuite_tpm
         PUBLIC
         ${GCC_CLANG_RELEASE_BUILD_OPTS}
     )
 
     target_compile_options (
-        ${PROJECT_NAME}_Exceptions_test
+        ${PROJECT_NAME}_test_Assertions_basic
+        PUBLIC
+        ${GCC_CLANG_RELEASE_BUILD_OPTS}
+    )
+
+    target_compile_options (
+        ${PROJECT_NAME}_test_Exceptions
         PUBLIC
         ${GCC_CLANG_RELEASE_BUILD_OPTS}
     )
