@@ -22,25 +22,31 @@ list (
                                 #  building for Clang, GCC, and MSVC,
                                 #  and MSVC has different pragmas than
                                 #  GCC/Clang.
-    -Wno-unused-lambda-capture  # Avoid MSVC error C3493 - There is
-                                #  implementation divergence here and
-                                #  since we're not using >=C++14 there
-                                #  is no workaround other than to ignore
-                                #  this warning (the MSVC issue is an
-                                #  error).
-                                # A workaround for >=C++14 is to use an
-                                #  explicit capture - if ever I change
-                                #  the library to use >=C++14 I can
-                                #  remove this and use an explicit
-                                #  capture.
 )
+
+if (NOT (${TESTCPP_STACKTRACE_ENABLED}))
+    # If stack traces are enabled, we use C++14 features that make this
+    #  warning unnecessary, so we don't add it unless we need it.
+    list (
+        APPEND
+        GCC_CLANG_DEBUG_BUILD_OPTS
+
+        -Wno-unused-lambda-capture # Avoid MSVC error C3493 - There is
+                                   #  implementation divergence here
+                                   #  and since we're not using >=C++14
+                                   #  there is no workaround other than
+                                   #  to ignore this warning (the MSVC
+                                   #  issue is an error).
+                                   # A workaround for >=C++14 is to use
+                                   #  an explicit capture.
+    )
+endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # GCC doesn't support -Wno-global-constructors yet, so only add it
     #  if we are building with Clang, either with MSVC as a frontend
     #  or straight-up LLVM.
     # Ref https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71482
-
     list (
         APPEND
 
