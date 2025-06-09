@@ -14,32 +14,32 @@ endif ()
 
 if (BUILD_TESTING)
     target_compile_definitions (
-        ${PROJECT_NAME}_TestCase_test
+        ${PROJECT_NAME}_test_TestCase
         PUBLIC
         DEBUG_LOG
     )
     target_compile_definitions (
-        ${PROJECT_NAME}_TestSuite_ctor_test
+        ${PROJECT_NAME}_test_TestSuite_ctor
         PUBLIC
         DEBUG_LOG
     )
     target_compile_definitions (
-        ${PROJECT_NAME}_TestSuite_running_test
+        ${PROJECT_NAME}_test_TestSuite_running
         PUBLIC
         DEBUG_LOG
     )
     target_compile_definitions (
-        ${PROJECT_NAME}_TestSuite_tpm_test
+        ${PROJECT_NAME}_test_TestSuite_tpm
         PUBLIC
         DEBUG_LOG
     )
     target_compile_definitions (
-        ${PROJECT_NAME}_Assertions_basic_test
+        ${PROJECT_NAME}_test_Assertions_basic
         PUBLIC
         DEBUG_LOG
     )
     target_compile_definitions (
-        ${PROJECT_NAME}_Exceptions_test
+        ${PROJECT_NAME}_test_Exceptions
         PUBLIC
         DEBUG_LOG
     )

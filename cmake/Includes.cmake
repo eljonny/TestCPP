@@ -13,35 +13,35 @@ endif ()
 
 if (BUILD_TESTING)
     target_include_directories (
-        ${PROJECT_NAME}_TestCase_test PRIVATE
+        ${PROJECT_NAME}_test_TestCase PRIVATE
         test/include
         include
     )
 
     target_include_directories (
-        ${PROJECT_NAME}_TestSuite_ctor_test PRIVATE
+        ${PROJECT_NAME}_test_TestSuite_ctor PRIVATE
         test/include
         include
     )
     target_include_directories (
-        ${PROJECT_NAME}_TestSuite_running_test PRIVATE
+        ${PROJECT_NAME}_test_TestSuite_running PRIVATE
         test/include
         include
     )
     target_include_directories (
-        ${PROJECT_NAME}_TestSuite_tpm_test PRIVATE
-        test/include
-        include
-    )
-
-    target_include_directories (
-        ${PROJECT_NAME}_Assertions_basic_test PRIVATE
+        ${PROJECT_NAME}_test_TestSuite_tpm PRIVATE
         test/include
         include
     )
 
     target_include_directories (
-        ${PROJECT_NAME}_Exceptions_test PRIVATE
+        ${PROJECT_NAME}_test_Assertions_basic PRIVATE
+        test/include
+        include
+    )
+
+    target_include_directories (
+        ${PROJECT_NAME}_test_Exceptions PRIVATE
         test/include
         include
     )

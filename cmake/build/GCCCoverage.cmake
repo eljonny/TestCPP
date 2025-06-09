@@ -38,35 +38,35 @@ target_compile_options (
 )
 
 target_compile_options (
-    ${PROJECT_NAME}_TestCase_test
+    ${PROJECT_NAME}_test_TestCase
     PUBLIC
     ${COVERAGE_BUILD_OPTS}
 )
 
 target_compile_options (
-    ${PROJECT_NAME}_TestSuite_ctor_test
+    ${PROJECT_NAME}_test_TestSuite_ctor
     PUBLIC
     ${COVERAGE_BUILD_OPTS}
 )
 target_compile_options (
-    ${PROJECT_NAME}_TestSuite_running_test
+    ${PROJECT_NAME}_test_TestSuite_running
     PUBLIC
     ${COVERAGE_BUILD_OPTS}
 )
 target_compile_options (
-    ${PROJECT_NAME}_TestSuite_tpm_test
-    PUBLIC
-    ${COVERAGE_BUILD_OPTS}
-)
-
-target_compile_options (
-    ${PROJECT_NAME}_Assertions_basic_test
+    ${PROJECT_NAME}_test_TestSuite_tpm
     PUBLIC
     ${COVERAGE_BUILD_OPTS}
 )
 
 target_compile_options (
-    ${PROJECT_NAME}_Exceptions_test
+    ${PROJECT_NAME}_test_Assertions_basic
+    PUBLIC
+    ${COVERAGE_BUILD_OPTS}
+)
+
+target_compile_options (
+    ${PROJECT_NAME}_test_Exceptions
     PUBLIC
     ${COVERAGE_BUILD_OPTS}
 )
