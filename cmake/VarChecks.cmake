@@ -38,10 +38,19 @@ if (NOT DEFINED TESTCPP_STACKTRACE_ENABLED)
     message (STATUS "Not defined TESTCPP_STACKTRACE_ENABLED")
     set (TESTCPP_STACKTRACE_ENABLED 0)
 
+    set (CMAKE_CXX_STANDARD 11)
 else ()
     message (STATUS
        "Defd TESTCPP_STACKTRACE_ENABLED ${TESTCPP_STACKTRACE_ENABLED}")
+
+    if (${TESTCPP_STACKTRACE_ENABLED})
+        set (CMAKE_CXX_STANDARD 14)
+    else ()
+        set (CMAKE_CXX_STANDARD 11)
+    endif ()
 endif ()
+
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (${TESTCPP_TEST_ENABLED})
     message (STATUS "Testing enabled!")
