@@ -24,10 +24,6 @@ list (
                             #  /Qspectre is specified.
                             # Applied this warning suppression since
                             #  /Qspectre is specified.
-    /Qspectre               # Instructs the compiler to apply Spectre
-                            #  vulnerability mitigations.
-    /external:anglebrackets # Treat angle-bracket includes as system
-                            #  includes.
     /external:W0            # Suppress all warnings from external
                             #  headers.
 )
@@ -52,6 +48,90 @@ if (${TESTCPP_STACKTRACE_ENABLED})
     )
 endif ()
 
+if (NOT ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+    list (
+        APPEND
+        MSVC_RELEASE_BUILD_OPTS
+
+        /Qspectre               # Instructs the compiler to apply
+                                #  Spectre vulnerability mitigations.
+        /external:anglebrackets # Treat angle-bracket includes as
+                                #  system includes.
+    )
+else ()
+    # If using clang-cl, we need some additional/altered flags
+    list (
+        APPEND
+        MSVC_RELEASE_BUILD_OPTS
+
+        -Wno-c++98-compat          # We're compiling for C++11, so it's
+                                   #  not necessary to maintain
+                                   #  compatibility with C++98.
+        -Wno-c++98-compat-pedantic # We're compiling for C++11, so,
+                                   #  again, it's not necessary to
+                                   #  maintain compatibility with
+                                   #  C++98.
+        -Wno-global-constructors   # The performance degradation
+                                   #  pointed out by this warning is
+                                   #  non-trivial but not enough to
+                                   #  work through any issues that
+                                   #  might be caused by it; there were
+                                   #  already constructors from built-
+                                   #  in types that were being called
+                                   #  (particularly unique_ptr), but
+                                   #  this points out that the type I
+                                   #  added (no_destroy) adds custom
+                                   #  and additional start-up code that
+                                   #  can change startup performance by
+                                   #  making it slower.
+                                   # How much slower is a matter of
+                                   #  micro-optimization for this
+                                   #  library project in particular,
+                                   #  but could significantly decrease
+                                   #  startup performance if there were
+                                   #  n-many of these objects being
+                                   #  created.
+                                   # At this point there are only 6, so
+                                   #  this should not cause a
+                                   #  noticeable hit to startup
+                                   #  performance.
+    )
+
+    if (NOT (${TESTCPP_STACKTRACE_ENABLED}))
+        # If stack traces are enabled, we use C++14 features that make
+        #  this warning suppression unnecessary, so we don't add it
+        #  unless we need it.
+        list (
+            APPEND
+            MSVC_RELEASE_BUILD_OPTS
+
+            -Wno-unused-lambda-capture # Avoid MSVC error C3493 - There
+                                       #  is implementation divergence
+                                       #  here and since we're not
+                                       #  using >=C++14 there is no
+                                       #  workaround other than to
+                                       #  ignore this warning (the MSVC
+                                       #  issue is an error).
+                                       # A workaround for >=C++14 is to
+                                       #  use an explicit capture.
+        )
+    endif ()
+
+    if (BUILD_TESTING)
+        list (
+            APPEND
+            MSVC_RELEASE_TEST_BUILD_OPTS
+
+            ${MSVC_RELEASE_BUILD_OPTS}
+            -Wno-undefined-func-template # Not a real problem
+            -Wno-exit-time-destructors   # This is just not a concern
+                                         #  for test executables in
+                                         #  this project, it's a single
+                                         #  object that gets destroyed.
+        )
+    endif ()
+endif ()
+
 target_compile_options (
     ${PROJECT_NAME}
     PUBLIC
@@ -66,7 +146,41 @@ if (${TESTCPP_DEMO_ENABLED})
     )
 endif ()
 
-if (BUILD_TESTING)
+if (BUILD_TESTING AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+    target_compile_options (
+        ${PROJECT_NAME}_test_TestCase
+        PUBLIC
+        ${MSVC_RELEASE_TEST_BUILD_OPTS}
+    )
+
+    target_compile_options (
+        ${PROJECT_NAME}_test_TestSuite_ctor
+        PUBLIC
+        ${MSVC_RELEASE_TEST_BUILD_OPTS}
+    )
+    target_compile_options (
+        ${PROJECT_NAME}_test_TestSuite_running
+        PUBLIC
+        ${MSVC_RELEASE_TEST_BUILD_OPTS}
+    )
+    target_compile_options (
+        ${PROJECT_NAME}_test_TestSuite_tpm
+        PUBLIC
+        ${MSVC_RELEASE_TEST_BUILD_OPTS}
+    )
+
+    target_compile_options (
+        ${PROJECT_NAME}_test_Assertions_basic
+        PUBLIC
+        ${MSVC_RELEASE_TEST_BUILD_OPTS}
+    )
+
+    target_compile_options (
+        ${PROJECT_NAME}_test_Exceptions
+        PUBLIC
+        ${MSVC_RELEASE_TEST_BUILD_OPTS}
+    )
+elseif (BUILD_TESTING)
     target_compile_options (
         ${PROJECT_NAME}_test_TestCase
         PUBLIC
