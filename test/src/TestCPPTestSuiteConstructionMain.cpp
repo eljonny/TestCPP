@@ -1,10 +1,12 @@
 #include "TestCPP.h"
 
-using TestCPP::TestCase;
-using TestCPP::TestSuite;
-using std::string;
-using std::make_tuple;
-using std::function;
+namespace TestCPP {
+    namespace Testing {
+        namespace TestSuiteSuites {
+            extern TestSuite ctorSuite;
+        }
+    }
+}
 
 #include "TestSuite/TestSuiteConstructionSuite.h"
 

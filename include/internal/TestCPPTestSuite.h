@@ -87,10 +87,10 @@ namespace TestCPP {
          *          tests.
          */
         template<typename... TestType>
-        TestSuite (TestObjName&& newSuiteName, TestType ...tests)
+        TestSuite (TestObjName&& newSuiteName, TestType ...newSuiteTests)
         {
             commonInit(std::forward<TestObjName>(newSuiteName));
-            this->addTests(tests...);
+            this->addTests(newSuiteTests...);
         }
 
         /**
@@ -99,7 +99,7 @@ namespace TestCPP {
          * Appropriate specializations defined in the source file.
          */
         template<typename T>
-        void addTest (T&& test);
+        void addTest (T&& addTestToSuite);
 
         /**
          * @brief Specialization to handle when someone tries to call
@@ -113,13 +113,16 @@ namespace TestCPP {
 
         /**
          * @brief Add one or more tests at once to the test suite.
-         * @param test The first test to add.
-         * @param tests The rest of the tests to add.
+         *
+         * @param addTestToSuite         The first test to add.
+         * @param addTheseOtherTestsAlso The rest of the tests to add.
          */
         template<typename Test, typename... OtherTests>
-        void addTests (Test test, OtherTests ...tests) {
-            addTest(std::move(test));
-            addTests(tests...);
+        void addTests (Test addTestToSuite,
+                       OtherTests ...addTheseOtherTestsAlso)
+        {
+            addTest(std::move(addTestToSuite));
+            addTests(addTheseOtherTestsAlso...);
         }
 
         /**

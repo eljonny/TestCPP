@@ -96,20 +96,23 @@ namespace TestCPP {
 
         /**
          * @brief Construct a test case with possibility to use all
-         *         options.
+         *          options.
          *
-         * @param testName The name of the test as a TestObjName.
-         * @param test The implementation or pointer to the test.
-         * @param testPassedMessage Whether to omit a message indicating
-         *          test passage.
-         * @param captureOut Whether to capture stdout output for
-         *          analysis after the test run.
-         * @param captureLog Whether to capture clog output for
-         *          analysis after the test run.
-         * @param captureErr Whether to capture stderr output for
-         *          analysis after the test run.
-         * @param opt Technique for comparing actual output with
-         *          expected output after the test run.
+         * @param name              The name of the test as a
+         *                            TestObjName.
+         * @param testFn            The implementation or pointer to
+         *                            the test.
+         * @param testPassedMessage Whether to omit a message
+         *                            indicating test passage.
+         * @param captureOut        Whether to capture stdout output
+         *                            for analysis after the test run.
+         * @param captureLog        Whether to capture clog output for
+         *                            analysis after the test run.
+         * @param captureErr        Whether to capture stderr output
+         *                            for analysis after the test run.
+         * @param opt               Technique for comparing actual
+         *                            output with expected output after
+         *                            the test run.
          *
          * Instantiate and define a test case.
          * All parameters are optional other than the test name and the
@@ -284,23 +287,29 @@ namespace TestCPP {
          *          active.
          */
         void captureStdErr ();
+
         /**
          * @brief Write a test failure reason to the specified stream.
-         * @param out The stream to write the test failure reason to.
-         * @param reason The test failure reason to write.
+         *
+         * @param out           The stream to write the test failure
+         *                        reason to.
+         * @param failureReason The test failure reason to write.
          */
         void logFailure (ostream& out, const string& failureReason) const;
         /**
          * @brief If a test encounters an error while running, this
          *          function will be called to log the test error.
-         * @param failureMessage The error message from the test that
-         *          should be logged.
+         *
+         * @param failureReason The error message from the test that
+         *                        should be logged.
          */
         void logTestFailure (const string& failureReason);
+
         /**
          * @brief Internal test run controller.
          */
         void runTest ();
+
         /**
          * @brief Handles the internal logic for calls to checkStdout,
          *          checkLog, and checkStderr based on the selected
@@ -336,9 +345,12 @@ namespace TestCPP {
 
         /**
          * @brief Measure the duration of a function when run.
+         *
          * @param func Measure the duration of this function when run.
          * @param args A template pack of arguments to apply to the
-         *          given function of which to measure the duration.
+         *               given function of which to measure the
+         *               duration.
+         *
          * @return The duration of the function run, in nanoseconds.
          */
         template<typename F, typename ...Args>

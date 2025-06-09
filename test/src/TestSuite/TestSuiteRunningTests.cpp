@@ -4,9 +4,9 @@
 namespace TestCPP {
     namespace Testing {
         namespace TestSuiteTests {
-            unsigned zero = 0;
-            unsigned one = 1;
-            unsigned three = 3;
+            static unsigned zero = 0;
+            static unsigned one = 1;
+            static unsigned three = 3;
 
             void TestSuiteRunNoTests() {
                 auto testSuite = unique_ptr<TestSuite>(new TestSuite(
