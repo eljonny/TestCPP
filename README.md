@@ -71,6 +71,8 @@ The goal is to keep the library simple and easy to use, and to delegate
 
 The following features are currently planned:
 - Test Discovery
+  - Convention-based
+  - Configuration-based
 - Test result output to files or stdout/stderr in a variety of formats
   - JUnit XML
   - xUnit XML
@@ -183,8 +185,8 @@ You can build the library from source and use the resulting build
  options in the build system and compiler toolchain that applies to
  your project.
 
-After building, run the variant of the commands that align with
- your build configuration (starting from the project directory).
+After building, run the variant of the commands that align with your
+ build configuration (starting from the project directory) on *nix.
 
 For the debug build:
 ```
@@ -197,6 +199,10 @@ For the release build:
 cd build-release
 sudo cmake --install .
 ```
+
+On Windows, you can run CPack (see the section in the README here on
+ using CPack to build Windows targets) then install the generated
+ package.
 
 # Usage
 
@@ -320,6 +326,15 @@ I'll use the TestCPP tests for `TestCPP::TestCase` as a real example.
 The following is [test/src/TestCPPTestCaseMain.cpp](https://github.com/eljonny/TestCPP/blob/main/test/src/TestCPPTestCaseMain.cpp):
 ```cpp
 #include "TestCPP.h"
+
+namespace TestCPP {
+    namespace Testing {
+        namespace TestCaseSuite {
+            extern TestSuite suite;
+        }
+    }
+}
+
 #include "TestCase/TestCaseSuite.h"
 
 int main(void)
@@ -511,6 +526,7 @@ Let's take a look at a portion of the `TestCPP::TestCase` tests source
  file, [test/src/TestCase/TestCaseTests.cpp](https://github.com/eljonny/TestCPP/blob/main/test/src/TestCase/TestCaseTests.cpp):
 ```cpp
 #include "TestCPP.h"
+#include "TestCase/TestCaseTests.h"
 #include "TestCase/TestCaseTestChunks.h"
 
 using TestCPP::Util::debugLog;
@@ -537,9 +553,10 @@ namespace TestCPP {
                         debugLog("Construct with nullptr string", true);
                         debugLog(" - assertThrows lambda");
 
-                        auto test = unique_ptr<TestCase>(new TestCase(
-                            nullptr,
-                            function<void()>([](){})
+                        auto testShouldThrow = unique_ptr<TestCase>(
+                            new TestCase(
+                                nullptr,
+                                function<void()>([](){})
                         ));
                     },
                     "Should have thrown on nullptr string!"
@@ -574,9 +591,20 @@ namespace TestCPP {
 
                 auto test = unique_ptr<TestCase>(new TestCase(
                     "SUB-TEST TestCaseGo case Test - throws chr",
+#ifdef TESTCPP_STACKTRACE_ENABLED
+                    // We use C++14 when stacktraces are enabled, which
+                    //  allows us to avoid needing to use
+                    //  -Wno-unused-lambda-capture to avoid MSVC C3493
+                    //  since the implementations can be reconciled in
+                    //  the newer standard.
+                    function<void()>([&toThrow = throwChr](){
+                        throw toThrow;
+                    }),
+#else
                     function<void()>([&throwChr](){
                         throw throwChr;
                     }),
+#endif
                     true, false, true, false,
                     TestCase::TestCaseOutCompareOptions::CONTAINS
                 ));
@@ -750,9 +778,10 @@ I originally developed this project in the [CodeLite IDE](https://codelite.org/)
  there is a workspace and project in this repository.
 In the project, there are CMake targets defined for Release and Debug
  builds.
-It is, as far as I know, strictly compliant with the C++11 standard,
- and should work on any platform where there is a compiler toolchain
- that supports this standard, which at this point is almost anywhere.
+It is, as far as I know, strictly compliant with the C++11 standard
+ when built without stacktraces enabled, and should work on any
+ platform where there is a compiler toolchain that supports this
+ standard, which at this point is almost anywhere.
 
 To build within the CodeLite IDE:
 - Load the workspace
@@ -822,64 +851,79 @@ The CMake build is split into components that get included into the
 The top-level components are as follows:
 - CMake Build File:
   The main build file that includes all the other components
-   (CMakeLists.txt). All other components are in cmake/.
+   ([CMakeLists.txt](https://github.com/eljonny/TestCPP/blob/main/CMakeLists.txt)).
+  
+  All other components are in [cmake/](https://github.com/eljonny/TestCPP/blob/main/cmake).
 - Code Analysis:
-  Configuring code analysis tools (Analysis.cmake).
+  Configuring code analysis tools ([Analysis.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Analysis.cmake)).
+  
   Currently, this includes clang-tidy in the build process.
   - CPPCheck is also included in the build process, but it is
     not included in the Analysis.cmake file because it is
-    run as part of the static analysis GitHub Action (see
-    .github/workflows/cmake-static-analysis.yml).
+    run as part of [the TestCPP static analysis GitHub Action](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml) (see
+    [.github/workflows/cmake-static-analysis.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-static-analysis.yml)).
+  - This is supported on Windows through the CMake Presets, but works
+    as-is on Linux as long as the tools are all installed and
+    available: `clang++` and `clang-tidy`.
 - Build Type Handling:
   Handling the build type which sets compile options for the platform
    on which the build is being run based on the build type (Debug,
-   Release, I still need to work on getting RelWithDebugInfo
-   configured properly) (BuildTypeHandling.cmake).
+   Release, [I still need to work on getting RelWithDebugInfo
+   configured properly](https://github.com/eljonny/TestCPP/issues/121)) ([BuildTypeHandling.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/BuildTypeHandling.cmake)).
 - Target Includes:
-  Which includes should be applied to which targets (Includes.cmake).
+  Which includes should be applied to which targets ([Includes.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Includes.cmake)).
 - Installing:
-  Configuring installation of the library (Installing.cmake).
+  Configuring installation of the library ([Installing.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Installing.cmake)).
 - Target Link Libraries:
   Which libraries need to be linked in which build targets, based on
-   the result of VarChecks in terms of code coverage (Linking.cmake).
+   the result of VarChecks in terms of code coverage ([Linking.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Linking.cmake)).
 - Packaging:
   Configuring library packaging parameters, enable CPack
-   (Packing.cmake).
+   ([Packing.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Packing.cmake)).
 - Dependency Handling:
   Handling dependencies for the library, including Boost.Stacktrace,
   that are managed through CMake Git submodules that are included
-   in the project via add_subdirectory (SubmodulesInit.cmake).
+   in the project via add_subdirectory ([SubmodulesInit.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/SubmodulesInit.cmake)).
 - Build Targets Configuration:
-  Setting up the build targets (Targets.cmake).
+  Setting up the build targets ([Targets.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Targets.cmake)).
+  
   Lists each translation unit that applies to each target.
 - Testing:
   Testing configuration, based on the result of VarChecks
-   (Testing.cmake).
+   ([Testing.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Testing.cmake)).
 - Variable Checks:
   Checking the variables to enable or disable certain sections of the
-   build (VarChecks.cmake).
+   build ([VarChecks.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/VarChecks.cmake)).
+  
   Variables that are checked:
-  - TESTCPP_COVERAGE_ENABLED
-    If set to 1, enables code coverage with gcov if testing is also
-     enabled. If undefined or set to 0, coverage will be disabled
+  - `TESTCPP_COVERAGE_ENABLED`
+    
+    If set to `1`, enables code coverage with gcov if testing is also
+     enabled. If undefined or set to `0`, coverage will be disabled
      even if testing is enabled.
-  - TESTCPP_DEMO_ENABLED
-    If set to 1, enables the demo target, which builds a small
+  - `TESTCPP_DEMO_ENABLED`
+    
+    If set to `1`, enables the demo target, which builds a small
      executable that runs some contrived tests to verify compilation
-     and runtime. If undefined or set to 0, the demo target will not
-     be built. The name of the demo target is ${PROJECT_NAME}_run.
-  - TESTCPP_TEST_ENABLED
-    If set to 1, CTest is included and the test targets are enabled.
-    If undefined or set to 0, testing for the library will be
+     and runtime. If undefined or set to `0`, the demo target will not
+     be built.
+    
+    The name of the demo target is `TestCPP_run`.
+  - `TESTCPP_TEST_ENABLED`
+    
+    If set to `1`, CTest is included and the test targets are enabled.
+    If undefined or set to `0`, testing for the library will be
      disabled and the tests will not be built.
-  - TESTCPP_ANALYSIS_ENABLED
-    If set to 1, enables running clang-tidy, which runs clang-tidy
-     on each translation unit that is compiled based on the config-
-     uration in the clang-tidy dot file (.clang-tidy in the project
-     root).
-    If undefined or set to 0, clang-tidy will not be run.
+  - `TESTCPP_ANALYSIS_ENABLED`
+    
+    If set to `1`, enables running `clang-tidy`, which runs `clang-tidy`
+     on each translation unit that is compiled based on the
+     configuration in the `clang-tidy` dot file ([`.clang-tidy`](https://github.com/eljonny/TestCPP/blob/main/.clang-tidy) in the
+     project root).
+    If undefined or set to `0`, `clang-tidy` will not be run.
   - TESTCPP_STACKTRACE_ENABLED
-    If set to 1, enables compilation with Boost.Stacktrace, which
+    
+    If set to `1`, enables compilation with Boost.Stacktrace, which
      adds dependencies on that library and also the following:
      - Boost.Assert
      - Boost.Config
@@ -901,7 +945,8 @@ The top-level components are as follows:
      required platform libraries to provide backtrace information.
 
     Only the most basic implementation is header-only, and that is
-     not used in this project.
+     not used in this project, except on Windows where WinDbg is not
+     available.
 
     This also adds dependencies on platform-specific libraries at
      link-time for address resolution in the stacktraces:
@@ -918,57 +963,73 @@ The top-level components are as follows:
         - If nothing is available, only libdl will be used and
           backtrace information will be limited.
 
-There are a number of CMake modules in cmake/ subdirectories, including
+There are a number of CMake modules in [cmake/](https://github.com/eljonny/TestCPP/blob/main/cmake) subdirectories, including
  the following:
-- Build definitions (cmake/build/):
-  - CompileDefs.cmake
+- Build definitions ([cmake/build/](https://github.com/eljonny/TestCPP/blob/main/cmake/build)):
+  - [CompileDefs.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/build/CompileDefs.cmake)
+    
     Defines compile definitions for all configurations of the project.
-  - DebugCompileDefs.cmake
+  - [DebugCompileDefs.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/build/DebugCompileDefs.cmake)
+    
     Defines compile definitions specific to the Debug configuration of
     the project.
-  - GCCClangDebug.cmake
+  - [GCCClangDebug.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/build/GCCClangDebug.cmake)
+    
     Defines compiler flags specific to the Debug configuration of the
     project when building with GCC or Clang.
-  - GCCClangRelease.cmake
+  - [GCCClangRelease.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/build/GCCClangRelease.cmake)
+    
     Defines compiler flags specific to the Release configuration of the
     project when building with GCC or Clang.
-  - GCCCoverage.cmake
+  - [GCCCoverage.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/build/GCCCoverage.cmake)
+    
     Defines compiler flags specific to the Debug configuration of the
     project when building with GCC and generating code coverage data.
-  - MSVCDebug.cmake
+  - [MSVCDebug.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/build/MSVCDebug.cmake)
+    
     Defines compiler flags specific to the Debug configuration of the
     project when building with MSVC.
-  - MSVCRelease.cmake
+  - [MSVCRelease.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/build/MSVCRelease.cmake)
+    
     Defines compiler flags specific to the Release configuration of the
     project when building with MSVC.
-- Linking definitions (cmake/link/):
-  - Boost.Stacktrace.cmake
+- Linking definitions ([cmake/link/](https://github.com/eljonny/TestCPP/blob/main/cmake/link)):
+  - [Boost.Stacktrace.cmake]((https://github.com/eljonny/TestCPP/blob/main/cmake/link/Boost.Stacktrace.cmake))
+    
     Defines linking for the Boost.Stacktrace library, which is used
-    for stack traces for test failures when TESTCPP_STACKTRACE_ENABLED
-    is set to 1 (or true) into the primary library target.
+    for stack traces for test failures when `TESTCPP_STACKTRACE_ENABLED`
+    is set to `1` (or `true`) into the primary library target.
     This builds a list of installation targets for Boost.Stacktrace
     that are required for the library to work properly when
-    Boost.Stacktrace is enabled, used in Installing.cmake when the
+    Boost.Stacktrace is enabled, used in [Installing.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/Installing.cmake) when the
     aforementioned cache variable is set.
-  - Demo.cmake
+  - [Demo.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/link/Demo.cmake)
+    
     Defines the linking for the demo targets.
-  - TestCPPWithCoverage.cmake
+  - [TestCPPWithCoverage.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/link/TestCPPWithCoverage.cmake)
+    
     Defines the linking for the TestCPP library when code coverage is
     enabled.
-  - Tests.cmake
+  - [Tests.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/link/Tests.cmake)
+    
     Defines the linking for the test targets.
-  - TestsWithCoverage.cmake
+  - [TestsWithCoverage.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/link/TestsWithCoverage.cmake)
+    
     Defines the linking for the test targets when code coverage is
     enabled.
-- Toolchain files (cmake/toolchains/):
-  - Windows
-    - Windows.Clang.toolchain.cmake
+- Toolchain files ([cmake/toolchains/](https://github.com/eljonny/TestCPP/blob/main/cmake/toolchains)):
+  - Windows (from [this repo](https://github.com/MarkSchofield/WindowsToolchain), thank you [Mark](https://github.com/MarkSchofield)!)
+    - [Windows.Clang.toolchain.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/toolchains/Windows.Clang.toolchain.cmake)
+      
       Toolchain file for Visual Studio-installed Clang on Windows.
-    - Windows.MSVC.toolchain.cmake
+    - [Windows.MSVC.toolchain.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/toolchains/Windows.MSVC.toolchain.cmake)
+      
       Toolchain file for MSVC on Windows.
-    - Windows.Kits.cmake
+    - [Windows.Kits.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/toolchains/Windows.Kits.cmake)
+      
       Toolchain file for Windows SDKs.
-    - VSWhere.cmake
+    - [VSWhere.cmake](https://github.com/eljonny/TestCPP/blob/main/cmake/toolchains/VSWhere.cmake)
+      
       Toolchain file for finding Visual Studio installations.
 
 ### Known issues/limitations
@@ -978,7 +1039,7 @@ The build does not yet support RelWithDebugInfo, which I am planning to
 
 ## Building outside the IDE
 
-To build outside of the CodeLite IDE, you can run the following
+To build outside of the any IDE, you can run the following
  commands, after cloning the repo, for the debug build:
 ```
 cd TestCPP
@@ -1017,55 +1078,55 @@ Both Release and Debug configurations support building with stack trace
 
 ## Static Analysis of TestCPP
 
-You can run cppcheck, infer, and clang-tidy on the generated
+You can run [`cppcheck`](https://cppcheck.sourceforge.io/) ([repo](https://github.com/danmar/cppcheck)), [`infer`](https://fbinfer.com/) ([repo](https://github.com/facebook/infer)), and [`clang-tidy`](https://clang.llvm.org/extra/clang-tidy/) ([repo](https://github.com/llvm/llvm-project/tree/main/clang-tools-extra/clang-tidy)) on the generated
  compile_commands.json.
 
-Another tool that is helpful to run is flawfinder.
+Another tool that is helpful to run is [`flawfinder`](https://dwheeler.com/flawfinder/) ([repo](https://github.com/david-a-wheeler/flawfinder)).
 
-For clang-tidy, you can also use the CMake flag to have CMake run
- clang-tidy during the build.
+For `clang-tidy`, you can also use the CMake flag to have CMake run
+ `clang-tidy` during the build.
 
-clang-tidy uses the .clang-tidy configuration file so you don't need to
+`clang-tidy` uses the `.clang-tidy` configuration file so you don't need to
  specify any options unless you want to run it with different checks/
  behavior from what I usually run for this project.
 
-My suggested options for cppcheck are:
-- --project=compile_commands.json
+My suggested options for `cppcheck` are:
+- `--project=compile_commands.json`
   - Uses the generated CMake output to define a check project; you need
     to adjust the argument to this parameter to match the path to the
-    compile_commands.json file that was generated.
-- --enable=all
+    `compile_commands.json` file that was generated.
+- `--enable=all`
   - Enables all CPPCheck checks applicable to the project.
-- --suppress=missingIncludeSystem
+- `--suppress=missingIncludeSystem`
   - Then suppress missing system includes, there are no <>-enclosed
     includes that need to be checked for this project.
-- --suppress=unusedFunction
+- `--suppress=unusedFunction`
   - Then suppress checking for unused functions. Most API functions
     are not used within the library itself, and CPPCheck will generate
     numerous errors saying the functions are unused.
-- --suppress=checkersReport
+- `--suppress=checkersReport`
   - Then suppress the checkers report, which is a summary of the checks
     that were run and how many were skipped.
-- --suppress='\*:3rdparty/\*'
+- `--suppress='\*:3rdparty/\*'`
   - Ignore all checks in the 3rdparty directory, which is where the
     Boost headers are stored for this project.
-- --inconclusive
+- `--inconclusive`
   - Allow inconclusive results to be reported, which can identify more
     potential issues in the code.
-- --force
+- `--force`
   - Forces checking of all preprocessor configurations
-- --check-level=exhaustive
+- `--check-level=exhaustive`
   - Analysis covers all possible paths and more expensive checks
-- --inline-suppr
+- `--inline-suppr`
   - Obeys inline suppression of errors in the code, which are used in
     this project to suppress specific instances of errors/warnings that
     are not applicable or are false positives.
-- --quiet
+- `--quiet`
   - Suppresses all output except for errors and warnings
-- --std=c++11
+- `--std=c++11`, or `--std=c++14` when stacktraces are enabled
   - Specifies the C++ standard to use for checking the code
 
-I would recommend against using the -j parameter with cppcheck because
+I would recommend against using the `-j` parameter with cppcheck because
  it disables certain checks that are used in the project.
 
 For infer, you can run the following command after configuring the
@@ -1089,7 +1150,7 @@ flawfinder --minlevel=0 --dataonly --quiet --columns include
 ```
 
 I would also recommend using the following flawfinder arguments:
-- --error-level=0
+- `--error-level=0`
   - Sets the error level to 0, which is the lowest level of error
     reporting; this is essentially all-warnings-as-errors.
 
@@ -1155,7 +1216,14 @@ If you are building on Linux, the build supports generating
 - `cpack -G RPM`
 
 If you are building on Windows, the build supports generating MSI
- packages. To build those (make sure you have the WiX toolkit installed
+ packages.
+- To install the WiX toolset, you can try running the following
+  command, or follow the instructions on [the WiX website](https://docs.firegiant.com/wix/using-wix/).
+  - `dotnet tool install --global wix`
+    - You can specify a specific version of WiX to install by appending
+      `--version <version>` to the command above.
+
+To build an MSI package (make sure you have the WiX toolkit installed
  first), run the following command from the CMake build directory:
 - `cpack -G WIX`
 
@@ -1181,7 +1249,7 @@ I am occasionally developing this library/framework, if anyone would
 You must agree to the [WAIVER](https://github.com/eljonny/TestCPP/blob/main/WAIVER) in order to
  contribute, as the code is Public Domain [as noted by the LICENSE](https://github.com/eljonny/TestCPP/blob/main/LICENSE),
  which means the code you contribute is Public Domain as the existing
- code is; you will still be attributed in the GitHub repository.
+ code is.
 
 If you create a pull request and ask me to merge it, you are agreeing
  to the terms of the aforementioned WAIVER and LICENSE.
@@ -1194,36 +1262,36 @@ There are several workflows that are used to build, test, and package
  the library.
 
 The workflows are as follows:
-- cmake-multi-platform-st.yml
+- [cmake-multi-platform-st.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-multi-platform-st.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-multi-platform-st.yml))
   - Builds the library on Windows and Linux with stack traces enabled.
-- cmake-multi-platform-nost.yml
+- [cmake-multi-platform-nost.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-multi-platform-nost.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-multi-platform-nost.yml))
   - Builds the library on Windows and Linux with stack traces disabled.
-- cmake-build-test-st.yml
+- [cmake-build-test-st.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-build-test-st.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-test-st.yml))
   - Builds and tests the library on Windows and Linux with stack traces
     enabled.
-- cmake-build-test-nost.yml
+- [cmake-build-test-nost.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-build-test-nost.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-test-nost.yml))
   - Builds and tests the library on Windows and Linux with stack traces
     disabled.
-- cmake-linux-pack-st.yml
+- [cmake-linux-pack-st.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-linux-pack-st.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack-st.yml))
   - Builds and packages the library on Linux with stack traces enabled.
-- cmake-linux-pack-nost.yml
+- [cmake-linux-pack-nost.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-linux-pack-nost.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-linux-pack-nost.yml))
   - Builds and packages the library on Linux with stack traces
     disabled.
-- cmake-windows-pack-st.yml
+- [cmake-windows-pack-st.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-windows-pack-st.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-windows-pack-st.yml))
   - Builds and packages the library on Windows with stack traces
     enabled.
-- cmake-windows-pack-nost.yml
+- [cmake-windows-pack-nost.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-windows-pack-nost.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-windows-pack-nost.yml))
   - Builds and packages the library on Windows with stack traces
     disabled.
-- cmake-build-cov-st.yml
+- [cmake-build-cov-st.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-build-cov-st.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-build-cov-st.yml))
   - Builds and tests the library on Linux with stack traces enabled and
     generates code coverage reports that are then pushed to CodeCov for
     helpful visualizations and reporting.
-- cmake-static-analysis.yml
+- [cmake-static-analysis.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/cmake-static-analysis.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/cmake-static-analysis.yml))
   - Runs clang-tidy and cppcheck on the library code using
     JacobDomagala/StaticAnalysis@master
-- codeql.yml
+- [codeql.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/codeql.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/codeql.yml))
   - Runs the CodeQL static analysis tool on the library code.
-- shellcheck.yml
+- [shellcheck.yml](https://github.com/eljonny/TestCPP/blob/main/.github/workflows/shellcheck.yml) ([workflow](https://github.com/eljonny/TestCPP/actions/workflows/shellcheck.yml))
   - Runs shellcheck on the shell scripts in the project to ensure they
     are valid and follow best practices.
