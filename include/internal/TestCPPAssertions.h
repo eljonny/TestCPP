@@ -361,15 +361,15 @@ void TestCPP::Assertions::assertEquals<const char*, const char*>(
 
 /**
  * @brief Check that char*'s are not equal using strcmp.
- * @param expected The value that the actual value should not
- *                  be equivalent to.
- * @param actual The actual value that will be checked against
- *                  the expected value.
- * @param failureMessage Failure message that should be logged
- *                          if the assertion fails. This
- *                          defaults to a generic failure
- *                          message related to the assertion
- *                          type.
+ *
+ * @param shouldNotBe    The value that the actual value should not be
+ *                         equivalent to.
+ * @param actual         The actual value that will be checked against
+ *                         the expected value.
+ * @param failureMessage Failure message that should be logged if the
+ *                         assertion fails. This defaults to a generic
+ *                         failure message related to the assertion
+ *                         type.
  */
 template<>
 void TestCPP::Assertions::assertNotEquals<const char*, const char*>(

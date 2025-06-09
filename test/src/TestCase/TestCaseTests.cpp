@@ -1,4 +1,5 @@
 #include "TestCPP.h"
+#include "TestCase/TestCaseTests.h"
 #include "TestCase/TestCaseTestChunks.h"
 
 using TestCPP::Util::debugLog;
@@ -25,9 +26,10 @@ namespace TestCPP {
                         debugLog("Construct with nullptr string", true);
                         debugLog(" - assertThrows lambda");
 
-                        auto test = unique_ptr<TestCase>(new TestCase(
-                            nullptr,
-                            function<void()>([](){})
+                        auto testShouldThrow = unique_ptr<TestCase>(
+                            new TestCase(
+                                nullptr,
+                                function<void()>([](){})
                         ));
                     },
                     "Should have thrown on nullptr string!"
@@ -110,9 +112,20 @@ namespace TestCPP {
 
                 auto test = unique_ptr<TestCase>(new TestCase(
                     "SUB-TEST TestCaseGo case Test - throws str",
+#ifdef TESTCPP_STACKTRACE_ENABLED
+                    // We use C++14 when stacktraces are enabled, which
+                    //  allows us to avoid needing to use
+                    //  -Wno-unused-lambda-capture to avoid MSVC C3493
+                    //  since the implementations can be reconciled in
+                    //  the newer standard.
+                    function<void()>([&toThrow = throwStr](){
+                        throw toThrow;
+                    }),
+#else
                     function<void()>([&throwStr](){
                         throw throwStr;
                     }),
+#endif
                     true, false, true, false,
                     TestCase::TestCaseOutCompareOptions::CONTAINS
                 ));
@@ -134,9 +147,20 @@ namespace TestCPP {
 
                 auto test = unique_ptr<TestCase>(new TestCase(
                     "SUB-TEST TestCaseGo case Test - throws chr",
+#ifdef TESTCPP_STACKTRACE_ENABLED
+                    // We use C++14 when stacktraces are enabled, which
+                    //  allows us to avoid needing to use
+                    //  -Wno-unused-lambda-capture to avoid MSVC C3493
+                    //  since the implementations can be reconciled in
+                    //  the newer standard.
+                    function<void()>([&toThrow = throwChr](){
+                        throw toThrow;
+                    }),
+#else
                     function<void()>([&throwChr](){
                         throw throwChr;
                     }),
+#endif
                     true, false, true, false,
                     TestCase::TestCaseOutCompareOptions::CONTAINS
                 ));
