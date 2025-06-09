@@ -7,7 +7,7 @@ endif ()
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
     message (STATUS "Release build compilation options enabled")
 
-    if (MSVC AND NOT ("${CMAKE_VS_PLATFORM_TOOLSET}" STREQUAL "ClangCL"))
+    if (MSVC)
         message (STATUS "MSVC Release build compilation options enabled")
 
         include (MSVCRelease)
@@ -23,7 +23,7 @@ else ()
 
     include (DebugCompileDefs)
     
-    if (MSVC AND NOT ("${CMAKE_VS_PLATFORM_TOOLSET}" STREQUAL "ClangCL"))
+    if (MSVC)
         message (STATUS "MSVC Debug build compilation options enabled")
 
         include (MSVCDebug)
