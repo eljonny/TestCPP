@@ -28,7 +28,7 @@ if (NOT (${TESTCPP_STACKTRACE_ENABLED}))
     #  warning unnecessary, so we don't add it unless we need it.
     list (
         APPEND
-        GCC_CLANG_DEBUG_BUILD_OPTS
+        GCC_CLANG_RELEASE_BUILD_OPTS
 
         -Wno-unused-lambda-capture # Avoid MSVC error C3493 - There is
                                    #  implementation divergence here
