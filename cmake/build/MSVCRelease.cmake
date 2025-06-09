@@ -37,9 +37,18 @@ if (${TESTCPP_STACKTRACE_ENABLED})
         APPEND
         MSVC_RELEASE_BUILD_OPTS
 
-        "/external:I3rdparty/include" # Include the 3rdparty directory
-                                      #  as an external include
-                                      #  directory.
+        # Include the 3rdparty dependency directories as external.
+        "/external:I3rdparty/boost.assert/include"
+        "/external:I3rdparty/boost.config/include"
+        "/external:I3rdparty/boost.container_hash/include"
+        "/external:I3rdparty/boost.core/include"
+        "/external:I3rdparty/boost.describe/include"
+        "/external:I3rdparty/boost.mp11/include"
+        "/external:I3rdparty/boost.predef/include"
+        "/external:I3rdparty/boost.stacktrace/include"
+        "/external:I3rdparty/boost.static_assert/include"
+        "/external:I3rdparty/boost.throw_exception/include"
+        "/external:I3rdparty/boost.winapi/include"
     )
 endif ()
 

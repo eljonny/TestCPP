@@ -7,6 +7,16 @@
   "SystemHeaders": false,
   "ExtraArgs": [
     "-Iinclude",
-    "-I3rdparty/include"
+    "-I3rdparty/boost.assert/include",
+    "-I3rdparty/boost.config/include",
+    "-I3rdparty/boost.container_hash/include",
+    "-I3rdparty/boost.core/include",
+    "-I3rdparty/boost.describe/include",
+    "-I3rdparty/boost.mp11/include",
+    "-I3rdparty/boost.predef/include",
+    "-I3rdparty/boost.stacktrace/include",
+    "-I3rdparty/boost.static_assert/include",
+    "-I3rdparty/boost.throw_exception/include",
+    "-I3rdparty/boost.winapi/include"
   ]
 }
