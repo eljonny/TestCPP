@@ -921,7 +921,7 @@ The top-level components are as follows:
      configuration in the `clang-tidy` dot file ([`.clang-tidy`](https://github.com/eljonny/TestCPP/blob/main/.clang-tidy) in the
      project root).
     If undefined or set to `0`, `clang-tidy` will not be run.
-  - TESTCPP_STACKTRACE_ENABLED
+  - `TESTCPP_STACKTRACE_ENABLED`
     
     If set to `1`, enables compilation with Boost.Stacktrace, which
      adds dependencies on that library and also the following:
